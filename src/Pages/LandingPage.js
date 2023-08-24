@@ -45,7 +45,7 @@ export default function LandingPage() {
       <nav id="navbar" className="navbar">
         <ul>
           <li><a className="nav-link scrollto active" href="#hero">Home</a></li>
-          <li><a className="getstarted scrollto" href="/register">Get Started</a></li>
+          <li><Link to='/register'><button className="getstarted scrollto">Get Started</button></Link></li>
         </ul>
         <i className="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -65,7 +65,7 @@ export default function LandingPage() {
           <div data-aos="fade-up" data-aos-delay="600">
             <div className="text-center text-lg-start">
               <a href="/register" className="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
-                <span>Get Started</span>
+               <Link to="/register"><span className='text-white'>Get Started</span></Link> 
                 <i className="bi bi-arrow-right"><Icon icon="bi:arrow-right-short" /></i>
               </a>
             </div>

@@ -237,3 +237,25 @@ export const chartData2 = {
     },
   ],
 };
+
+export const Baroptions = {
+  series: [600, 579, 21],
+  chart: {
+    width: 380,
+    // type: 'pie',
+  },
+  labels: ['Total', 'Present', 'Absent'],
+  responsive: [
+    {
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200,
+        },
+        legend: {
+          position: 'bottom',
+        },
+      },
+    },
+  ],
+}

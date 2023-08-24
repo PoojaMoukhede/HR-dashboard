@@ -1,5 +1,6 @@
 import React from 'react'
 import { Icon } from '@iconify/react';
+import {Link} from 'react-router-dom'
 
 export default function Register() {
   return (
@@ -26,7 +27,7 @@ export default function Register() {
 												<input type="password" name="logpass" className="form-style" placeholder="Your Password" id="logpass" autocomplete="off"/>
 												<i className="input-icon "><Icon icon="uil:lock-alt" /></i>
 											</div>
-											<a href="/main" className="btn btn2 mt-4">submit</a>
+											<Link to="/main"><button className="btn btn2 mt-4">submit</button></Link>
                             				<p className="mb-0 mt-4 text-center"><a href="#0" className="link">Forgot your password?</a></p>
 				      					</div>
 			      					</div>
@@ -50,7 +51,7 @@ export default function Register() {
 												<input type="password" name="logpass" className="form-style" placeholder="Re-enter Password" id="logpass" autocomplete="off"/>
 												<i className="input-icon "><Icon icon="uil:lock-alt" /></i>
 											</div>
-											<a href="/main" className="btn mt-4 btn2">submit</a>
+											<Link to="/main"><button className="btn btn2 mt-4">submit</button></Link>
 				      					</div>
 			      					</div>
 			      				</div>
