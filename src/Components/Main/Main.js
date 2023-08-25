@@ -1,5 +1,5 @@
 import React from "react";
-import "./Main.css";
+// import "./Main.css";
 import Header from "../Header/Header";
 import Sidebar from "../Sidebar/Sidebar";
 import Dashboard from "../Dashboard/Dashboard";

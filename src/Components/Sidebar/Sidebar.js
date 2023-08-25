@@ -1,8 +1,19 @@
 import React from "react";
 import {Link} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 // import './Sidebar.css'
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+  function handleLogout(){
+    // e.preventDefault();
+    localStorage.removeItem("token");
+    sessionStorage.clear()
+    localStorage.clear()
+    window.location.replace('/login');
+    navigate("/");
+}
   return (
     <>
       <div className="app-sidebar sidebar-shadow">
@@ -50,10 +61,12 @@ export default function Sidebar() {
           <div className="app-sidebar__inner">
             <ul className="vertical-nav-menu">
             <Link to='/main'> <li className="app-sidebar__heading">Dashboards</li></Link>
-             <Link to='/members'><li className="app-sidebar__heading">Members</li></Link> 
+             <Link to='/members'><li className="app-sidebar__heading">Employee</li></Link> 
              <Link to='/attandance'> <li className="app-sidebar__heading">Attandance</li></Link> 
              <Link to='/complaint'><li className="app-sidebar__heading">Complaint</li></Link> 
               <Link to='/managers'><li className="app-sidebar__heading">Managers</li></Link>
+              <li className="app-sidebar__heading" onClick={()=>handleLogout()}>Logout</li>
+
             </ul>
           </div>
         </div>

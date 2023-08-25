@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import Header from "../../Components/Header/Header";
-import dummyData from "../../Components/MOCK_DATA.json";
+import { Icon } from "@iconify/react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import swal from 'sweetalert';
+import AddEmployeeModel from "../../Components/AddEmployeeModel/AddEmployeeModel";
+import { ExportToExcel } from "../../Components/Export/ExportToExcel";
+import { read, readFile, utils } from "xlsx";
 
+const fileName="EmployeeData"
 export default function Member() {
-  const [searchValue, setSearchValue] = useState("");
   const [rows, setRows] = useState([]);
+  const navigate = useNavigate();
+  const [searchValue, setSearchValue] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredRows = rows.filter((row) =>
     Object.values(row).some((value) =>
@@ -13,8 +22,74 @@ export default function Member() {
     )
   );
   useEffect(() => {
-    setRows(dummyData);
+    axios
+      .get("http://localhost:8080/get")
+      .then((response) => {
+        setRows(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+
   }, []);
+
+  const handleAddMember = (newEmployee) => {
+    console.log("model open")
+    setRows((prevRows) => [...prevRows, newEmployee]);
+    console.log("model close")
+  };
+
+  const handleDeleteEmployee = (id) => {
+    console.log(`id in delete ${id}`)
+        axios.delete(`http://localhost:8080/deleteEmployee/${id}`)
+          .then(res => {
+            const updatedRows = rows.filter((row) => row._id !== id);
+            setRows(updatedRows);
+            swal({
+              title: "Done!",
+              text: "User is deleted",
+              icon: "success",
+              timer: 2000,
+              button: false
+            });
+            console.log(`id in delete ${res}`)
+          })
+      }
+
+      const handleImport = async (event) => {
+        console.log("inside import")
+        try {
+          const files = event.target.files[0];
+          const file = files;
+          console.log("inside import try")
+          const reader = new FileReader();
+          reader.onload = async (event) => {
+            const wb = read(event.target.result);
+            const sheets = wb.SheetNames;
+      
+            if (sheets.length) {
+              const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
+      
+              // Send data to the backend API endpoint
+              const response = await fetch('http://localhost:8080/import-data', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                },
+                body: JSON.stringify(rows),
+              });
+      
+              if (response.ok) {
+                console.log('Data imported successfully');
+              }
+            }
+          };
+          reader.readAsArrayBuffer(file);
+        } catch (error) {
+          console.log('Error: ', error);
+        }
+      };
+
 
   return (
     <>
@@ -25,11 +100,25 @@ export default function Member() {
 
           <div className="app-main__outer">
             <div className="app-main__inner">
+              <div className="d-flex">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="btn btn-primary mb-2 "
+              >
+                Add Employee
+              </button>
+              <ExportToExcel apiData={rows} fileName={fileName}/>
+              <div className="fileUpload" >
+                  <input type="file" className="upload" onChange={handleImport}/>
+                  <span>Import</span>
+                </div>
+              </div>
               <div className="row">
                 <div className="col-md-12">
                   <div className="main-card mb-3 card">
                     <div className="card-header">
                       Employee Data
+                      
                       <div className="btn-actions-pane-right">
                         <div className="search-wrapper">
                           <input
@@ -43,6 +132,11 @@ export default function Member() {
                         </div>
                       </div>
                     </div>
+                    <AddEmployeeModel
+                        open={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        onAdd={handleAddMember}
+                      />
                     <div className="table-responsive">
                       <table
                         className="align-middle mb-0 table table-borderless table-striped table-hover"
@@ -50,7 +144,6 @@ export default function Member() {
                       >
                         <thead>
                           <tr>
-                            <th className="text-center">ID</th>
                             <th>Name</th>
                             <th className="text-center">Email</th>
                             <th className="text-center">Contact Number</th>
@@ -62,53 +155,65 @@ export default function Member() {
                             <th className="text-center">State</th>
                             <th className="text-center">Date Of Birth</th>
                             <th className="text-center">Joining Date</th>
+                            <th className="text-center">Action</th>
                           </tr>
                         </thead>
                         <tbody>
                           {filteredRows.map((row) => (
                             <tr>
-                              <td className="text-center text-muted">
-                                {row.id}
-                              </td>
                               <td>
                                 <div className="widget-content p-0">
                                   <div className="widget-content-wrapper">
-                                    <div className="widget-content-left mr-3">
-                                      <div className="widget-content-left">
-                                        <img
-                                          width="40"
-                                          className="rounded-circle"
-                                          src="assets/images/avatars/4.jpg"
-                                          alt=""
-                                        />
-                                      </div>
-                                    </div>
                                     <div className="widget-content-left flex2">
                                       <div className="widget-heading">
-                                        {row.name}
+                                        {row.Emp_name}
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </td>
-                              <td className="text-center">{row.email}</td>
-                              <td className="text-center">{row.contact_no}</td>
-                              <td className="text-center">{row.department}</td>
+                              <td className="text-center">{row.Emp_email}</td>
+                              <td className="text-center">{row.Emp_contact_No}</td>
+                              <td className="text-center">{row.Emp_department}</td>
                               <td className="text-center">O+</td>
                               <td className="text-center">
                                 Mechanical Engineer
                               </td>
                               <td className="text-center">Enginnering</td>
-                              <td className="text-center">{row.city}</td>
-                              <td className="text-center">{row.state}</td>
-                              <td className="text-center">{row.DOB}</td>
-                              <td className="text-center">
-                                {row.joining_date}
+                              <td className="text-center">{row.Emp_city}</td>
+                              <td className="text-center">{row.Emp_state}</td>
+                              <td className="text-center">{row.Emp_DOB}</td>
+                              <td className="text-center">{row.Emp_joining_date}</td>
+           <td className="d-flex">
+                                <button
+                                  style={{
+                                    color: "white",
+                                    backgroundColor: "green",
+                                    fontSize: "1rem",
+                                    border: "none",
+                                    marginRight: "4px",
+                                  }}
+                                >
+                                  <Icon icon="uiw:edit" />
+                                </button>
+                                <button
+                                onClick={()=>handleDeleteEmployee(row._id)}
+                                  style={{
+                                    color: "white",
+                                    backgroundColor: "red",
+                                    fontSize: "1rem",
+                                    border: "none",
+                                    marginRight: "4px",
+                                  }}
+                                >
+                                  <Icon icon="fluent:delete-20-filled" />
+                                </button>
                               </td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
+                     
                     </div>
                   </div>
                 </div>
