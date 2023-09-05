@@ -8,6 +8,7 @@ import swal from 'sweetalert';
 import AddEmployeeModel from "../../Components/AddEmployeeModel/AddEmployeeModel";
 import { ExportToExcel } from "../../Components/Export/ExportToExcel";
 import { read, readFile, utils } from "xlsx";
+import * as XLSX from 'xlsx';
 
 const fileName="EmployeeData"
 export default function Member() {
@@ -15,6 +16,8 @@ export default function Member() {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [excelData , setExcelData] = useState([])
+  const fileType =['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel']
 
   const filteredRows = rows.filter((row) =>
     Object.values(row).some((value) =>
@@ -56,40 +59,65 @@ export default function Member() {
           })
       }
 
-      const handleImport = async (event) => {
-        console.log("inside import")
-        try {
-          const files = event.target.files[0];
-          const file = files;
-          console.log("inside import try")
-          const reader = new FileReader();
-          reader.onload = async (event) => {
-            const wb = read(event.target.result);
-            const sheets = wb.SheetNames;
+      // const handleImport = async (event) => {
+      //   console.log("inside import")
       
-            if (sheets.length) {
-              const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
-      
-              // Send data to the backend API endpoint
-              const response = await fetch('http://localhost:8080/import-data', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                },
-                body: JSON.stringify(rows),
-              });
-      
-              if (response.ok) {
-                console.log('Data imported successfully');
-              }
-            }
-          };
-          reader.readAsArrayBuffer(file);
-        } catch (error) {
-          console.log('Error: ', error);
-        }
-      };
+      //   try {
+      //     const files = event.target.files[0];
+      //     const file = files;
+      //     console.log("inside import try",file)
+      //     const reader = new FileReader();
+      //     reader.onload = async (event) => {
+      //       const wb = read(event.target.result);
+      //       const sheets = wb.SheetNames;
+      //       console.log(`sheets : ${sheets}`)
+      //       if (sheets.length) {
+      //         const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
+      //         console.log(`Sheet length : ${sheets.length}`)
+      //         // Send data to the backend API endpoint
+      //         const response = await fetch('http://localhost:8080/importdata', {
+      //           method: 'POST',
+      //           headers: {
+      //             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      //           },               
+      //           body: JSON.stringify(rows),
+      //         });
+      //         console.log(`Response : ${response}`)
+      //         if (response.ok) {
+      //           console.log('Data imported successfully');
+      //         }
+      //       }
+      //     };
+      //     reader.readAsArrayBuffer(file);
+      //   } catch (error) {
+      //     console.log('Error: ', error);
+      //   }
+      // };
+    
+const handleImport = async(event)=>{
+ const selected_file = event.target.files[0];
+ if(selected_file){
+  if(selected_file && fileType.includes(selected_file.type)){
+    let reader = new FileReader();
+    reader.onload=(e)=>{
+      const workbook = read(e.target.result);
+      const sheet = workbook.SheetNames;
+      if(sheet.length){
+        const data = utils.sheet_add_json(workbook.Sheets[sheet[0]])
+        setExcelData(data)
+      }
+    }
+    reader.readAsArrayBuffer(selected_file)
+  }
+  else{
+    console.log("Please Upload Excel file only")
+  }
+  console.log(selected_file.type)
+ }
 
+}
+
+     
 
   return (
     <>

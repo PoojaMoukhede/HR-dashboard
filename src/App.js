@@ -10,6 +10,7 @@ import Managers from './Pages/Member/Managers'
 import Attandance from './Pages/Attandance'
 import Complaint from './Pages/Complaint'
 import { APIContextProvider } from "./Context";
+import Details from './Pages/Details';
 
 
 
@@ -31,6 +32,8 @@ function App() {
         <Route exact path="/managers" element={<Managers />} />
         <Route exact path="/attandance" element={<Attandance/>} />
         <Route exact path="/complaint" element={<Complaint/>} />
+        <Route exact path="/details" element={<Details/>} />
+
         </Routes>
         </APIContextProvider>
     </BrowserRouter>

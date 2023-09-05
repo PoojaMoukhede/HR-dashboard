@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function Table() {
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     setRows(dummyData);
   }, []);
@@ -102,6 +102,9 @@ export default function Table() {
                       type="button"
                       id="PopoverCustomT-1"
                       className="btn btn-primary btn-sm"
+                      onClick={()=>{
+                        navigate('/details')
+                      }}
                     >
                       Details
                     </button>
