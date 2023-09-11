@@ -15,7 +15,7 @@ export default function Expanse() {
           <div className="app-main__outer">
             <div className="app-main__inner">
               <div className="row">
-                <h2 className="text-center">Monthly Expanses</h2>
+                <h2 className="text-center" style={{color:"rgba(13,27,62,.7)"}}>Monthly Expanses</h2>
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
                   <div className="col mb-4">
                     <div className="card">

@@ -1047,6 +1047,7 @@ const AddEmployeeModal = ({
                     marginTop: "5px",
                     maxWidth: "100%",
                   }}
+                  min="2010-01-01"
                 />
               </div>
             </div>

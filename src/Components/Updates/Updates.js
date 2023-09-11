@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer,toast } from 'react-toastify';
-
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 export default function Updates() {
-  // const [rows, setRows] = useState([]);
-  const nevigate = useNavigate()
-const rows = [
-  {Emp_name:"Piyush Soni", Emp_id:'1357',Rank:'25'},
-  {Emp_name:"Kushal Mishra", Emp_id:'572',Rank:'25'},
-  {Emp_name:"Hitesh Kumawat", Emp_id:'1215',Rank:'23'},
-  {Emp_name:"Rohit Nair", Emp_id:'1541',Rank:'22'},
-  {Emp_name:"Himanshu Desai", Emp_id:'692',Rank:'22'},
-  {Emp_name:"Devesh Panday", Emp_id:'1257',Rank:'21'},
-  {Emp_name:"Umesh Prajapati", Emp_id:'982',Rank:'21'},
-  {Emp_name:"Manmeet Singh", Emp_id:'1025',Rank:'21'},
-  {Emp_name:"Meet Choudhary", Emp_id:'1477',Rank:'21'},
-  {Emp_name:"Pooja Moukhede", Emp_id:'1477',Rank:'21'},
-
-
-]
+  const [row, setRows] = useState([]);
+  const nevigate = useNavigate();
+  const rows = [
+    { Emp_name: "Piyush Soni", Emp_id: "1357", Rank: "25" },
+    { Emp_name: "Kushal Mishra", Emp_id: "572", Rank: "25" },
+    { Emp_name: "Hitesh Kumawat", Emp_id: "1215", Rank: "23" },
+    { Emp_name: "Rohit Nair", Emp_id: "1541", Rank: "22" },
+    { Emp_name: "Himanshu Desai", Emp_id: "692", Rank: "22" },
+    { Emp_name: "Devesh Panday", Emp_id: "1257", Rank: "21" },
+    { Emp_name: "Umesh Prajapati", Emp_id: "982", Rank: "21" },
+    { Emp_name: "Manmeet Singh", Emp_id: "1025", Rank: "21" },
+    { Emp_name: "Meet Choudhary", Emp_id: "1477", Rank: "21" },
+    { Emp_name: "Pooja Moukhede", Emp_id: "1477", Rank: "21" },
+  ];
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -38,11 +36,44 @@ const rows = [
 
   //   fetchData();
   // }, []);
+  useEffect(() => {
+  axios
+   .get("http://localhost:8080/get")
+   .then((response) => {
+     setRows(response.data);
+  
+   })
+   .catch((error) => {
+     console.error("Error fetching data:", error);
+   });
+      
+  // Example usage
+  // const todayBirthdayPeople = Today(Data);
+  // console.log(todayBirthdayPeople);
+  
+  }, []);
 
+  const toastSuccess = () => toast.success("Wishes Sent");
 
-  const toastSuccess = () => toast.success('Wishes Sent');
-
-
+  function Today(person) {
+    const currentDate = new Date(); // Get the current date
+  
+    // Extract the current day and month
+    const currentDay = currentDate.getDate();
+    const currentMonth = currentDate.getMonth();
+  
+    // Filter the data based on matching day and month
+    const filteredData = person.filter((data) => {
+      const birthdayDate = new Date(data.birthday);
+      const birthdayDay = birthdayDate.getDate();
+      const birthdayMonth = birthdayDate.getMonth();
+  
+      return currentDay === birthdayDay && currentMonth === birthdayMonth;
+    });
+  
+    return filteredData;
+  }
+  
 
   return (
     <>
@@ -60,12 +91,16 @@ const rows = [
             <div className="tab-content">
               <div className="tab-pane fade active show" id="tab-eg-55">
                 <div className="widget-chart p-3">
-                  <div style={{ height: "370px",overflowY:'scroll' }}>
+                {/* {row.map((data)=>{ */}
+                                
+                             
+                  <div style={{ height: "370px", overflowY: "scroll" }}>
                     <div className="table-responsive">
                       <div className="widget-content p-0">
                         <div className="widget-content-wrapper">
                           <div className="widget-content-left flex2">
                             <div className="widget-heading">
+                              
                               <div
                                 class="card mb-2"
                                 style={{ maxwidth: "540px" }}
@@ -94,9 +129,19 @@ const rows = [
                                       </p>
                                       <p class="card-text">
                                         <small class="text-muted">
-                                         Today
-                                        </small>
-                                        <button className="btn" style={{fontSize:'0.8rem', color:'#24a1e9'}} onClick={toastSuccess}>Send</button>
+                                          Today 
+                                        {/* {Today(data)} */}
+                                          </small>
+                                        <button
+                                          className="btn"
+                                          style={{
+                                            fontSize: "0.8rem",
+                                            color: "#24a1e9",
+                                          }}
+                                          onClick={toastSuccess}
+                                        >
+                                          Send
+                                        </button>
                                       </p>
                                     </div>
                                   </div>
@@ -119,24 +164,32 @@ const rows = [
                                   </div>
                                   <div class="col-md-10">
                                     <div class="card-body">
-                                      <h5 class="card-title">
-                                        Happy Birthday
-                                      </h5>
+                                      <h5 class="card-title">Happy Birthday</h5>
                                       <p class="card-text">
-                                      The warmest wishes to <b>Pooja Moukhede</b> a great member of our team.
-                                      May your special day be full of happiness, fun and cheer!
+                                        The warmest wishes to{" "}
+                                        <b>Pooja Moukhede</b> a great member of
+                                        our team. May your special day be full
+                                        of happiness, fun and cheer!
                                       </p>
                                       <p class="card-text">
                                         <small class="text-muted">
                                           2023-09-13
                                         </small>
-                                        <button className="btn" style={{fontSize:'0.8rem', color:'#24a1e9'}} onClick={toastSuccess}>Send</button>
+                                        <button
+                                          className="btn"
+                                          style={{
+                                            fontSize: "0.8rem",
+                                            color: "#24a1e9",
+                                          }}
+                                          onClick={toastSuccess}
+                                        >
+                                          Send
+                                        </button>
                                       </p>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-
 
                               <div
                                 class="card mb-2"
@@ -158,15 +211,24 @@ const rows = [
                                         Welcome To Our Team
                                       </h5>
                                       <p class="card-text">
-                                      Congratulations! <b>Shravan Patel</b> You’re going to be an amazing addition 
-                                      to this team
-
+                                        Congratulations! <b>Shravan Patel</b>{" "}
+                                        You’re going to be an amazing addition
+                                        to this team
                                       </p>
                                       <p class="card-text">
                                         <small class="text-muted">
-                                        2023-09-15
+                                          2023-09-15
                                         </small>
-                                        <button className="btn" style={{fontSize:'0.8rem', color:'#24a1e9'}} onClick={toastSuccess}>Send</button>
+                                        <button
+                                          className="btn"
+                                          style={{
+                                            fontSize: "0.8rem",
+                                            color: "#24a1e9",
+                                          }}
+                                          onClick={toastSuccess}
+                                        >
+                                          Send
+                                        </button>
                                       </p>
                                     </div>
                                   </div>
@@ -189,34 +251,42 @@ const rows = [
                                   </div>
                                   <div class="col-md-10">
                                     <div class="card-body">
-                                      <h5 class="card-title">
-                                        Farewell
-                                      </h5>
+                                      <h5 class="card-title">Farewell</h5>
                                       <p class="card-text">
-                                     <b>Sourabh Patel</b> You’ve been a valuable member of the team,
-                                      and you’ll be missed. Wishing you all the best in your new job.
-
+                                        <b>Sourabh Patel</b> You’ve been a
+                                        valuable member of the team, and you’ll
+                                        be missed. Wishing you all the best in
+                                        your new job.
                                       </p>
                                       <p class="card-text">
                                         <small class="text-muted">
-                                        2023-09-10
+                                          2023-09-10
                                         </small>
-                                        <button className="btn" style={{fontSize:'0.8rem', color:'#24a1e9'}} onClick={
+                                        <button
+                                          className="btn"
+                                          style={{
+                                            fontSize: "0.8rem",
+                                            color: "#24a1e9",
+                                          }}
+                                          onClick={
                                             // nevigate('/noti')
-                                           toastSuccess
-                                        }>Send</button>
+                                            toastSuccess
+                                          }
+                                        >
+                                          Send
+                                        </button>
                                       </p>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                             
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                   {/* })} */}
                 </div>
               </div>
             </div>

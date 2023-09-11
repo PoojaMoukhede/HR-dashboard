@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const style = {fontSize:"1.5rem",marginRight:"0.5rem"}
@@ -49,7 +49,7 @@ export default function Sidebar() {
                 type="button"
                 className="hamburger close-sidebar-btn hamburger--elastic"
                 data-class="closed-sidebar"
-                onClick={() => handleToggleSidebar()}
+             
               >
                 <span className="hamburger-box">
                   <span className="hamburger-inner"></span>
@@ -63,7 +63,7 @@ export default function Sidebar() {
             <button
               type="button"
               className="hamburger hamburger--elastic mobile-toggle-nav"
-              onClick={() => handleToggleSidebar()}
+           
             >
               <span className="hamburger-box">
                 <span className="hamburger-inner"></span>
@@ -75,7 +75,7 @@ export default function Sidebar() {
           <span>
             <button
               type="button"
-              onClick={() => handleToggleSidebar()}
+           
               className="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav"
             >
               {/* <span className="btn-icon-wrapper">
@@ -155,6 +155,17 @@ export default function Sidebar() {
                   Complaint
                 </li>
               </Link>
+              <Link to="/calender">
+                <li
+                  className={` item_s app-sidebar__heading ${getActiveClass(
+                    "/calender"
+                  )}`}
+                  onClick={() => handleItemClick("/calender")}
+                >
+                  <Icon icon="material-symbols:support-agent"  style={style} />
+                  Calender View
+                </li>
+              </Link>
               {/* Repeat this pattern for other sidebar items */}
               <li
                 className=" item_s app-sidebar__heading"
@@ -164,7 +175,7 @@ export default function Sidebar() {
                 Logout
               </li>
             </ul>
-          </div>
+           </div>
         </div>
       </div>
     </>
