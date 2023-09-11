@@ -1,5 +1,6 @@
 import React, { useContext, useState, createContext } from "react";
 import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
 const APIContext = createContext();
 
@@ -24,7 +25,7 @@ export function APIContextProvider({ children }) {
   // const editEmployeeURL = `${URL}putEmployee/${id}`;
   // const deleteEmployeeURL = `${URL}deleteEmployee/${id}`;
 
-  const addManagerURL = `${URL}addManager`;
+  const addManagerURL = `${URL}addmanager`;
   // const editManagerURL = `${URL}delete/${id}`;
   // const deleteManagerURL = `${URL}put/${id}`;
 
@@ -99,7 +100,7 @@ export function APIContextProvider({ children }) {
       });
   };
 
-  const onFormSubmit21 = (id, data) => {   //managers
+  const onFormSubmit21 = (data) => {   //managers
     axios
       .post(addManagerURL, data)
       .then((res) => {
@@ -109,9 +110,10 @@ export function APIContextProvider({ children }) {
           contact_no,
           city,
           state,
+          blood_group,
         } = res.data;
 
-        console.log(name,email,contact_no, city,state);
+        console.log(name,email,contact_no, city,state,blood_group);
         setManagerdata(data)
       
       })

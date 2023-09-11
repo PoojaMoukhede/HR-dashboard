@@ -2,22 +2,24 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import Header from "../../Components/Header/Header";
 import { Icon } from "@iconify/react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 import AddEmployeeModel from "../../Components/AddEmployeeModel/AddEmployeeModel";
 import { ExportToExcel } from "../../Components/Export/ExportToExcel";
-import { read, readFile, utils } from "xlsx";
-import * as XLSX from 'xlsx';
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
-const fileName="EmployeeData"
+const fileName = "EmployeeData";
 export default function Member() {
   const [rows, setRows] = useState([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [excelData , setExcelData] = useState([])
-  const fileType =['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel']
+  const fileType = [
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.ms-excel",
+  ];
 
   const filteredRows = rows.filter((row) =>
     Object.values(row).some((value) =>
@@ -33,91 +35,74 @@ export default function Member() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-
   }, []);
 
   const handleAddMember = (newEmployee) => {
-    console.log("model open")
+    console.log("model open");
     setRows((prevRows) => [...prevRows, newEmployee]);
-    console.log("model close")
+    console.log("model close");
   };
 
   const handleDeleteEmployee = (id) => {
-    console.log(`id in delete ${id}`)
-        axios.delete(`http://localhost:8080/deleteEmployee/${id}`)
-          .then(res => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this user!",
+      icon: "warning",
+      buttons: ["Cancel", "Yes, delete it"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        // User confirmed deletion, proceed with the delete request
+        console.log(`id in delete ${id}`);
+        axios
+          .delete(`http://localhost:8080/deleteEmployee/${id}`)
+          .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
             setRows(updatedRows);
             swal({
-              title: "Done!",
-              text: "User is deleted",
+              title: "Deleted!",
+              text: "Employee data has been deleted.",
               icon: "success",
               timer: 2000,
-              button: false
+              button: false,
             });
-            console.log(`id in delete ${res}`)
-          })
+            console.log(`id in delete ${res}`);
+          });
+      } else {
+        // User clicked "Cancel" or closed the dialog, do nothing
+        swal("Cancelled", "Employee data is safe 😊", "info");
       }
+    });
+  };
 
-      // const handleImport = async (event) => {
-      //   console.log("inside import")
-      
-      //   try {
-      //     const files = event.target.files[0];
-      //     const file = files;
-      //     console.log("inside import try",file)
-      //     const reader = new FileReader();
-      //     reader.onload = async (event) => {
-      //       const wb = read(event.target.result);
-      //       const sheets = wb.SheetNames;
-      //       console.log(`sheets : ${sheets}`)
-      //       if (sheets.length) {
-      //         const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
-      //         console.log(`Sheet length : ${sheets.length}`)
-      //         // Send data to the backend API endpoint
-      //         const response = await fetch('http://localhost:8080/importdata', {
-      //           method: 'POST',
-      //           headers: {
-      //             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-      //           },               
-      //           body: JSON.stringify(rows),
-      //         });
-      //         console.log(`Response : ${response}`)
-      //         if (response.ok) {
-      //           console.log('Data imported successfully');
-      //         }
-      //       }
-      //     };
-      //     reader.readAsArrayBuffer(file);
-      //   } catch (error) {
-      //     console.log('Error: ', error);
-      //   }
-      // };
-    
-const handleImport = async(event)=>{
- const selected_file = event.target.files[0];
- if(selected_file){
-  if(selected_file && fileType.includes(selected_file.type)){
-    let reader = new FileReader();
-    reader.onload=(e)=>{
-      const workbook = read(e.target.result);
-      const sheet = workbook.SheetNames;
-      if(sheet.length){
-        const data = utils.sheet_add_json(workbook.Sheets[sheet[0]])
-        setExcelData(data)
+  const handleImport = async (event) => {
+    const selected_file = event.target.files[0];
+    if (selected_file) {
+      if (selected_file && fileType.includes(selected_file.type)) {
+        // Create FormData and append the file
+        const formData = new FormData();
+        formData.append("file", selected_file);
+
+        axios
+          .post("http://localhost:8080/importdata", formData)
+          .then((response) => {
+            console.log("Import response:", response);
+          })
+          .catch((error) => {
+            console.error("Error sending POST request:", error);
+          });
+      } else {
+        console.log("Please Upload Excel file only");
       }
+      console.log("Selected file type:", selected_file.type);
     }
-    reader.readAsArrayBuffer(selected_file)
-  }
-  else{
-    console.log("Please Upload Excel file only")
-  }
-  console.log(selected_file.type)
- }
+    window.location.reload();
+  };
+
+
+const handleEditEmployee= async(event)=>{
 
 }
-
-     
 
   return (
     <>
@@ -129,24 +114,51 @@ const handleImport = async(event)=>{
           <div className="app-main__outer">
             <div className="app-main__inner">
               <div className="d-flex">
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="btn btn-primary mb-2 "
-              >
-                Add Employee
-              </button>
-              <ExportToExcel apiData={rows} fileName={fileName}/>
-              <div className="fileUpload" >
-                  <input type="file" className="upload" onChange={handleImport}/>
-                  <span>Import</span>
-                </div>
+                <OverlayTrigger
+                  key="tooltip"
+                  placement="top"
+                  overlay={<Tooltip id="tooltip">Add Employee</Tooltip>}
+                >
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="btn btn-primary mb-2 "
+                    style={{ borderRadius: "30px", padding: "10px" }}
+                  >
+                    {/* Add Employee */}
+                    <Icon
+                      icon="mingcute:add-fill"
+                      color="white"
+                      width="1.5rem"
+                    />
+                  </button>
+                </OverlayTrigger>
+
+                <ExportToExcel apiData={rows} fileName={fileName} />
+                <OverlayTrigger
+                  key="tooltip"
+                  placement="top"
+                  overlay={<Tooltip id="tooltip">Import Data</Tooltip>}
+                >
+                  <div
+                    className="fileUpload"
+                    style={{ borderRadius: "30px", padding: "10px" }}
+
+                  >
+                    <input
+                      type="file"
+                      className="upload"
+                      onChange={handleImport}
+                    />
+                    <Icon icon="pajamas:import" color="white" width="1.5rem" />
+                    {/* <span>Import</span> */}
+                  </div>
+                </OverlayTrigger>
               </div>
               <div className="row">
                 <div className="col-md-12">
                   <div className="main-card mb-3 card">
                     <div className="card-header">
                       Employee Data
-                      
                       <div className="btn-actions-pane-right">
                         <div className="search-wrapper">
                           <input
@@ -161,10 +173,10 @@ const handleImport = async(event)=>{
                       </div>
                     </div>
                     <AddEmployeeModel
-                        open={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
-                        onAdd={handleAddMember}
-                      />
+                      open={isModalOpen}
+                      onClose={() => setIsModalOpen(false)}
+                      onAdd={handleAddMember}
+                    />
                     <div className="table-responsive">
                       <table
                         className="align-middle mb-0 table table-borderless table-striped table-hover"
@@ -188,7 +200,7 @@ const handleImport = async(event)=>{
                         </thead>
                         <tbody>
                           {filteredRows.map((row) => (
-                            <tr>
+                            <tr key={row._id}>
                               <td>
                                 <div className="widget-content p-0">
                                   <div className="widget-content-wrapper">
@@ -201,47 +213,80 @@ const handleImport = async(event)=>{
                                 </div>
                               </td>
                               <td className="text-center">{row.Emp_email}</td>
-                              <td className="text-center">{row.Emp_contact_No}</td>
-                              <td className="text-center">{row.Emp_department}</td>
-                              <td className="text-center">O+</td>
                               <td className="text-center">
-                                Mechanical Engineer
+                                {row.Emp_contact_No}
                               </td>
-                              <td className="text-center">Enginnering</td>
+                              <td className="text-center">
+                                {row.Emp_department}
+                              </td>
+                              <td className="text-center">
+                                {row.Emp_blood_group}
+                              </td>
+                              <td className="text-center">
+                                {row.Emp_expertise}
+                              </td>
+                              <td className="text-center">
+                                {row.Emp_qualification}
+                              </td>
                               <td className="text-center">{row.Emp_city}</td>
                               <td className="text-center">{row.Emp_state}</td>
                               <td className="text-center">{row.Emp_DOB}</td>
-                              <td className="text-center">{row.Emp_joining_date}</td>
-           <td className="d-flex">
-                                <button
-                                  style={{
-                                    color: "white",
-                                    backgroundColor: "green",
-                                    fontSize: "1rem",
-                                    border: "none",
-                                    marginRight: "4px",
-                                  }}
+                              <td className="text-center">
+                                {row.Emp_joining_date}
+                              </td>
+                              <td className="d-flex">
+                                <OverlayTrigger
+                                  key="tooltip"
+                                  placement="bottom"
+                                  overlay={
+                                    <Tooltip id="tooltip">
+                                      Edit Employee
+                                    </Tooltip>
+                                  }
                                 >
-                                  <Icon icon="uiw:edit" />
-                                </button>
-                                <button
-                                onClick={()=>handleDeleteEmployee(row._id)}
-                                  style={{
-                                    color: "white",
-                                    backgroundColor: "red",
-                                    fontSize: "1rem",
-                                    border: "none",
-                                    marginRight: "4px",
-                                  }}
+                                  <button
+                                    style={{
+                                      color: "white",
+                                      backgroundColor: "green",
+                                      fontSize: "1rem",
+                                      border: "none",
+                                      marginRight: "4px",
+                                    }}
+                                  >
+                                    <Icon icon="uiw:edit" />
+                                  </button>
+                                </OverlayTrigger>
+                          
+                                <OverlayTrigger
+                                  key="tooltip"
+                                  placement="bottom"
+                                  overlay={
+                                    <Tooltip id="tooltip">
+                                      Delete Employee
+                                    </Tooltip>
+                                  }
                                 >
-                                  <Icon icon="fluent:delete-20-filled" />
-                                </button>
+                                  <button
+                                    onClick={() =>
+                                      handleDeleteEmployee(row._id)
+                                    }
+                                    style={{
+                                      color: "white",
+                                      backgroundColor: "red",
+                                      fontSize: "1rem",
+                                      border: "none",
+                                      marginRight: "4px",
+                                    }}
+                                  >
+                                    <Icon icon="fluent:delete-20-filled" />
+                                  </button>
+                                </OverlayTrigger>
+
                               </td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
-                     
                     </div>
                   </div>
                 </div>

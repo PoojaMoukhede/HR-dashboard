@@ -3,19 +3,100 @@ import Sidebar from "../../Components/Sidebar/Sidebar";
 import Header from "../../Components/Header/Header";
 import dummyData from "../../Components/MOCK_DATA.json";
 import { Icon } from "@iconify/react";
+import { ExportToExcel } from "../../Components/Export/ExportToExcel";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import axios from "axios";
+import swal from "sweetalert";
+import AddManagers from '../../Components/AddEmployeeModel/AddManagers'
+
+const fileName = "Managers-Contact";
 
 export default function Managers() {
   const [searchValue, setSearchValue] = useState("");
   const [rows, setRows] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const fileType = [
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.ms-excel",
+  ];
 
   const filteredRows = rows.filter((row) =>
     Object.values(row).some((value) =>
       value.toString().toLowerCase().includes(searchValue.toLowerCase())
     )
   );
+
   useEffect(() => {
-    setRows(dummyData);
+    axios
+      .get("http://localhost:8080/getmanager")
+      .then((response) => {
+        setRows(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
+
+  const handleImport = async (event) => {
+    const selected_file = event.target.files[0];
+    if (selected_file) {
+      if (selected_file && fileType.includes(selected_file.type)) {
+        // Create FormData and append the file
+        const formData = new FormData();
+        formData.append("file", selected_file);
+
+        axios
+          .post("http://localhost:8080/importmanager", formData)
+          .then((response) => {
+            console.log("Import response:", response);
+          })
+          .catch((error) => {
+            console.error("Error sending POST request:", error);
+          });
+      } else {
+        console.log("Please Upload Excel file only");
+      }
+      console.log("Selected file type:", selected_file.type);
+    }
+    window.location.reload();
+  };
+  const handleAdd = (newEmployee) => {
+    console.log("model open");
+    setRows((prevRows) => [...prevRows, newEmployee]);
+    console.log("model close");
+  };
+
+  const handleDelete = (id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this user!",
+      icon: "warning",
+      buttons: ["Cancel", "Yes, delete it"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        // User confirmed deletion, proceed with the delete request
+        console.log(`id in delete ${id}`);
+        axios.delete(`http://localhost:8080/delete/${id}`).then((res) => {
+          const updatedRows = rows.filter((row) => row._id !== id);
+          setRows(updatedRows);
+          swal({
+            title: "Deleted!",
+            text: "Manager's data has been deleted.",
+            icon: "success",
+            timer: 2000,
+            button: false,
+          });
+          console.log(`id in delete ${res}`);
+        });
+      } else {
+        // User clicked "Cancel" or closed the dialog, do nothing
+        swal("Cancelled", "Manager's data is safe 😊", "info");
+      }
+    });
+  
+  };
 
   return (
     <>
@@ -26,6 +107,51 @@ export default function Managers() {
 
           <div className="app-main__outer">
             <div className="app-main__inner">
+              <div className="d-flex">
+                <OverlayTrigger
+                  key="tooltip"
+                  placement="top"
+                  overlay={<Tooltip id="tooltip">Add Employee</Tooltip>}
+                >
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="btn btn-primary mb-2 "
+                    style={{ borderRadius: "30px", padding: "10px" }}
+                  >
+                    {/* Add Employee */}
+                    <Icon
+                      icon="mingcute:add-fill"
+                      color="white"
+                      width="1.5rem"
+                    />
+                  </button>
+                </OverlayTrigger>
+                <AddManagers
+                      open={isModalOpen}
+                      onClose={() => setIsModalOpen(false)}
+                      onAdd={handleAdd}
+                    />
+
+                <ExportToExcel apiData={rows} fileName={fileName} />
+                <OverlayTrigger
+                  key="tooltip"
+                  placement="top"
+                  overlay={<Tooltip id="tooltip">Import Data</Tooltip>}
+                >
+                  <div
+                    className="fileUpload"
+                    style={{ borderRadius: "30px", padding: "10px" }}
+                  >
+                    <input
+                      type="file"
+                      className="upload"
+                      onChange={handleImport}
+                    />
+                    <Icon icon="pajamas:import" color="white" width="1.5rem" />
+                    {/* <span>Import</span> */}
+                  </div>
+                </OverlayTrigger>
+              </div>
               <div className="row">
                 <div className="col-md-12">
                   <div className="main-card mb-3 card">
@@ -51,10 +177,10 @@ export default function Managers() {
                       >
                         <thead>
                           <tr>
-                            <th className="text-center">ID</th>
                             <th>Name</th>
                             <th className="text-center">Email</th>
                             <th className="text-center">Contact Number</th>
+                            <th className="text-center">Blood Group</th>
                             <th className="text-center">City</th>
                             <th className="text-center">State</th>
                             <th className="text-center">Action</th>
@@ -63,22 +189,10 @@ export default function Managers() {
                         <tbody>
                           {filteredRows.map((row) => (
                             <tr>
-                              <td className="text-center text-muted">
-                                {row.id}
-                              </td>
+                             
                               <td>
                                 <div className="widget-content p-0">
                                   <div className="widget-content-wrapper">
-                                    <div className="widget-content-left mr-3">
-                                      <div className="widget-content-left">
-                                        <img
-                                          width="40"
-                                          className="rounded-circle"
-                                          src="assets/images/avatars/4.jpg"
-                                          alt=""
-                                        />
-                                      </div>
-                                    </div>
                                     <div className="widget-content-left flex2">
                                       <div className="widget-heading">
                                         {row.name}
@@ -89,31 +203,56 @@ export default function Managers() {
                               </td>
                               <td className="text-center">{row.email}</td>
                               <td className="text-center">{row.contact_no}</td>
+                              <td className="text-center">{row.blood_group}</td>
                               <td className="text-center">{row.city}</td>
                               <td className="text-center">{row.state}</td>
                               <td className="d-flex">
-                                <button
-                                  style={{
-                                    color: "white",
-                                    backgroundColor: "green",
-                                    fontSize: "1rem",
-                                    border: "none",
-                                    marginRight: "4px",
-                                  }}
+                              <OverlayTrigger
+                                  key="tooltip"
+                                  placement="bottom"
+                                  overlay={
+                                    <Tooltip id="tooltip">
+                                      Edit 
+                                    </Tooltip>
+                                  }
                                 >
-                                  <Icon icon="uiw:edit" />
-                                </button>
-                                <button
-                                  style={{
-                                    color: "white",
-                                    backgroundColor: "red",
-                                    fontSize: "1rem",
-                                    border: "none",
-                                    marginRight: "4px",
-                                  }}
+                                  <button
+                                    style={{
+                                      color: "white",
+                                      backgroundColor: "green",
+                                      fontSize: "1rem",
+                                      border: "none",
+                                      marginRight: "4px",
+                                    }}
+                                  >
+                                    <Icon icon="uiw:edit" />
+                                  </button>
+                                </OverlayTrigger>
+                          
+                                <OverlayTrigger
+                                  key="tooltip"
+                                  placement="bottom"
+                                  overlay={
+                                    <Tooltip id="tooltip">
+                                      Delete 
+                                    </Tooltip>
+                                  }
                                 >
-                                  <Icon icon="fluent:delete-20-filled" />
-                                </button>
+                                  <button
+                                    onClick={() =>
+                                      handleDelete(row._id)
+                                    }
+                                    style={{
+                                      color: "white",
+                                      backgroundColor: "red",
+                                      fontSize: "1rem",
+                                      border: "none",
+                                      marginRight: "4px",
+                                    }}
+                                  >
+                                    <Icon icon="fluent:delete-20-filled" />
+                                  </button>
+                                </OverlayTrigger>
                               </td>
                             </tr>
                           ))}

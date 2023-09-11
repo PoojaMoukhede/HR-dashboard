@@ -2,6 +2,9 @@ import React from "react";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 // import '../Reports.css'
+import { Icon } from "@iconify/react";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 export const ExportToExcel = ({ apiData, fileName }) => {
   const fileType =
@@ -17,11 +20,28 @@ export const ExportToExcel = ({ apiData, fileName }) => {
   };
 
   return (
-    <button
-      onClick={(e) => exportToCSV(apiData, fileName)}
-      className="btn"
-      style={{ padding: "0.3rem", marginLeft: "0.5rem", color: "white" ,backgroundColor:"#00bcbe", height:'2.8rem',marginBottom:'0.5rem'}}
-    > Export
-    </button>
+    <OverlayTrigger
+      key="tooltip"
+      placement="top"
+      overlay={<Tooltip id="tooltip">Export Data</Tooltip>}
+    >
+      <button
+        onClick={(e) => exportToCSV(apiData, fileName)}
+        className="btn"
+        // data-toggle="tooltip" data-placement="top" title="Export Data"
+        style={{
+          padding: "10px",
+          marginLeft: "0.5rem",
+          color: "white",
+          backgroundColor: "#00bcbe",
+          height: "2.8rem",
+          marginBottom: "0.5rem",
+          borderRadius: "30px",
+        }}
+      >
+        <Icon icon="uil:export" color="white" width="1.5rem" />
+        {/* Export */}
+      </button>
+    </OverlayTrigger>
   );
 };

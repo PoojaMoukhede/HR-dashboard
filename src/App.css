@@ -370,11 +370,12 @@ h6 span{
   /* margin: 0.5em; */
   margin-left: 0.5rem;
   overflow: hidden;
-  padding: 0.4em;
+  /* padding: 0.4em; */
   margin-bottom: 0.5rem;
   position: relative;
   text-align: center;
-  width: 65px;
+  width: 48px;
+  /* width: 65px; */
   cursor: pointer;
 }
 .fileUpload:hover,
@@ -408,4 +409,90 @@ input[type="file"] {
   display: inline-block;
   padding: 6px 12px;
   cursor: pointer;
+}
+.btn_app{
+  width: 80%;
+  padding: 0.5rem;
+  color: #fff;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.3rem;
+}
+.approve{
+  background-color: rgb(7, 116, 7);
+}
+.reject{
+  background-color: rgb(165, 15, 15);
+}
+.big{
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.activate{
+  background-color:#00c6f8;
+  color:white;
+  padding: 0.7rem;
+}
+.item_s{
+  /* background-color: #fcfcfc; */
+  height: 2.5rem;
+}
+
+
+/* 404 page not found */
+
+.error {
+  color: #c3cdc5;
+  text-align: center;
+  animation: fadein 1.2s ease-in;
+}
+.error > .code {
+  font-size: 10.5em;
+  text-shadow:  0 6px 1px rgba(0,0,0,0.0980392) , 0 0 5px rgba(0,0,0,0.0980392) , 0 1px 3px rgba(0,0,0,0.298039) , 0 3px 5px rgba(0,0,0,0.2) , 0 5px 10px rgba(0,0,0,0.247059) , 0 10px 10px rgba(0,0,0,0.2) , 0 20px 20px rgba(0,0,0,0.14902) ;
+  margin: 0;
+}
+.error > .desc {
+  text-shadow: 0px 3px 5px rgba(0,0,0,0.5), 0px 6px 20px rgba(0,0,0,0.3);
+  font-weight: 400;
+}
+@keyframes fadein {
+  0% {
+    margin-top: -50px;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.pageNotFound{
+  height: 100vh;
+  position: fixed;
+  width: 100%;
+background-image: url('./Images/tamas-tuzes-katai-rEn-AdBr3Ig-unsplash\ \(1\).jpg');
+background-position:center;
+background-repeat:no-repeat;
+background-size: cover;
+}
+.btn0{
+  background-color: #274e33;
+  margin-top: 1%;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  /* padding: 3px; */
+}
+.btn0:hover{
+ color: #d13821;
+ background-color:  #c3cdc5;
+}
+.square {
+  width: 8px;
+  height: 8px;
+  margin: auto;
+}
+.progress{
+  background-color: white;
 }

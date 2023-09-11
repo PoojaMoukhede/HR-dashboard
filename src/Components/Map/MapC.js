@@ -12,7 +12,9 @@ export default function MapC() {
           Active Employees Location 
         </div>
       </div>
-      <img src={map} alt="" height="900px" />
+      {/* <img src={map} alt="" height="900px" /> */}
+    <iframe src="https://maps.google.com/maps?q=ahmedabad&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=&amp;output=embed" frameborder="0" scrolling="no" style={{width:" 100%", height: "800px"}}></iframe>
+
     </>
   );
 }

@@ -11,6 +11,9 @@ import Attandance from './Pages/Attandance'
 import Complaint from './Pages/Complaint'
 import { APIContextProvider } from "./Context";
 import Details from './Pages/Details';
+import PageNotFound from './Components/PageNotFound';
+import Expanse from './Pages/Expanse'
+import ToastNotification from './Components/ToastNotification';
 
 
 
@@ -33,7 +36,10 @@ function App() {
         <Route exact path="/attandance" element={<Attandance/>} />
         <Route exact path="/complaint" element={<Complaint/>} />
         <Route exact path="/details" element={<Details/>} />
-
+        <Route exact path='/details' element={<Details/>}/>
+        <Route exact path='/expanse' element={<Expanse/>}/>
+        <Route exact path='/to' element={<ToastNotification/>}/>
+        <Route exact path='*' element={<PageNotFound/>}/>
         </Routes>
         </APIContextProvider>
     </BrowserRouter>

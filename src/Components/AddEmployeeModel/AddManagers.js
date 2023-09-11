@@ -9,29 +9,20 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { useAPI } from "../../Context";
 
-
-const AddEmployeeModal = ({
-  open,
-  onClose,
-}) => {
-  const [newEmployee, setNewEmployee] = useState({
-    // id: Date.now(),
-    Emp_name: "",
-    Emp_email: "",
-    Emp_contact_No: "",
-    Emp_department: "",
-    Emp_city: "",
-    Emp_state: "",
-    Emp_DOB: "",
-    Emp_joining_date: "",
-    Emp_blood_group:"",
-    Emp_qualification:"",
-    Emp_expertise:""
+const AddManagers = ({ open, onClose }) => {
+  
+  const [newManager, setnewManager] = useState({
+    name: "",
+    email: "",
+    contact_no: "",
+    city: "",
+    state: "",
+    blood_group: "",
   });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewEmployee((prevEmployee) => ({
+    setnewManager((prevEmployee) => ({
       ...prevEmployee,
       [name]: value,
     }));
@@ -39,7 +30,6 @@ const AddEmployeeModal = ({
 
   const [selectedState, setSelectedState] = useState("");
   const [selectedcity, setSelectedcity] = useState("");
-  const [selectedDate, setSelectedDate] = useState(null);
 
   const statesData = {
     AndraPradesh: [
@@ -821,9 +811,9 @@ const AddEmployeeModal = ({
     setSelectedState(stateValue);
     setSelectedcity("");
 
-    setNewEmployee((prevEmployee) => ({
+    setnewManager((prevEmployee) => ({
       ...prevEmployee,
-      Emp_state: stateValue,
+      state: stateValue,
     }));
   };
 
@@ -831,34 +821,30 @@ const AddEmployeeModal = ({
     const cityValue = event.target.value;
     setSelectedcity(cityValue);
 
-    setNewEmployee((prevEmployee) => ({
+    setnewManager((prevEmployee) => ({
       ...prevEmployee,
-      Emp_city: cityValue,
+      city: cityValue,
     }));
   };
 
   const cityOptions = selectedState
-    ? statesData[selectedState].map((Emp_city) => (
-        <MenuItem key={Emp_city} value={Emp_city}>
-          {Emp_city}
+    ? statesData[selectedState].map((city) => (
+        <MenuItem key={city} value={city}>
+          {city}
         </MenuItem>
       ))
     : null;
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  const { onFormSubmit } = useAPI();
+  const { onFormSubmit21 } = useAPI();
   const onFormSubmit1 = (e) => {
-    onFormSubmit( newEmployee);
+    onFormSubmit21(newManager);
 
-    if (!isEmailValid(newEmployee.Emp_email)) {
+    if (!isEmailValid(newManager.email)) {
       alert("Invalid email format");
       return;
     }
-    window.location.reload();
-    console.log(newEmployee);
+    // window.location.reload();
+    console.log("new-------", newManager);
   };
 
   const isEmailValid = (email) => {
@@ -867,205 +853,124 @@ const AddEmployeeModal = ({
   };
 
   return (
-    <> 
-    <Modal
-      open={open}
-      onClose={onClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
-    >
-      <Fade in={open}>
-        <div className="modal-container">
-          <h2>Add New Employee</h2>
-          <div className="grid-container">
-            <div className="grid-row">
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_name"
-                  label="Employee Name"
-                  value={newEmployee.Emp_name}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                />
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="grid-item">
-                <TextField
-                  type="email"
-                  name="Emp_email"
-                  label="Employee E-mail"
-                  value={newEmployee.Emp_email}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                />
-              </div>
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_contact_No"
-                  label="Employee Contact Number"
-                  value={newEmployee.Emp_contact_No}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                />
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_qualification"
-                  label="Qualification"
-                  value={newEmployee.Emp_qualification}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                />
-              </div>
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_department"
-                  label="Department"
-                  value={newEmployee.Emp_department}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                />
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_expertise"
-                  label="Expertise"
-                  value={newEmployee.Emp_expertise}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                />
-              </div>
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_blood_group"
-                  label="Blood Group"
-                  value={newEmployee.Emp_blood_group}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                />
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="grid-item">
-                <Select
-                  name="Emp_state"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  // value={newEmployee.state}
-                  label="State"
-                  style={{ color: "black", marginTop: "15px" }}
-                  fullWidth
-                  value={selectedState}
-                  onChange={handleStateChange}
-
-                  // onChange={handleInputChange}
-                >
-                  <MenuItem>Select</MenuItem>
-                  {Object.keys(statesData).map((state) => (
-                    <MenuItem value={state} key={state}>
-                      {state}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </div>
-              <div className="grid-item">
-                <Select
-                  name="Emp_city"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  // value={newEmployee.city}
-                  label="City"
-                  style={{ color: "black", marginTop: "15px" }}
-                  fullWidth
-                  // onChange={handleInputChange}
-                  value={selectedcity}
-                  onChange={handlecityChange}
-                >
-                  <MenuItem value="">Select</MenuItem>
-                  {cityOptions}
-                </Select>
-              </div>
-            </div>
-            <div className="grid-row mt-3">
-              <div className="grid-item ">
-                <label>Date of Birth</label>
-                <input
-                  type="date"
-                  placeholder="DD/MM/YYYY"
-                  name="Emp_DOB"
-                  value={newEmployee.Emp_DOB}
-                  onChange={handleInputChange}
-                  required
-                  style={{
-                    width: "23.25rem",
-                    height: "3.3rem",
-                    marginTop: "5px",
-                    maxWidth: "100%",
-                  }}
-                />
+    <>
+      <Modal
+        open={open}
+        onClose={onClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className="modal-container">
+            <h2>Add New Manager</h2>
+            <div className="grid-container">
+              <div className="grid-row">
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="name"
+                    label="Name"
+                    value={newManager.name}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                  />
+                </div>
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="contact_no"
+                    label="Contact Number"
+                    value={newManager.contact_no}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                  />
+                </div>
               </div>
 
-              <div className="grid-item">
-                <label>Date of Joining</label>
-                <input
-                  type="date"
-                  placeholder="DD/MM/YYYY"
-                  name="Emp_joining_date"
-                  required
-                  value={newEmployee.Emp_joining_date}
-                  onChange={handleInputChange}
-                  style={{
-                    width: "23.25rem",
-                    height: "3.3rem",
-                    marginTop: "5px",
-                    maxWidth: "100%",
-                  }}
-                />
+              <div className="grid-row">
+                <div className="grid-item">
+                  <TextField
+                    type="email"
+                    name="email"
+                    label="E-mail"
+                    value={newManager.email}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                  />
+                </div>
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="blood_group"
+                    label="Blood Group"
+                    value={newManager.blood_group}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                  />
+                </div>
               </div>
+
+              <div className="grid-row">
+                <div className="grid-item">
+                  <Select
+                    name="state"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="State"
+                    style={{ color: "black", marginTop: "15px" }}
+                    fullWidth
+                    value={selectedState}
+                    onChange={handleStateChange}
+                  >
+                    <MenuItem>Select</MenuItem>
+                    {Object.keys(statesData).map((state) => (
+                      <MenuItem value={state} key={state}>
+                        {state}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div className="grid-item">
+                  <Select
+                    name="city"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="City"
+                    style={{ color: "black", marginTop: "15px" }}
+                    fullWidth
+                    value={selectedcity}
+                    onChange={handlecityChange}
+                  >
+                    <MenuItem value="">Select</MenuItem>
+                    {cityOptions}
+                  </Select>
+                </div>
+              </div>
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onFormSubmit1}
+              >
+                Add Employee
+              </Button>
             </div>
-          
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={onFormSubmit1}
-            >
-             Add Employee
-            </Button>
           </div>
-        </div>
-      </Fade>
-      
-    </Modal>
+        </Fade>
+      </Modal>
     </>
   );
 };
 
-export default AddEmployeeModal;
-
+export default AddManagers;
