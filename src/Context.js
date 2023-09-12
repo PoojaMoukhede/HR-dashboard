@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 const APIContext = createContext();
 
 export function APIContextProvider({ children }) {
-  const URL = "http://localhost:8080/";
+  // const URL = "http://localhost:8080/";
+  const URL = "https://dashboardbackend-production-9839.up.railway.app/"
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [userEmail, setUserEmail] = useState("");
@@ -122,35 +123,35 @@ export function APIContextProvider({ children }) {
       });
   };
 
-  // const onFormSubmitEdit = async(id, data) => { //emplopyee `${URL}putEmployee/${id}`
-  //   console.log(" onformsubmitedit inside")
-  //  await axios           
-  //     .put(`http://localhost:8080/putEmployee/64e30533d1c3cd0aaf6a6aae`)
-  //     console.log("-------------")
-  //     .then((res) => {
-  //       const info = res.data;
-  //       console.log(`info ${info}`);
-  //       setEmployeedata(data)
-  //       console.log(`id while fetching ${id}`)
+  const onFormSubmitEdit = async(id, data) => { //emplopyee `${URL}putEmployee/${id}`
+    console.log(" onformsubmitedit inside")
+   await axios           
+      .put(`http://localhost:8080/putEmployee/${id}`)
+      console.log("-------------")
+      .then((res) => {
+        const info = res.data;
+        console.log(`info ${info}`);
+        setEmployeedata(data)
+        console.log(`id while fetching ${id}`)
       
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
-  const onFormSubmitEdit = async (id, data) => {
-    console.log("onFormSubmitEdit inside");
-    
-    try {
-      const response = await axios.put(`http://localhost:8080/putEmployee/${id}`);
-      const info = response.data;
-      console.log(`info ${info}`);
-      setEmployeedata(data);
-      console.log(`id while fetching ${id}`);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
+  // const onFormSubmitEdit = async (id, data) => {
+  //   console.log("onFormSubmitEdit inside");
+    
+  //   try {
+  //     const response = await axios.put(`http://localhost:8080/putEmployee/${id}`);
+  //     const info = response.data;
+  //     console.log(`info ${info}`);
+  //     setEmployeedata(data);
+  //     console.log(`id while fetching ${id}`);
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
 
   return (
     <APIContext.Provider

@@ -23,7 +23,7 @@ export default function FullCalendarComponent() {
             <div className="app-main__inner">
               <div className="row">
                 <div className="App">
-                  {/* <h1>Current Date/Month</h1> */}
+                  <h3>Functionality Coming Soon</h3>
                   <FullCalendar
                     plugins={[dayGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"

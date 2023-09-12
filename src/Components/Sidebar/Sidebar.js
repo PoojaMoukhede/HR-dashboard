@@ -162,7 +162,7 @@ export default function Sidebar() {
                   )}`}
                   onClick={() => handleItemClick("/calender")}
                 >
-                  <Icon icon="material-symbols:support-agent"  style={style} />
+                  <Icon icon="uil:calender"  style={style} />
                   Calender View
                 </li>
               </Link>

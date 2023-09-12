@@ -29,7 +29,7 @@ export default function Managers() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/getmanager")
+      .get("https://dashboardbackend-production-9839.up.railway.app/getmanager")
       .then((response) => {
         setRows(response.data);
       })
@@ -47,7 +47,7 @@ export default function Managers() {
         formData.append("file", selected_file);
 
         axios
-          .post("http://localhost:8080/importmanager", formData)
+          .post("https://dashboardbackend-production-9839.up.railway.app/importmanager", formData)
           .then((response) => {
             console.log("Import response:", response);
           })
@@ -78,7 +78,7 @@ export default function Managers() {
       if (willDelete) {
         // User confirmed deletion, proceed with the delete request
         console.log(`id in delete ${id}`);
-        axios.delete(`http://localhost:8080/delete/${id}`).then((res) => {
+        axios.delete(`https://dashboardbackend-production-9839.up.railway.app/delete/${id}`).then((res) => {
           const updatedRows = rows.filter((row) => row._id !== id);
           setRows(updatedRows);
           swal({

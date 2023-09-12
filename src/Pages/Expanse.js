@@ -25,9 +25,9 @@ export default function Expanse() {
                         className="card-img-top"
                         alt="..."
                       />
-                      <div class="card-body">
-                        {/* <h5 class="card-title d-flex">Food</h5>
-                        <p class="card-text">2000</p> */}
+                      <div className="card-body">
+                        {/* <h5 className="card-title d-flex">Food</h5>
+                        <p className="card-text">2000</p> */}
                         <div className="row">
                           <div className="col-sm-6">
                             <h5 className="card-title">Food</h5>

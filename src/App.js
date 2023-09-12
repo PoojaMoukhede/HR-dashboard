@@ -15,7 +15,7 @@ import PageNotFound from './Components/PageNotFound';
 import Expanse from './Pages/Expanse'
 import ToastNotification from './Components/ToastNotification';
 import FullCalendarComponent from './Components/Updates/FullCalendarComponent';
-
+import Profile from './Components/Header/Profile';
 
 
 function App() {
@@ -42,6 +42,7 @@ function App() {
         <Route exact path='/to' element={<ToastNotification/>}/>
         <Route exact path='*' element={<PageNotFound/>}/>
         <Route exact path='/calender' element={<FullCalendarComponent/>}/>
+        {/* <Route exact path='/profile' element={<Profile/>}/> */}
         </Routes>
         </APIContextProvider>
     </BrowserRouter>

@@ -9,6 +9,10 @@ import AddEmployeeModel from "../../Components/AddEmployeeModel/AddEmployeeModel
 import { ExportToExcel } from "../../Components/Export/ExportToExcel";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import EditEmployeeModel from '../../Components/AddEmployeeModel/EditEmployeeModel/EditEmployeeModel'
+
+
+
 
 const fileName = "EmployeeData";
 export default function Member() {
@@ -28,7 +32,7 @@ export default function Member() {
   );
   useEffect(() => {
     axios
-      .get("http://localhost:8080/get")
+      .get("https://dashboardbackend-production-9839.up.railway.app/get")
       .then((response) => {
         setRows(response.data);
       })
@@ -55,7 +59,7 @@ export default function Member() {
         // User confirmed deletion, proceed with the delete request
         console.log(`id in delete ${id}`);
         axios
-          .delete(`http://localhost:8080/deleteEmployee/${id}`)
+          .delete(`https://dashboardbackend-production-9839.up.railway.app/deleteEmployee/${id}`)
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
             setRows(updatedRows);
@@ -84,7 +88,7 @@ export default function Member() {
         formData.append("file", selected_file);
 
         axios
-          .post("http://localhost:8080/importdata", formData)
+          .post("https://dashboardbackend-production-9839.up.railway.app/importdata", formData)
           .then((response) => {
             console.log("Import response:", response);
           })
@@ -177,6 +181,11 @@ const handleEditEmployee= async(event)=>{
                       onClose={() => setIsModalOpen(false)}
                       onAdd={handleAddMember}
                     />
+                    <EditEmployeeModel
+                      open={isModalOpen}
+                      onClose={() => setIsModalOpen(false)}
+                      onAdd={handleAddMember}
+                    />
                     <div className="table-responsive">
                       <table
                         className="align-middle mb-0 table table-borderless table-striped table-hover"
@@ -245,6 +254,7 @@ const handleEditEmployee= async(event)=>{
                                   }
                                 >
                                   <button
+                                    onClick={() => setIsModalOpen(true)}
                                     style={{
                                       color: "white",
                                       backgroundColor: "green",

@@ -3,8 +3,19 @@ import Sidebar from "../Components/Sidebar/Sidebar";
 import Header from "../Components/Header/Header";
 import Attandance from "../Components/Charts/Attandance";
 import AttandanceTable from "../Components/Charts/AttandanceTable";
+import BarChart from "../Components/Charts/BarChart";
+import { ToastContainer, toast } from 'react-toastify';
+
+
 
 export default function Details() {
+
+  const toastSuccess = () => toast.success('Leave Approved');
+  const toastError = () => toast.error('Leave Rejected');
+  const toastSuccess2 = () => toast.success('Advance Payment Request Approved');
+  const toastError2 = () => toast.error('Advance Payment Request Rejected');
+  
+
   const workHoursData = [
     { date: "2023-09-01", regularHours: 8, overtimeHours: 2, belowHours: 0 },
     { date: "2023-09-02", regularHours: 6, overtimeHours: 0, belowHours: 2 },
@@ -133,7 +144,7 @@ export default function Details() {
 
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          <span>Date of joining</span>
+                          <span>2021-02-22</span>
                         </div>
                       </div>
                     </div>
@@ -237,10 +248,59 @@ export default function Details() {
                     </div>
                     <div className="tab-content">
                       <div className="tab-pane fade active show" id="tab-eg-55">
-                        <div className="widget-chart p-3">
-                          <div style={{ height: "370px" }}>
-                            {/* <Attandance/> */}
-                            {/* <Attandance data={workHoursData} /> */}
+                        <div className="widget-chart p-3 d-flex ">
+                          <div
+                            style={{ height: "300px", width: "50%" }}
+                            className="d-flex flex-column"
+                          >
+                            <BarChart />
+                            <span className="d-flex justify-content-center">
+                              <h2>16/20</h2>
+                              <p className="ms-1">Days</p>
+                            </span>
+                          </div>
+                          <div className="col-md-12 col-xl-6">
+                            <div className="card-body">
+                              <div className="row">
+                                <div className="col-sm-6">
+                                  <p className="mb-0">Total Leave</p>
+                                </div>
+                                <div className="col-sm-6">
+                                  <p className="text-muted mb-0">20</p>
+                                </div>
+                              </div>
+                              <hr />
+                              <div className="row">
+                                <div className="col-sm-6">
+                                  <p className="mb-0">Leave Used</p>
+                                </div>
+                                <div className="col-sm-6">
+                                  <p className="text-muted mb-0">
+                                    04
+                                  </p>
+                                </div>
+                              </div>
+                              <hr />
+                              <div className="row">
+                                <div className="col-sm-6">
+                                  <p className="mb-0">Status</p>
+                                </div>
+                                <div className="col-sm-6">
+                                  <p className="text-muted mb-0">
+                                    Applied  for 01 days
+                                  </p>
+                                </div>
+                              </div>
+                              <hr />
+                              <div className="row mt-5">
+                                <div className="col-sm-6">
+                                  <button className="btn_app approve" onClick={toastSuccess}>Approve</button>
+                                </div>
+                                <div className="col-sm-6">
+                                 <button className="btn_app reject" onClick={toastError}>Reject</button>
+                                </div>
+                              </div> 
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -262,9 +322,41 @@ export default function Details() {
                         >
                           <div
                             className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
-                            style={{ height: "370px"}}
+                            style={{ height: "300px" }}
                           >
-                            {/* <AttandanceTable /> */}
+                            <div className="col-md-12 col-xl-12">
+                            <div className="card-body">
+                              <div className="row">
+                                <div className="col-sm-6">
+                                  <p className="mb-0">Total Amount Till Last Month</p>
+                                </div>
+                                <div className="col-sm-6">
+                                  <p className="text-muted mb-0">22000 &#8377;</p>
+                                </div>
+                              </div>
+                              <hr />
+                              <div className="row">
+                                <div className="col-sm-6">
+                                  <p className="mb-0">Claim This Month</p>
+                                </div>
+                                <div className="col-sm-6">
+                                  <p className="text-muted mb-0">
+                                    4200 &#8377;
+                                  </p>
+                                </div>
+                              </div>
+                              <hr />
+                              
+                              <div className="row mt-5">
+                                <div className="col-sm-6">
+                                  <button className="btn_app approve" onClick={toastSuccess2}>Approve</button>
+                                </div>
+                                <div className="col-sm-6">
+                                 <button className="btn_app reject" onClick={toastError2}>Reject</button>
+                                </div>
+                              </div> 
+                            </div>
+                          </div>
                           </div>
                         </div>
                       </div>
@@ -272,7 +364,17 @@ export default function Details() {
                   </div>
                 </div>
               </div>
-
+<ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
             </div>
           </div>
         </div>
