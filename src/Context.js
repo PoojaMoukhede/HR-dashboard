@@ -128,7 +128,7 @@ export function APIContextProvider({ children }) {
   const onFormSubmitEdit = async(id, data) => { //emplopyee `${URL}putEmployee/${id}`
     console.log(" onformsubmitedit inside")
    await axios           
-      .put(`http://localhost:8080/putEmployee/${id}`)
+      .put(`http://localhost:8080/putEmployee/${id}`,data)
       console.log("-------------")
       .then((res) => {
         const info = res.data;

@@ -11,9 +11,10 @@ import { useAPI } from "../../../Context";
 import { useEffect } from "react";
 import axios from "axios";
 
-const AddEmployeeModal = ({
+const EditEmployeeModal = ({
   open,
   onClose,
+  selectedEmployee,
 }) => {
   const [newEmployee, setNewEmployee] = useState({
     // id: Date.now(),
@@ -29,7 +30,7 @@ const AddEmployeeModal = ({
     Emp_qualification:"",
     Emp_expertise:""
   });
-
+ console.log(`selectedEmployee ${selectedEmployee}`)
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewEmployee((prevEmployee) => ({
@@ -852,13 +853,13 @@ const AddEmployeeModal = ({
 
   const { onFormSubmitEdit } = useAPI();
   const onFormSubmit = (e) => {
-    onFormSubmitEdit(newEmployee);
+    onFormSubmitEdit(selectedEmployee._id,newEmployee);
 
     if (!isEmailValid(newEmployee.Emp_email)) {
       alert("Invalid email format");
       return;
     }
-    window.location.reload();
+    // window.location.reload();
     console.log(newEmployee);
   };
 
@@ -866,7 +867,7 @@ const AddEmployeeModal = ({
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
-  useEffect((id) => {
+  useEffect(() => {
     // axios
     //   .get(`http://localhost:8080/getemployee/${id}`)
     //   .then((response) => {
@@ -875,7 +876,30 @@ const AddEmployeeModal = ({
     //   .catch((error) => {
     //     console.error("Error fetching data:", error);
     //   });
-  }, []);
+
+    console.log({selectedEmployee});
+if(selectedEmployee){
+  const emp ={
+    Emp_name: selectedEmployee.Emp_name,
+ Emp_email: selectedEmployee.Emp_email,
+ Emp_contact_No: selectedEmployee.Emp_contact_No,
+ Emp_department: selectedEmployee.Emp_department,
+ Emp_city:selectedEmployee.Emp_city,
+ Emp_state: selectedEmployee.Emp_state,
+ Emp_DOB: selectedEmployee.Emp_DOB,
+ Emp_joining_date: selectedEmployee.Emp_joining_date,
+ Emp_blood_group:selectedEmployee.Emp_blood_group,
+ Emp_qualification:selectedEmployee.Emp_qualification,
+ Emp_expertise:selectedEmployee.Emp_expertise
+
+ }
+
+ setNewEmployee(emp)
+
+}
+   
+
+  }, [selectedEmployee]);
 
   return (
     <> 
@@ -1079,5 +1103,5 @@ const AddEmployeeModal = ({
   );
 };
 
-export default AddEmployeeModal;
+export default EditEmployeeModal;
 

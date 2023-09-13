@@ -9,7 +9,7 @@ import AddEmployeeModel from "../../Components/AddEmployeeModel/AddEmployeeModel
 import { ExportToExcel } from "../../Components/Export/ExportToExcel";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-// import EditEmployeeModel from '../../Components/AddEmployeeModel/EditEmployeeModel/EditEmployeeModel'
+import EditEmployeeModel from '../../Components/AddEmployeeModel/EditEmployeeModel/EditEmployeeModel'
 
 
 
@@ -17,6 +17,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 const fileName = "EmployeeData";
 export default function Member() {
   const [rows, setRows] = useState([]);
+  const [selectedEmployee,setSelectedEmployee] = useState(null)
   // const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -177,11 +178,12 @@ export default function Member() {
                       onClose={() => setIsModalOpen(false)}
                       onAdd={handleAddMember}
                     />
-                    {/* <EditEmployeeModel
+                    <EditEmployeeModel
+                    selectedEmployee={selectedEmployee}
                       open={isModalOpen}
                       onClose={() => setIsModalOpen(false)}
                       onAdd={handleAddMember}
-                    /> */}
+                    />
                     <div className="table-responsive">
                       <table
                         className="align-middle mb-0 table table-borderless table-striped table-hover"
@@ -250,7 +252,12 @@ export default function Member() {
                                   }
                                 >
                                   <button
-                                    onClick={() => setIsModalOpen(true)}
+                                    onClick={(e) => {setIsModalOpen(true)
+                                    // console.log(e)
+                                    // console.log(row)
+                                    setSelectedEmployee(row)
+                                  }
+                                    }
                                     style={{
                                       color: "white",
                                       backgroundColor: "green",
