@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import Header from "../../Components/Header/Header";
-import dummyData from "../../Components/MOCK_DATA.json";
+// import dummyData from "../../Components/MOCK_DATA.json";
 import { Icon } from "@iconify/react";
 import { ExportToExcel } from "../../Components/Export/ExportToExcel";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import axios from "axios";
 import swal from "sweetalert";
-import AddManagers from '../../Components/AddEmployeeModel/AddManagers'
+import AddManagers from "../../Components/AddEmployeeModel/AddManagers";
 
 const fileName = "Managers-Contact";
 
@@ -47,7 +47,10 @@ export default function Managers() {
         formData.append("file", selected_file);
 
         axios
-          .post("https://dashboardbackend-production-9839.up.railway.app/importmanager", formData)
+          .post(
+            "https://dashboardbackend-production-9839.up.railway.app/importmanager",
+            formData
+          )
           .then((response) => {
             console.log("Import response:", response);
           })
@@ -78,24 +81,54 @@ export default function Managers() {
       if (willDelete) {
         // User confirmed deletion, proceed with the delete request
         console.log(`id in delete ${id}`);
-        axios.delete(`https://dashboardbackend-production-9839.up.railway.app/delete/${id}`).then((res) => {
-          const updatedRows = rows.filter((row) => row._id !== id);
-          setRows(updatedRows);
-          swal({
-            title: "Deleted!",
-            text: "Manager's data has been deleted.",
-            icon: "success",
-            timer: 2000,
-            button: false,
+        axios
+          .delete(
+            `https://dashboardbackend-production-9839.up.railway.app/delete/${id}`
+          )
+          .then((res) => {
+            const updatedRows = rows.filter((row) => row._id !== id);
+            setRows(updatedRows);
+            swal({
+              title: "Deleted!",
+              text: "Manager's data has been deleted.",
+              icon: "success",
+              timer: 2000,
+              button: false,
+            });
+            console.log(`id in delete ${res}`);
           });
-          console.log(`id in delete ${res}`);
-        });
       } else {
         // User clicked "Cancel" or closed the dialog, do nothing
         swal("Cancelled", "Manager's data is safe 😊", "info");
       }
     });
-  
+  };
+  const [selectedRows, setSelectedRows] = useState([]);
+  const handleRowSelection = (email) => {
+    if (selectedRows.includes(email)) {
+      setSelectedRows(selectedRows.filter((id) => id !== email));
+    } else {
+      setSelectedRows([...selectedRows, email]);
+    }
+    const newData = rows.map((row) => {
+      if (row.email === email) {
+        return { ...row, email };
+      }
+      return row;
+    });
+    setRows(newData);
+  };
+  const handleDeleteRows = () => {
+    axios
+    .delete(
+      'http://localhost:8080/deleteAll'
+    )
+    .then((res) => {
+      const newData = rows.filter((row) => !selectedRows.includes(row.email));
+    setRows(newData);
+    setSelectedRows([]);
+    })
+    
   };
 
   return (
@@ -108,6 +141,20 @@ export default function Managers() {
           <div className="app-main__outer">
             <div className="app-main__inner">
               <div className="d-flex">
+              <OverlayTrigger
+                  key="tooltip"
+                  placement="top"
+                  overlay={<Tooltip id="tooltip">Delete All</Tooltip>}
+                >
+                 
+                <button
+                  className="btn btn-primary mb-2 mr-2"
+                  onClick={handleDeleteRows}
+                  style={{ borderRadius: "30px", padding: "10px" }}
+                >
+                  <Icon icon="fluent:delete-16-regular" color="white"  width="1.5rem"/>
+                </button>
+                </OverlayTrigger>
                 <OverlayTrigger
                   key="tooltip"
                   placement="top"
@@ -127,14 +174,14 @@ export default function Managers() {
                   </button>
                 </OverlayTrigger>
                 <AddManagers
-                      open={isModalOpen}
-                      onClose={() => setIsModalOpen(false)}
-                      onAdd={handleAdd}
-                    />
+                  open={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                  onAdd={handleAdd}
+                />
 
                 <ExportToExcel apiData={rows} fileName={fileName} />
                 <OverlayTrigger
-                  key="tooltip"
+                  key="tooltip1"
                   placement="top"
                   overlay={<Tooltip id="tooltip">Import Data</Tooltip>}
                 >
@@ -177,6 +224,7 @@ export default function Managers() {
                       >
                         <thead>
                           <tr>
+                            <th className="select-header">Select</th>
                             <th>Name</th>
                             <th className="text-center">Email</th>
                             <th className="text-center">Contact Number</th>
@@ -188,8 +236,15 @@ export default function Managers() {
                         </thead>
                         <tbody>
                           {filteredRows.map((row) => (
-                            <tr>
-                             
+                            <tr key={row.id}>
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  style={{ height: "1rem", width: "2rem" }}
+                                  checked={selectedRows.includes(row.email)}
+                                  onChange={() => handleRowSelection(row.email)}
+                                />
+                              </td>
                               <td>
                                 <div className="widget-content p-0">
                                   <div className="widget-content-wrapper">
@@ -207,14 +262,10 @@ export default function Managers() {
                               <td className="text-center">{row.city}</td>
                               <td className="text-center">{row.state}</td>
                               <td className="d-flex">
-                              <OverlayTrigger
-                                  key="tooltip"
+                                <OverlayTrigger
+                                  key="tooltip2"
                                   placement="bottom"
-                                  overlay={
-                                    <Tooltip id="tooltip">
-                                      Edit 
-                                    </Tooltip>
-                                  }
+                                  overlay={<Tooltip id="tooltip">Edit</Tooltip>}
                                 >
                                   <button
                                     style={{
@@ -228,20 +279,16 @@ export default function Managers() {
                                     <Icon icon="uiw:edit" />
                                   </button>
                                 </OverlayTrigger>
-                          
+
                                 <OverlayTrigger
-                                  key="tooltip"
+                                  key="tooltip3"
                                   placement="bottom"
                                   overlay={
-                                    <Tooltip id="tooltip">
-                                      Delete 
-                                    </Tooltip>
+                                    <Tooltip id="tooltip">Delete</Tooltip>
                                   }
                                 >
                                   <button
-                                    onClick={() =>
-                                      handleDelete(row._id)
-                                    }
+                                    onClick={() => handleDelete(row._id)}
                                     style={{
                                       color: "white",
                                       backgroundColor: "red",

@@ -6,9 +6,9 @@ import { chartData2 } from "../Data";
 import ReactApexChart from "react-apexcharts";
 import Table from "../Table/Table";
 import MapC from "../Map/MapC";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Updates from "../Updates/Updates";
-import ComplaintD from "./ComplaintD";
+// import ComplaintD from "./ComplaintD";
 
 export default function Dashboard() {
   return (

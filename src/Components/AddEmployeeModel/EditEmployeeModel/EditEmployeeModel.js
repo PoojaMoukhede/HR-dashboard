@@ -867,14 +867,14 @@ const AddEmployeeModal = ({
     return emailRegex.test(email);
   };
   useEffect((id) => {
-    axios
-      .get(`http://localhost:8080/getemployee/${id}`)
-      .then((response) => {
-        setNewEmployee(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    // axios
+    //   .get(`http://localhost:8080/getemployee/${id}`)
+    //   .then((response) => {
+    //     setNewEmployee(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching data:", error);
+    //   });
   }, []);
 
   return (

@@ -9,7 +9,7 @@ import AddEmployeeModel from "../../Components/AddEmployeeModel/AddEmployeeModel
 import { ExportToExcel } from "../../Components/Export/ExportToExcel";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import EditEmployeeModel from '../../Components/AddEmployeeModel/EditEmployeeModel/EditEmployeeModel'
+// import EditEmployeeModel from '../../Components/AddEmployeeModel/EditEmployeeModel/EditEmployeeModel'
 
 
 
@@ -104,10 +104,6 @@ export default function Member() {
   };
 
 
-const handleEditEmployee= async(event)=>{
-
-}
-
   return (
     <>
       <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -119,7 +115,7 @@ const handleEditEmployee= async(event)=>{
             <div className="app-main__inner">
               <div className="d-flex">
                 <OverlayTrigger
-                  key="tooltip"
+                  key="tooltip4"
                   placement="top"
                   overlay={<Tooltip id="tooltip">Add Employee</Tooltip>}
                 >
@@ -139,7 +135,7 @@ const handleEditEmployee= async(event)=>{
 
                 <ExportToExcel apiData={rows} fileName={fileName} />
                 <OverlayTrigger
-                  key="tooltip"
+                  key="tooltip5"
                   placement="top"
                   overlay={<Tooltip id="tooltip">Import Data</Tooltip>}
                 >
@@ -181,11 +177,11 @@ const handleEditEmployee= async(event)=>{
                       onClose={() => setIsModalOpen(false)}
                       onAdd={handleAddMember}
                     />
-                    <EditEmployeeModel
+                    {/* <EditEmployeeModel
                       open={isModalOpen}
                       onClose={() => setIsModalOpen(false)}
                       onAdd={handleAddMember}
-                    />
+                    /> */}
                     <div className="table-responsive">
                       <table
                         className="align-middle mb-0 table table-borderless table-striped table-hover"
@@ -245,7 +241,7 @@ const handleEditEmployee= async(event)=>{
                               </td>
                               <td className="d-flex">
                                 <OverlayTrigger
-                                  key="tooltip"
+                                  key="tooltip6"
                                   placement="bottom"
                                   overlay={
                                     <Tooltip id="tooltip">
@@ -268,7 +264,7 @@ const handleEditEmployee= async(event)=>{
                                 </OverlayTrigger>
                           
                                 <OverlayTrigger
-                                  key="tooltip"
+                                  key="tooltip7"
                                   placement="bottom"
                                   overlay={
                                     <Tooltip id="tooltip">

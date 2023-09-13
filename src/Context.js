@@ -30,7 +30,6 @@ export function APIContextProvider({ children }) {
   // const editManagerURL = `${URL}delete/${id}`;
   // const deleteManagerURL = `${URL}put/${id}`;
 
-
   //post user
   const signUpUser = (userData) => {
     console.log(userData);
@@ -39,7 +38,10 @@ export function APIContextProvider({ children }) {
         .post(SignUpUrl, userData)
         .then((res) => {
           console.log(res);
-          navigate("/register");
+          window.alert(`Registeration Completed`);
+
+          navigate("/login");
+          
         })
         .catch((err) => {
           console.log(err);
