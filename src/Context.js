@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const APIContext = createContext();
 
 export function APIContextProvider({ children }) {
-  // const URL = "http://localhost:8080/";
+  // const URL = "http://localhost:8000/";
   const URL = "https://dashboardbackend-production-9839.up.railway.app/"
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -21,15 +21,17 @@ export function APIContextProvider({ children }) {
   // TAKES email Password gives Token
   const loginUrl = `${URL}login`;
 
-  //add new employees
-  const addEmployeeURL = `${URL}add`;
+  //add new employeesemployees
+  const addEmployeeURL = `${URL}employees`;
+  // const addEmployeeURL = `${URL}add`;
   // const editEmployeeURL = `${URL}putEmployee/${id}`;
   // const deleteEmployeeURL = `${URL}deleteEmployee/${id}`;
 
-  const addManagerURL = `${URL}addmanager`;
+  const addManagerURL = `${URL}managers`;
+  // const addManagerURL = `${URL}addmanager`;
   // const editManagerURL = `${URL}delete/${id}`;
-  // const deleteManagerURL = `${URL}put/${id}`;
-
+  // const deleteManagerURL = `${URL}put/${id}`
+  
   //post user
   const signUpUser = (userData) => {
     console.log(userData);
@@ -129,13 +131,15 @@ export function APIContextProvider({ children }) {
     console.log(" onformsubmitedit inside")
    await axios           
       .put(`http://localhost:8080/putEmployee/${id}`,data)
-      console.log("-------------")
+      // .put(`http://localhost:8000/employees/${id}`,data)
+
+      // console.log("-------------")
       .then((res) => {
         const info = res.data;
         console.log(`info ${info}`);
         setEmployeedata(data)
         console.log(`id while fetching ${id}`)
-      
+        window.location.reload()
       })
       .catch((error) => {
         console.error("Error:", error);

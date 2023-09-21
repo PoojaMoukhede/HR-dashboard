@@ -1,22 +1,27 @@
-import React from "react";
-// import "./dashboard.css";
+import React,{useContext } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import { chartData } from "../Data";
 import { chartData2 } from "../Data";
 import ReactApexChart from "react-apexcharts";
 import Table from "../Table/Table";
 import MapC from "../Map/MapC";
-// import { Link } from "react-router-dom";
 import Updates from "../Updates/Updates";
 // import ComplaintD from "./ComplaintD";
+// import { Link } from "react-router-dom";
+import { ThemeContext } from "../Header/ThemeProvider";
 
 export default function Dashboard() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   return (
     <>
+     <div className={`App ${theme}`}>
       <div className="app-main">
         <Sidebar />
         <div className="app-main__outer">
           <div className="app-main__inner">
+          {/* <div className="header-toggle-buttons">
+            <button onClick={() => toggleTheme()}>{theme}</button>
+          </div> */}
             <div className="row">
               <div className="col-md-6 col-xl-4">
                 <div className="mb-3 widget-content bg-plum-plate">
@@ -345,6 +350,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

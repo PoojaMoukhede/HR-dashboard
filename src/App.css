@@ -562,3 +562,23 @@ background-size: cover;
 .fc-event, .fc-event-dot {
   background-color: #234394;
 }
+
+
+.titlle:hover{
+  color: #000000;
+}
+
+.Event_title:hover .edit {
+	display: block;
+}
+.edit {
+	padding-top: 3px;	
+	padding-right: 7px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	display: none;
+  color: #000000;
+}
+
+

@@ -17,7 +17,6 @@ import ToastNotification from './Components/ToastNotification';
 import FullCalendarComponent from './Components/Updates/FullCalendarComponent';
 import Profile from './Components/Header/Profile';
 
-
 function App() {
   return (
     <>

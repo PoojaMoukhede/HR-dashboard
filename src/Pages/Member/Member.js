@@ -33,7 +33,10 @@ export default function Member() {
   );
   useEffect(() => {
     axios
-      .get("https://dashboardbackend-production-9839.up.railway.app/get")
+      .get( 
+        // "http://localhost:8000/employees"
+        "https://dashboardbackend-production-9839.up.railway.app/get"
+        )
       .then((response) => {
         setRows(response.data);
       })
@@ -61,6 +64,8 @@ export default function Member() {
         console.log(`id in delete ${id}`);
         axios
           .delete(`https://dashboardbackend-production-9839.up.railway.app/deleteEmployee/${id}`)
+          // .delete(`http://localhost:8000/employees/${id}`)
+
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
             setRows(updatedRows);
@@ -89,7 +94,9 @@ export default function Member() {
         formData.append("file", selected_file);
 
         axios
+          // .post("https://dashboardbackend-production-9839.up.railway.app/importdata", formData)
           .post("https://dashboardbackend-production-9839.up.railway.app/importdata", formData)
+
           .then((response) => {
             console.log("Import response:", response);
           })
@@ -192,6 +199,7 @@ export default function Member() {
                         <thead>
                           <tr>
                             <th>Name</th>
+                            {/* <th>ID</th> */}
                             <th className="text-center">Email</th>
                             <th className="text-center">Contact Number</th>
                             <th className="text-center">Department</th>
@@ -219,6 +227,7 @@ export default function Member() {
                                   </div>
                                 </div>
                               </td>
+                              {/* <td className="text-center">{row.empID}</td> */}
                               <td className="text-center">{row.Emp_email}</td>
                               <td className="text-center">
                                 {row.Emp_contact_No}

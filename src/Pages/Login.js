@@ -29,11 +29,13 @@ export default function Login() {
                   <div className="col-lg-6">
                     <div className="card-body p-md-5 mx-md-4">
                       <div className="text-center">
-                        <img
-                          src={logo}
-                          style={{ width: " 105px" }}
-                          alt="logo"
-                        />
+                        <Link to="/">
+                          <img
+                            src={logo}
+                            style={{ width: " 105px" }}
+                            alt="logo"
+                          />
+                        </Link>
                         <h4 className="mt-1 mb-5 pb-1">
                           Please login to your account
                         </h4>
@@ -68,7 +70,7 @@ export default function Login() {
 
                         <div className="text-center pt-1 mb-5 pb-1">
                           <button
-                            className="btn text-white btn-block fa-lg bg-happy-fisher mb-3"
+                            className="btn text-white btn-block  bg-happy-fisher mb-3"
                             type="button"
                             onClick={UserLogin}
                           >

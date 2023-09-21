@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, createContext, useContext } from "react";
 import m_logo from "../../Images/multispan-logo 2.png";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import DropDown from "../DropDown";
-
+import { ThemeContext } from "../Header/ThemeProvider";
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+ 
 
   const navigate = useNavigate();
   function handleLogout() {
@@ -21,6 +22,54 @@ export default function Header() {
     console.log("sidebar toggle");
     setIsSidebarOpen(!isSidebarOpen);
   }
+
+  // const documentBody = document.body;
+
+  // function handleOnChange(){
+  //   let theme = getTheme();
+
+  //   if(theme === 'dark') {
+  //       setTheme('light');
+  //   } else {
+  //       setTheme('dark');
+  //   }
+  // }
+
+  // //functions
+  // function changeBackground () {
+  //     let theme = getTheme();
+
+  //     if(theme === 'dark') {
+  //         documentBody.classList.add('active');
+  //     } else {
+  //         documentBody.classList.remove('active');
+  //     }
+  // }
+
+  // function checkTheme() {
+  //     let theme = getTheme();
+  //     if(theme == null || theme === undefined || typeof(theme) != 'string') {
+  //         setTheme('light');
+  //     } else {
+  //         if(theme === 'dark') {
+  //             setTheme('dark');
+  //         } else {
+  //             setTheme('light');
+  //         }
+  //     }
+  // }
+
+  // function setTheme(theme = 'light') {
+  //     window.localStorage.setItem('theme', theme);
+  //     changeBackground();
+  // }
+
+  // function getTheme(){
+  //     return window.localStorage.getItem('theme');
+  // }
+
+  // checkTheme();
+
   return (
     <>
       <div className="app-header header-shadow">
@@ -29,6 +78,19 @@ export default function Header() {
             {" "}
             <img alt="" src={m_logo} />
           </div>
+          {/* <input
+            type="checkbox"
+            name="switcher"
+            id="switcher-input"
+            class="switcher-input"
+            // onChange={handleOnChange}
+          />
+        
+          <label class="switcher-label" for="switcher-input">
+            <i class="fas fa-solid fa-moon"></i>
+            <span class="switcher-toggler"></span>
+            <i class="fas fa-solid fa-sun"></i>
+          </label> */}
           <div className="right pt-2">
             <div className="notifications mt-1">
               <span className="mt-1 hover_icon">
@@ -38,6 +100,7 @@ export default function Header() {
                   style={{ fontSize: "1.6rem" }}
                 />
               </span>
+
               <span className="num">4</span>
               <ul className="ul_list">
                 <li className="icon">

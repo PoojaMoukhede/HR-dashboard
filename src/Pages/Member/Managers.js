@@ -30,6 +30,8 @@ export default function Managers() {
   useEffect(() => {
     axios
       .get("https://dashboardbackend-production-9839.up.railway.app/getmanager")
+      // .get("http://localhost:8000/managers")
+
       .then((response) => {
         setRows(response.data);
       })
@@ -49,6 +51,7 @@ export default function Managers() {
         axios
           .post(
             "https://dashboardbackend-production-9839.up.railway.app/importmanager",
+            // "http://localhost:8000/managers",
             formData
           )
           .then((response) => {
@@ -84,6 +87,7 @@ export default function Managers() {
         axios
           .delete(
             `https://dashboardbackend-production-9839.up.railway.app/delete/${id}`
+            // `http://localhost:8000/managers/${id}`
           )
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
@@ -119,6 +123,7 @@ export default function Managers() {
     setRows(newData);
   };
   const handleDeleteRows = () => {
+    console.log("delete All requested")
     axios
     .delete(
       'http://localhost:8080/deleteAll'
@@ -126,10 +131,25 @@ export default function Managers() {
     .then((res) => {
       const newData = rows.filter((row) => !selectedRows.includes(row.email));
     setRows(newData);
-    setSelectedRows([]);
+    
+    // setSelectedRows([]);
     })
     
   };
+  // const handleChange=(e)=>{ 
+  //       const { name, checked}= e.target;
+  //     if(name==="allselect")
+  //     {
+  //     const checkedvalue = selectedRows.map( (user)=>{ return {...user, isChecked:checked}});
+  //     console.log(checkedvalue);
+  //     setRows(checkedvalue);
+  //     } else{
+  //      const checkedvalue= selectedRows.map( (user)=>
+  //      user.username ===name? {...user, isChecked:checked}:user);
+  //      console.log(checkedvalue);
+  //      setRows(checkedvalue);
+  //     }
+  //   }
 
   return (
     <>
@@ -149,7 +169,8 @@ export default function Managers() {
                  
                 <button
                   className="btn btn-primary mb-2 mr-2"
-                  onClick={handleDeleteRows}
+                  name="allselect"
+                  // onClick={handleDeleteRows}
                   style={{ borderRadius: "30px", padding: "10px" }}
                 >
                   <Icon icon="fluent:delete-16-regular" color="white"  width="1.5rem"/>
@@ -224,8 +245,14 @@ export default function Managers() {
                       >
                         <thead>
                           <tr>
-                            <th className="select-header">Select</th>
+                            <th className="select-header">
+                              {/* <p>Select</p> */}
+                            <input type="checkbox"
+                             style={{ height: "1rem", width: "2rem" }}
+                            />
+                            </th>
                             <th>Name</th>
+                            {/* <th>ID</th> */}
                             <th className="text-center">Email</th>
                             <th className="text-center">Contact Number</th>
                             <th className="text-center">Blood Group</th>
@@ -243,6 +270,7 @@ export default function Managers() {
                                   style={{ height: "1rem", width: "2rem" }}
                                   checked={selectedRows.includes(row.email)}
                                   onChange={() => handleRowSelection(row.email)}
+                                  // onClick={()=>handleChange()}
                                 />
                               </td>
                               <td>
@@ -256,9 +284,15 @@ export default function Managers() {
                                   </div>
                                 </div>
                               </td>
+                              {/* <td className="text-center">{row.mID}</td> */}
+
                               <td className="text-center">{row.email}</td>
-                              <td className="text-center">{row.contact_no}</td>
-                              <td className="text-center">{row.blood_group}</td>
+                              <td className="text-center">{row.contact_no}</td>  
+                               {/*  please  change it for mongodb its contact_no */}
+                              <td className="text-center">
+                                {/* {row.blood_group} */}
+                                SQL has no field
+                                </td>
                               <td className="text-center">{row.city}</td>
                               <td className="text-center">{row.state}</td>
                               <td className="d-flex">
