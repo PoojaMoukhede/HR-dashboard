@@ -7,10 +7,9 @@ import PolorChart from "../Components/PolorChart";
 import LeaveTable from "./LeaveTable";
 
 export default function Attandance() {
-  const chart1Labels = ["Absent", "Present"];
-  const chart2Labels = ["Absent", "Present"];
-  const chart3Labels = [["On-Site", "In-Office", "Pending"]];
-
+  const chart1Labels = ['Absent', 'Present'];
+  const chart2Labels = ['Absent', 'Present'];
+  const chart3Labels = ['On-Site', 'In-Office', 'Pending'];
   return (
     <>
       <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -34,10 +33,11 @@ export default function Attandance() {
                       <div className="tab-pane fade active show" id="tab-eg-55">
                         <div className="widget-chart p-3">
                           <div style={{ height: "370px" }}>
-                            <PolorChart
+                            {/* <PolorChart
                               series={[82, 47]}
                               labels={chart1Labels}
-                            />
+                            /> */}
+                             <PolorChart series={[82, 47]} labels={chart1Labels}/>
                           </div>
                         </div>
                       </div>
@@ -64,7 +64,8 @@ export default function Attandance() {
                             className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
                             style={{ height: "370px" }}
                           >
-                            <PolorChart series={[42, 47]} />
+                            {/* <PolorChart series={[42, 47]} /> */}
+                            <PolorChart series={[82, 47]} labels={chart2Labels}/>
                           </div>
                         </div>
                       </div>
@@ -92,7 +93,8 @@ export default function Attandance() {
                             className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
                             style={{ height: "370px" }}
                           >
-                            <PolorChart series={[42, 47, 54]} />
+                            {/* <PolorChart series={[42, 47, 54]} /> */}
+                            <PolorChart series={[42, 47,54]} labels={chart3Labels}/>
                           </div>
                         </div>
                       </div>

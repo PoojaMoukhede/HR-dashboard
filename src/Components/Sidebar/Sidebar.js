@@ -166,6 +166,17 @@ export default function Sidebar() {
                   Calender View
                 </li>
               </Link>
+              <Link to="/canteen">
+                <li
+                  className={` item_s app-sidebar__heading ${getActiveClass(
+                    "/calender"
+                  )}`}
+                  onClick={() => handleItemClick("/canteen")}
+                >
+                  <Icon icon="ep:food"  style={style} />
+                  Canteen facility
+                </li>
+              </Link>
               {/* Repeat this pattern for other sidebar items */}
               <li
                 className=" item_s app-sidebar__heading"

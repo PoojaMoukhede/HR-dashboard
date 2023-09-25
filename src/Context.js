@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const APIContext = createContext();
 
 export function APIContextProvider({ children }) {
-  // const URL = "http://localhost:8000/";
+  // const URL = "http://localhost:8080/";
   const URL = "https://dashboardbackend-production-9839.up.railway.app/"
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +47,7 @@ export function APIContextProvider({ children }) {
         })
         .catch((err) => {
           console.log(err);
-          window.alert(`Registeration Failed`);
+          window.alert(`Registeration Failed`,err);
         });
     } catch (error) {
       window.alert(error.message);

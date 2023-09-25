@@ -582,3 +582,9 @@ background-size: cover;
 }
 
 
+.row{
+  cursor:default;
+}
+.vertical-nav-menu li{
+  cursor:pointer;
+}

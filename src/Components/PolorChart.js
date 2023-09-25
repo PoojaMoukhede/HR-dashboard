@@ -8,7 +8,7 @@ function PolorChart({series,labels}) {
       width: 380,
       type: 'polarArea',
     },
-    // labels: ['On-Site', 'In-Office', 'Pending'],
+    labels:labels,
     fill: {
       opacity: 1,
     },

@@ -16,6 +16,7 @@ import Expanse from './Pages/Expanse'
 import ToastNotification from './Components/ToastNotification';
 import FullCalendarComponent from './Components/Updates/FullCalendarComponent';
 import Profile from './Components/Header/Profile';
+import CanteenFacility from './Pages/CanteenFacility';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route exact path='/expanse' element={<Expanse/>}/>
         <Route exact path='/to' element={<ToastNotification/>}/>
         <Route exact path='*' element={<PageNotFound/>}/>
+        <Route exact path='/canteen' element={<CanteenFacility/>}/>
         <Route exact path='/calender' element={<FullCalendarComponent/>}/>
         {/* <Route exact path='/profile' element={<Profile/>}/> */}
         </Routes>

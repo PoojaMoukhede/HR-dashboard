@@ -9,6 +9,7 @@ import Updates from "../Updates/Updates";
 // import ComplaintD from "./ComplaintD";
 // import { Link } from "react-router-dom";
 import { ThemeContext } from "../Header/ThemeProvider";
+import Canteen from "../../Pages/Canteen";
 
 export default function Dashboard() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -345,6 +346,14 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-md-12">
+                <div className="mb-3 card">
+                 <Canteen/>
                 </div>
               </div>
             </div>

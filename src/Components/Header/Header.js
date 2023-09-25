@@ -143,7 +143,7 @@ export default function Header() {
           <span>
             <button
               type="button"
-              className="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav"
+              className="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav "
               onClick={() => handleLogout()}
             >
               <span className="btn-icon-wrapper">Logout</span>
