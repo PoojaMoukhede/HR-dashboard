@@ -34,8 +34,8 @@ export default function Member() {
   useEffect(() => {
     axios
       .get( 
-        // "http://localhost:8000/employees"
-        "https://dashboardbackend-production-9839.up.railway.app/get"
+        "http://localhost:8080/employees"
+        // "https://dashboardbackend-production-9839.up.railway.app/get"
         )
       .then((response) => {
         setRows(response.data);
@@ -63,8 +63,8 @@ export default function Member() {
         // User confirmed deletion, proceed with the delete request
         console.log(`id in delete ${id}`);
         axios
-          .delete(`https://dashboardbackend-production-9839.up.railway.app/deleteEmployee/${id}`)
-          // .delete(`http://localhost:8000/employees/${id}`)
+          // .delete(`https://dashboardbackend-production-9839.up.railway.app/deleteEmployee/${id}`)
+          .delete(`http://localhost:8080/employees/${id}`)
 
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);

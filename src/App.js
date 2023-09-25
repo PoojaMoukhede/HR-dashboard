@@ -36,7 +36,7 @@ function App() {
         <Route exact path="/managers" element={<Managers />} />
         <Route exact path="/attandance" element={<Attandance/>} />
         <Route exact path="/complaint" element={<Complaint/>} />
-        <Route exact path="/details" element={<Details/>} />
+        <Route exact path="/details/:id" element={<Details/>} />
         <Route exact path='/details' element={<Details/>}/>
         <Route exact path='/expanse' element={<Expanse/>}/>
         <Route exact path='/to' element={<ToastNotification/>}/>

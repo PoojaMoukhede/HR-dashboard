@@ -1,14 +1,75 @@
-import React from "react";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React,{useEffect,useState} from "react";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import Header from "../Components/Header/Header";
 import Attandance from "../Components/Charts/Attandance";
 import AttandanceTable from "../Components/Charts/AttandanceTable";
 import BarChart from "../Components/Charts/BarChart";
 import { ToastContainer, toast } from 'react-toastify';
-
+import { useParams } from 'react-router-dom';
+import axios from 'axios'
 
 
 export default function Details() {
+  const { id } = useParams();
+  const [employeeData,setEmployeedata] = useState()
+
+  const fetchData = async (id) => {
+    try {
+      const url = process.env.REACT_APP_API_URL
+  
+     const emp = await axios
+      .get( 
+        `${url}/employees/${id}`
+    
+        )
+      .then((response) => {
+        console.log({response});
+        return response.data
+       
+      })
+  
+      
+
+      setEmployeedata(emp)
+    
+  
+    }
+    catch(error){
+      console.log('err',error)
+    }
+  
+  };
+  
+  
+
+  useEffect( () => {
+
+
+    fetchData(id);
+
+
+  } ,[])
+  
 
   const toastSuccess = () => toast.success('Leave Approved');
   const toastError = () => toast.error('Leave Rejected');
@@ -67,7 +128,7 @@ export default function Details() {
                         className="rounded-circle img-fluid"
                         style={{ width: "115px" }}
                       />
-                      <h5 className="my-2">Mehul Sinh Zala</h5>
+                      <h5 className="my-2">{employeeData?.Emp_name}</h5>
                       <p className="text-muted mb-1">Full Stack Developer</p>
                       <p className="text-muted mb-1">
                         Ahmedabad, Gujrat , India

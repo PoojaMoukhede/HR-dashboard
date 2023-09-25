@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
+import { useLocation } from 'react-router-dom';
 // import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -26,13 +27,19 @@ export default function Sidebar() {
 
   // Function to handle item click and set the selected item
   function handleItemClick(item) {
+    // alert(item)
     setSelected(item);
   }
 
   const getActiveClass = (item) => {
+    // alert('triggred')
     return item === selected ? "activate" : "";
   };
+  const location = useLocation();
+  const currentPath = location.pathname;
 
+
+  console.log({currentPath});
   return (
     <>
       <div
@@ -78,9 +85,13 @@ export default function Sidebar() {
            
               className="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav"
             >
-              {/* <span className="btn-icon-wrapper">
+{/* dfdafafafafd */}
+
+toggler
+
+              <span className="btn-icon-wrapper">
                  <i className="fa fa-ellipsis-v fa-w-6"></i>
-               </span> */}
+               </span>
             </button>
           </span>
         </div>
@@ -90,9 +101,7 @@ export default function Sidebar() {
               <Link to="/main">
 
                 <li
-                  className={` item_s app-sidebar__heading ${getActiveClass(
-                    "/main"
-                  )}`}
+                  className={` item_s app-sidebar__heading ${currentPath=='/main'?'activate':''}`}
                   onClick={() => handleItemClick("/main")}
                 >
                   <Icon icon="icon-park-outline:dashboard" style={style} />

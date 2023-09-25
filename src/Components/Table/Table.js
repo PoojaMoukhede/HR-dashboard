@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from "react";
 import dummyData from "../MOCK_DATA.json";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 
 export default function Table() {
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
-    setRows(dummyData);
+    // setRows(dummyData);
+    axios
+    .get( 
+      "http://localhost:8080/employees"
+      // "https://dashboardbackend-production-9839.up.railway.app/get"
+      )
+    .then((response) => {
+      setRows(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
   }, []);
 
   const filteredRows = rows.filter((row) =>
@@ -80,7 +92,7 @@ export default function Table() {
                           </div>
                         </div>
                         <div className="widget-content-left flex2">
-                          <div className="widget-heading">{row.name}</div>
+                          <div className="widget-heading">{row.Emp_name}</div>
                           <div className="widget-subheading opacity-7">
                             Web Developer
                           </div>
@@ -102,8 +114,9 @@ export default function Table() {
                       type="button"
                       id="PopoverCustomT-1"
                       className="btn btn-primary btn-sm"
-                      onClick={()=>{
-                        navigate('/details')
+                      onClick={(e)=>{
+                        console.log({row})
+                        navigate(`/details/${row?._id}`)
                       }}
                     >
                       Details
