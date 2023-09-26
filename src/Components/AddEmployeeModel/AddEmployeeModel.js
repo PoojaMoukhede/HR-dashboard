@@ -823,17 +823,35 @@ const AddEmployeeModal = ({
     Puducherry: ["Karaikal", "Mahe", "Puducherry", "Yanam"],
   };
 
+  // const handleStateChange = (event) => {
+  //   const stateValue = event.target.value;
+  //   setSelectedState(stateValue);
+  //   setSelectedcity("");
+
+  //   setNewEmployee((prevEmployee) => ({
+  //     ...prevEmployee,
+  //     Emp_state: stateValue,
+  //   }));
+  // };
   const handleStateChange = (event) => {
     const stateValue = event.target.value;
     setSelectedState(stateValue);
-    setSelectedcity("");
-
+  
+    // Check if the selected state exists in the statesData object
+    if (statesData[stateValue]) {
+      const stateCities = statesData[stateValue];
+      if (stateCities.length > 0) {
+        setSelectedcity(stateCities[0]);
+      }
+    } else {
+      setSelectedcity('');
+    }
+  
     setNewEmployee((prevEmployee) => ({
       ...prevEmployee,
       Emp_state: stateValue,
     }));
   };
-
   const handlecityChange = (event) => {
     const cityValue = event.target.value;
     setSelectedcity(cityValue);

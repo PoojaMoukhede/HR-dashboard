@@ -11,8 +11,8 @@ import { FormGroup, Label, Input } from "reactstrap";
 import { nanoid } from "nanoid";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 
-// const Event_get  = "http://localhost:8080/getevent";
-// const Event_post  = "http://localhost:8080/postevent";
+// const Event_get  = "http://192.168.1.211:8080/getevent";
+// const Event_post  = "http://192.168.1.211:8080/postevent";
 let todayStr = new Date().toISOString().replace(/T.*$/, "");
 export default function FullCalendarComponent() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -122,8 +122,8 @@ export default function FullCalendarComponent() {
     const eventId = state.clickInfo.event.id; // Use the event's unique identifier
   
     axios
-      .delete(`http://localhost:8080/event/${eventId}`)
-      // .delete(`http://localhost:8000/events/${eventId}`)
+      .delete(`http://192.168.1.211:8080/event/${eventId}`)
+      // .delete(`http://192.168.1.211:8000/events/${eventId}`)
 
       .then((response) => {
         const deleteEvent = formData.filter((row)=>row.id);
@@ -146,8 +146,8 @@ export default function FullCalendarComponent() {
     };
   
     axios
-      .put(`http://localhost:8080/event/${updatedEvent.id}`, updatedEvent)
-      // .put(`http://localhost:8000/events/${updatedEvent.id}`, updatedEvent)
+      .put(`http://192.168.1.211:8080/event/${updatedEvent.id}`, updatedEvent)
+      // .put(`http://192.168.1.211:8000/events/${updatedEvent.id}`, updatedEvent)
 
       .then((response) => {
         // Handle success
@@ -190,8 +190,8 @@ export default function FullCalendarComponent() {
     };
 
     axios
-      .post("http://localhost:8080/event", newEvent)
-      // .post("http://localhost:8000/events", newEvent)
+      .post("http://192.168.1.211:8080/event", newEvent)
+      // .post("http://192.168.1.211:8000/events", newEvent)
 
       .then((response) => {
         const addedEvent = response.data;
@@ -215,7 +215,7 @@ export default function FullCalendarComponent() {
 
   useEffect((e) => {
     axios
-      .get("http://localhost:8080/event")
+      .get("http://192.168.1.211:8080/event")
       .then((response) => {
         setEvents(response.data);
       })

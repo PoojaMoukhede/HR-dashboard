@@ -1,4 +1,4 @@
-import React,{useContext,useEffect,useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import { chartData } from "../Data";
 import ReactApexChart from "react-apexcharts";
@@ -7,18 +7,27 @@ import MapC from "../Map/MapC";
 import Updates from "../Updates/Updates";
 import { ThemeContext } from "../Header/ThemeProvider";
 import Canteen from "../../Pages/Canteen";
-import axios from 'axios'
+import axios from "axios";
 
 export default function Dashboard() {
   const [fuelData, setFuelData] = useState([]);
   const [expData, setExpData] = useState([]);
-  const [cumulativeFuelConsumption, setCumulativeFuelConsumption] = useState([]);
+  const [cumulativeFuelConsumption, setCumulativeFuelConsumption] = useState(
+    []
+  );
   const [currentMonthFuelExpense, setCurrentMonthFuelExpense] = useState(0);
-  const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] = useState(0);
+  const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] =
+    useState(0);
 
   const [lastMonthFuelExpense, setLastMonthFuelExpense] = useState(0);
-  const [cumulativeTotalPrevMonthExpanse, setCumulativeFuelConsumptionPrevMonthExpanse] = useState(0);
-  const [cumulativeTotalThisMonthExpanse, setCumulativeFuelConsumptionThisMonthExpanse] = useState(0);
+  const [
+    cumulativeTotalPrevMonthExpanse,
+    setCumulativeFuelConsumptionPrevMonthExpanse,
+  ] = useState(0);
+  const [
+    cumulativeTotalThisMonthExpanse,
+    setCumulativeFuelConsumptionThisMonthExpanse,
+  ] = useState(0);
 
   const chartData2 = {
     options: {
@@ -70,8 +79,8 @@ export default function Dashboard() {
       },
     ],
   };
-  
-const chartData = {
+
+  const chartData = {
     options: {
       chart: {
         id: "basic-bar",
@@ -110,7 +119,7 @@ const chartData = {
         enabled: false,
       },
     },
-  
+
     series: [
       {
         name: "Expenses in INR",
@@ -122,7 +131,7 @@ const chartData = {
   const { theme, toggleTheme } = useContext(ThemeContext);
   useEffect(() => {
     axios
-      .get('http://localhost:8080/fuel')
+      .get("http://192.168.1.211:8080/fuel")
       .then((response) => {
         setFuelData(response.data);
         console.log(response.data);
@@ -139,23 +148,27 @@ const chartData = {
           const entryMonth = entryDate.getMonth();
 
           if (entryMonth === currentMonth) {
-            setCurrentMonthFuelExpense((prevExpense) => prevExpense + entry.Liters);
+            setCurrentMonthFuelExpense(
+              (prevExpense) => prevExpense + entry.Liters
+            );
           }
 
           if (entryMonth === lastMonth) {
-            setLastMonthFuelExpense((prevExpense) => prevExpense + entry.Liters);
+            setLastMonthFuelExpense(
+              (prevExpense) => prevExpense + entry.Liters
+            );
           }
         });
 
         setCumulativeFuelConsumption(cumulativeTotal);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       });
   }, []);
   // useEffect(() => {
   //   axios
-  //     .get('http://localhost:8080/fuel')
+  //     .get('http://192.168.1.211:8080/fuel')
   //     .then((response) => {
   //       setFuelData(response.data);
   //       console.log(response.data);
@@ -189,14 +202,12 @@ const chartData = {
   //     });
   // }, []);
 
-
-
   //-----------
   // useEffect(() => {
   //   axios
-  //   .get('http://localhost:8080/expanse')
+  //   .get('http://192.168.1.211:8080/expanse')
   //   .then((response) => {
-  //     setExpData(response.data); 
+  //     setExpData(response.data);
   //     console.log(response.data);
   //   })
   //   .catch((error) => {
@@ -207,233 +218,243 @@ const chartData = {
   // useEffect(() => {
   //   chartData.series[0].data = expData;
   // }, [expData])
-useEffect(()=>{
-  axios
-  .get('http://localhost:8080/expanse')
-  .then((response) => {
-    setExpData(response.data);
-    console.log(response.data);
+  useEffect(() => {
+    axios
+      .get("http://192.168.1.211:8080/expanse")
+      .then((response) => {
+        setExpData(response.data);
+        console.log(response.data);
 
-    let cumulativeTotalExpanse = 0;
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const lastMonth = (currentMonth - 1 + 12) % 12; 
+        let cumulativeTotalExpanse = 0;
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const lastMonth = (currentMonth - 1 + 12) % 12;
 
-    response.data.forEach((entry) => {
-      cumulativeTotalExpanse += entry.money;
-      const entryDate = new Date(entry.Date);
-      const entryMonth = entryDate.getMonth();
+        response.data.forEach((entry) => {
+          cumulativeTotalExpanse += entry.money;
+          const entryDate = new Date(entry.Date);
+          const entryMonth = entryDate.getMonth();
 
-      if (entryMonth === currentMonth) {
-        setCumulativeFuelConsumptionThisMonthExpanse((prevExpense) => prevExpense + entry.money);
-      }
+          if (entryMonth === currentMonth) {
+            setCumulativeFuelConsumptionThisMonthExpanse(
+              (prevExpense) => prevExpense + entry.money
+            );
+          }
 
-      if (entryMonth === lastMonth) {
-        setCumulativeFuelConsumptionPrevMonthExpanse((prevExpense) => prevExpense + entry.money);
-      }
-    });
+          if (entryMonth === lastMonth) {
+            setCumulativeFuelConsumptionPrevMonthExpanse(
+              (prevExpense) => prevExpense + entry.money
+            );
+          }
+        });
 
-    setCurrentMonthFuelExpensetotal(cumulativeTotalExpanse);
-  })
-  .catch((error) => {
-    console.error('Error fetching data:', error);
-  });
-
-},[])
-  
+        setCurrentMonthFuelExpensetotal(cumulativeTotalExpanse);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   return (
     <>
-     <div className={`App ${theme}`}>
-      <div className="app-main">
-        <Sidebar />
-        <div className="app-main__outer">
-          <div className="app-main__inner">
-          {/* <div className="header-toggle-buttons">
+      <div className={`App ${theme}`}>
+        <div className="app-main">
+          <Sidebar />
+          <div className="app-main__outer">
+            <div className="app-main__inner">
+              {/* <div className="header-toggle-buttons">
             <button onClick={() => toggleTheme()}>{theme}</button>
           </div> */}
-            <div className="row">
-              <div className="col-md-6 col-xl-4">
-                <div className="mb-3 widget-content bg-plum-plate">
-                  <div className="widget-content-wrapper text-white">
-                    <div className="widget-content-left">
-                      <div className="widget-heading">Attandance</div>
-                      <div className="widget-subheading">
-                      Till Last month attandance
+              <div className="row">
+                <div className="col-md-6 col-xl-4">
+                  <div className="mb-3 widget-content bg-plum-plate">
+                    <div className="widget-content-wrapper text-white">
+                      <div className="widget-content-left">
+                        <div className="widget-heading">Attandance</div>
+                        <div className="widget-subheading">
+                          Till Last month attandance
+                        </div>
                       </div>
-                    </div>
-                    <div className="widget-content-right">
-                      <div className="widget-numbers text-white">
-                        <span>98%</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-xl-4">
-                <div className="mb-3 widget-content bg-night-sky">
-                  <div className="widget-content-wrapper text-white">
-                    <div className="widget-content-left">
-                      <div className="widget-heading">Fuel Consumption</div>
-                      <div className="widget-subheading">
-                       Till Last month fuel consumption 
-                      </div>
-                    </div>
-                    <div className="widget-content-right">
-                      <div className="widget-numbers text-white">
-                        <span> {lastMonthFuelExpense} Liters</span>
+                      <div className="widget-content-right">
+                        <div className="widget-numbers text-white">
+                          <span>98%</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-xl-4">
-                <div className=" mb-3 widget-content bg-asteroid">
-                  <div className="widget-content-wrapper text-white">
-                    <div className="widget-content-left">
-                      <div className="widget-heading">Expenses On Fuel</div>
-                      <div className="widget-subheading">Till Last month expense</div>
-                    </div>
-                    <div className="widget-content-right">
-                      <div className="widget-numbers text-white">
-                      <span> {cumulativeTotalPrevMonthExpanse} &#8377;</span>
-                        {/* <span>48752</span> &#8377; */}
+                <div className="col-md-6 col-xl-4">
+                  <div className="mb-3 widget-content bg-night-sky">
+                    <div className="widget-content-wrapper text-white">
+                      <div className="widget-content-left">
+                        <div className="widget-heading">Fuel Consumption</div>
+                        <div className="widget-subheading">
+                          Till Last month fuel consumption
+                        </div>
+                      </div>
+                      <div className="widget-content-right">
+                        <div className="widget-numbers text-white">
+                          <span> {lastMonthFuelExpense} Liters</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-6 col-xl-4">
-                <div className="card11 mb-3 widget-content ">
-                  <div className="widget-content-wrapper text-black">
-                    <div className="widget-content-left">
-                      <div className="widget-heading">
-                        Total Distance Covered
+                <div className="col-md-6 col-xl-4">
+                  <div className=" mb-3 widget-content bg-asteroid">
+                    <div className="widget-content-wrapper text-white">
+                      <div className="widget-content-left">
+                        <div className="widget-heading">Expenses On Fuel</div>
+                        <div className="widget-subheading">
+                          Till Last month expense
+                        </div>
                       </div>
-                      <div className="widget-subheading">Till this month</div>
-                    </div>
-                    <div className="widget-content-right">
-                      <div className="widget-numbers text-black">
-                        <span>1082 KM</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-xl-4">
-                <div className="card11 mb-3 widget-content">
-                  <div className="widget-content-wrapper text-black">
-                    <div className="widget-content-left">
-                      <div className="widget-heading">
-                        Total Fuel Consumption
-                      </div>
-                      <div className="widget-subheading">Till this month</div>
-                    </div>
-                    <div className="widget-content-right">
-                      <div className="widget-numbers text-black">
-                        <span>{cumulativeFuelConsumption} Liters</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-xl-4">
-                <div className="card11 mb-3 widget-content ">
-                  <div className="widget-content-wrapper text-black">
-                    <div className="widget-content-left">
-                      <div className="widget-heading">Total Expenses</div>
-                      <div className="widget-subheading">Till this month</div>
-                    </div>
-                    <div className="widget-content-right">
-                      <div className="widget-numbers text-black">
-                        {/* <span>1,78072 &#8377;</span> */}
-                        <span>{currentMonthFuelExpensetotal} &#8377;</span> 
-                        {/* cumulativeTotalExpanse */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-12 col-lg-6">
-                <div className="mb-3 card">
-                  <div className="card-header-tab card-header">
-                    <div className="card-header-title">
-                      <i className="header-icon lnr lnr-chart-bars icon-gradient bg-night-sky">
-                        {" "}
-                      </i>
-                      Monthly Fuel Consumption Report
-                    </div>
-                  </div>
-                  <div className="tab-content">
-                    <div className="tab-pane fade active show" id="tab-eg-55">
-                      <div className="widget-chart p-3">
-                        <div style={{ height: "370px" }}>
-                          <ReactApexChart
-                            // options={chartData2.options}
-                            // series={chartData2.series}
-                            // type="bar"
-                            // height={350}
-                            options={chartData2.options} series={chartData2.series} type="bar" height={350} 
-                          />
+                      <div className="widget-content-right">
+                        <div className="widget-numbers text-white">
+                          <span>
+                            {" "}
+                            {cumulativeTotalPrevMonthExpanse} &#8377;
+                          </span>
+                          {/* <span>48752</span> &#8377; */}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="col-md-12 col-lg-6">
-                <div className="mb-3 card">
-                  <div className="card-header-tab card-header-tab-animation card-header">
-                    <div className="card-header-title">
-                      <i className="header-icon lnr lnr-chart-bars icon-gradient bg-asteroid">
-                        {" "}
-                      </i>
-                      Monthly Expense Report
+
+              <div className="row">
+                <div className="col-md-6 col-xl-4">
+                  <div className="card11 mb-3 widget-content ">
+                    <div className="widget-content-wrapper text-black">
+                      <div className="widget-content-left">
+                        <div className="widget-heading">
+                          Total Distance Covered
+                        </div>
+                        <div className="widget-subheading">Till this month</div>
+                      </div>
+                      <div className="widget-content-right">
+                        <div className="widget-numbers text-black">
+                          <span>1082 KM</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="card-body">
+                </div>
+                <div className="col-md-6 col-xl-4">
+                  <div className="card11 mb-3 widget-content">
+                    <div className="widget-content-wrapper text-black">
+                      <div className="widget-content-left">
+                        <div className="widget-heading">
+                          Total Fuel Consumption
+                        </div>
+                        <div className="widget-subheading">Till this month</div>
+                      </div>
+                      <div className="widget-content-right">
+                        <div className="widget-numbers text-black">
+                          <span>{cumulativeFuelConsumption} Liters</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-xl-4">
+                  <div className="card11 mb-3 widget-content ">
+                    <div className="widget-content-wrapper text-black">
+                      <div className="widget-content-left">
+                        <div className="widget-heading">Total Expenses</div>
+                        <div className="widget-subheading">Till this month</div>
+                      </div>
+                      <div className="widget-content-right">
+                        <div className="widget-numbers text-black">
+                          {/* <span>1,78072 &#8377;</span> */}
+                          <span>{currentMonthFuelExpensetotal} &#8377;</span>
+                          {/* cumulativeTotalExpanse */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-12 col-lg-6">
+                  <div className="mb-3 card">
+                    <div className="card-header-tab card-header">
+                      <div className="card-header-title">
+                        <i className="header-icon lnr lnr-chart-bars icon-gradient bg-night-sky">
+                          {" "}
+                        </i>
+                        Monthly Fuel Consumption Report
+                      </div>
+                    </div>
                     <div className="tab-content">
-                      <div
-                        className="tab-pane fade show active"
-                        id="tabs-eg-77"
-                      >
-                        <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
-                          <ReactApexChart
-                            options={chartData.options}
-                            series={chartData.series}
-                            type="bar"
-                            height={350}
-                          />
+                      <div className="tab-pane fade active show" id="tab-eg-55">
+                        <div className="widget-chart p-3">
+                          <div style={{ height: "370px" }}>
+                            <ReactApexChart
+                              // options={chartData2.options}
+                              // series={chartData2.series}
+                              // type="bar"
+                              // height={350}
+                              options={chartData2.options}
+                              series={chartData2.series}
+                              type="bar"
+                              height={350}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-12 col-lg-6">
+                  <div className="mb-3 card">
+                    <div className="card-header-tab card-header-tab-animation card-header">
+                      <div className="card-header-title">
+                        <i className="header-icon lnr lnr-chart-bars icon-gradient bg-asteroid">
+                          {" "}
+                        </i>
+                        Monthly Expense Report
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <div className="tab-content">
+                        <div
+                          className="tab-pane fade show active"
+                          id="tabs-eg-77"
+                        >
+                          <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
+                            <ReactApexChart
+                              options={chartData.options}
+                              series={chartData.series}
+                              type="bar"
+                              height={350}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <Updates />
-            <div className="row">
-              <div className="col-md-12">
-                <div className="mb-3 card cardp">
-                  <Table />
+              <Updates />
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="mb-3 card cardp">
+                    <Table />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="row">
-              <div className="col-md-12">
-                <div className="mb-3 card">
-                  <MapC />
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="mb-3 card">
+                    <MapC />
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* <div className="row">
+              {/* <div className="row">
               <div className="col-md-12 col-lg-12">
                 <div className="mb-3 card">
                   <div className="card-header-tab card-header">
@@ -461,68 +482,66 @@ useEffect(()=>{
                 </div>
               </div>
             </div> */}
-                        <div className="row">
-              <div className="col-md-12 col-lg-6">
-                <div className="mb-3 card">
-                  <div className="card-header-tab card-header">
-                    <div className="card-header-title">
-                      <i className="header-icon lnr lnr-chart-bars icon-gradient bg-night-sky">
-                        {" "}
-                      </i>
-                      Complaint Overview
+              <div className="row">
+                {/* <div className="col-md-12 col-lg-6">
+                  <div className="mb-3 card">
+                    <div className="card-header-tab card-header">
+                      <div className="card-header-title">
+                        <i className="header-icon lnr lnr-chart-bars icon-gradient bg-night-sky">
+                          {" "}
+                        </i>
+                        Complaint Overview
+                      </div>
                     </div>
-                  </div>
-                  <div className="tab-content">
-                    <div className="tab-pane fade active show" id="tab-eg-55">
-                      <div className="widget-chart p-3">
-                        <div
-                          className="d-flex"
-                          style={{
-                            height: "80px",
-                            justifyContent: "space-around",
-                            textAlign: "center",
-                          }}
-                        >
-                          <div>
-                            <h5>Total</h5>
-                            <h4>12</h4>
-                          </div>
+                    <div className="tab-content">
+                      <div className="tab-pane fade active show" id="tab-eg-55">
+                        <div className="widget-chart p-3">
+                          <div
+                            className="d-flex"
+                            style={{
+                              height: "80px",
+                              justifyContent: "space-around",
+                              textAlign: "center",
+                            }}
+                          >
+                            <div>
+                              <h5>Total</h5>
+                              <h4>12</h4>
+                            </div>
 
-                          <div>
-                            <h5>Pending</h5>
-                            <h4>02</h4>
-                            <div
-                              className="square"
-                              style={{ backgroundColor: "#27ceb8" }}
-                            ></div>
-                          </div>
+                            <div>
+                              <h5>Pending</h5>
+                              <h4>02</h4>
+                              <div
+                                className="square"
+                                style={{ backgroundColor: "#27ceb8" }}
+                              ></div>
+                            </div>
 
-                          <div>
-                            <h5>In Progress</h5>
-                            <h4>04</h4>
-                            <div
-                              className="square"
-                              style={{ backgroundColor: "#63619b" }}
-                            ></div>
-                          </div>
+                            <div>
+                              <h5>In Progress</h5>
+                              <h4>04</h4>
+                              <div
+                                className="square"
+                                style={{ backgroundColor: "#63619b" }}
+                              ></div>
+                            </div>
 
-                          <div>
-                            <h5>Completed</h5>
-                            <h4>06</h4>
-                            <div
-                              className="square"
-                              style={{ backgroundColor: "#f8b146" }}
-                            ></div>
-
+                            <div>
+                              <h5>Completed</h5>
+                              <h4>06</h4>
+                              <div
+                                className="square"
+                                style={{ backgroundColor: "#f8b146" }}
+                              ></div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-
-                </div>
-              </div>
-              <div className="col-md-12 col-lg-6">
+                </div> */}
+                {/* <div className="col-md-12 col-lg-6">
                 <div className="mb-3 card">
                   <div className="card-header-tab card-header-tab-animation card-header">
                     <div className="card-header-title">
@@ -580,19 +599,19 @@ useEffect(()=>{
                     </div>
                   </div>
                 </div>
+              </div> */}
               </div>
-            </div>
 
-            {/* <div className="row">
+              {/* <div className="row">
               <div className="col-md-12">
                 <div className="mb-3 card">
                  <Canteen/>
                 </div>
               </div>
             </div> */}
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </>
   );

@@ -43,7 +43,7 @@ function App() {
         <Route exact path='*' element={<PageNotFound/>}/>
         <Route exact path='/canteen' element={<CanteenFacility/>}/>
         <Route exact path='/calender' element={<FullCalendarComponent/>}/>
-        {/* <Route exact path='/profile' element={<Profile/>}/> */}
+        <Route exact path='/profile' element={<Profile/>}/>
         </Routes>
         </APIContextProvider>
     </BrowserRouter>

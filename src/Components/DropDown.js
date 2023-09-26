@@ -29,7 +29,7 @@ export default function DropDown() {
       <Dropdown.Toggle split  id="dropdown-split-basic" style={{backgroundColor:"white",border:"none",color:"black"}} />
 
       <Dropdown.Menu>
-        <Dropdown.Item href="#">Profile</Dropdown.Item>
+        <Dropdown.Item href="/profile">Profile</Dropdown.Item>
         <Dropdown.Item   onClick={handleLogout} >Logout</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>

@@ -9,18 +9,18 @@ import AddEmployeeModel from "../../Components/AddEmployeeModel/AddEmployeeModel
 import { ExportToExcel } from "../../Components/Export/ExportToExcel";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import EditEmployeeModel from '../../Components/AddEmployeeModel/EditEmployeeModel/EditEmployeeModel'
-
-
-
+import EditEmployeeModel from "../../Components/AddEmployeeModel/EditEmployeeModel/EditEmployeeModel";
+import Register from "../Register";
 
 const fileName = "EmployeeData";
 export default function Member() {
   const [rows, setRows] = useState([]);
-  const [selectedEmployee,setSelectedEmployee] = useState(null)
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
   // const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
+
   const fileType = [
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "application/vnd.ms-excel",
@@ -33,10 +33,10 @@ export default function Member() {
   );
   useEffect(() => {
     axios
-      .get( 
-        "http://localhost:8080/employees"
+      .get(
+        "http://192.168.1.211:8080/employees"
         // "https://dashboardbackend-production-9839.up.railway.app/get"
-        )
+      )
       .then((response) => {
         setRows(response.data);
       })
@@ -50,7 +50,11 @@ export default function Member() {
     setRows((prevRows) => [...prevRows, newEmployee]);
     console.log("model close");
   };
-
+  const handleAddMember2 = (newEmployee) => {
+    console.log("model open");
+    setRows((prevRows) => [...prevRows, newEmployee]);
+    console.log("model close");
+  };
   const handleDeleteEmployee = (id) => {
     swal({
       title: "Are you sure?",
@@ -64,7 +68,7 @@ export default function Member() {
         console.log(`id in delete ${id}`);
         axios
           // .delete(`https://dashboardbackend-production-9839.up.railway.app/deleteEmployee/${id}`)
-          .delete(`http://localhost:8080/employees/${id}`)
+          .delete(`http://192.168.1.211:8080/employees/${id}`)
 
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
@@ -95,7 +99,7 @@ export default function Member() {
 
         axios
           // .post("https://dashboardbackend-production-9839.up.railway.app/importdata", formData)
-          .post("http://localhost:8080/importdata", formData)
+          .post("http://192.168.1.211:8080/importdata", formData)
 
           .then((response) => {
             console.log("Import response:", response);
@@ -112,6 +116,15 @@ export default function Member() {
   };
 
 
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+
+  const openRegisterModal = () => {
+    setShowRegisterModal(true);
+    console.log("kkkkkkkkkkk")
+  };
+
+
+
   return (
     <>
       <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -122,6 +135,7 @@ export default function Member() {
           <div className="app-main__outer">
             <div className="app-main__inner">
               <div className="d-flex">
+              
                 <OverlayTrigger
                   key="tooltip4"
                   placement="top"
@@ -140,7 +154,7 @@ export default function Member() {
                     />
                   </button>
                 </OverlayTrigger>
-
+               
                 <ExportToExcel apiData={rows} fileName={fileName} />
                 <OverlayTrigger
                   key="tooltip5"
@@ -150,7 +164,6 @@ export default function Member() {
                   <div
                     className="fileUpload"
                     style={{ borderRadius: "30px", padding: "10px" }}
-
                   >
                     <input
                       type="file"
@@ -161,6 +174,9 @@ export default function Member() {
                     {/* <span>Import</span> */}
                   </div>
                 </OverlayTrigger>
+                {/* {showRegisterModal &&  */}
+              <Register openModal={openRegisterModal} />
+                {/* } */}
               </div>
               <div className="row">
                 <div className="col-md-12">
@@ -185,12 +201,7 @@ export default function Member() {
                       onClose={() => setIsModalOpen(false)}
                       onAdd={handleAddMember}
                     />
-                    {/* <EditEmployeeModel
-                    selectedEmployee={selectedEmployee}
-                      open={isModalOpen}
-                      onClose={() => setIsModalOpen(false)}
-                      onAdd={handleAddMember}
-                    /> */}
+
                     <div className="table-responsive">
                       <table
                         className="align-middle mb-0 table table-borderless table-striped table-hover"
@@ -261,12 +272,12 @@ export default function Member() {
                                   }
                                 >
                                   <button
-                                    onClick={(e) => {setIsModalOpen(true)
-                                    // console.log(e)
-                                    // console.log(row)
-                                    setSelectedEmployee(row)
-                                  }
-                                    }
+                                    onClick={(e) => {
+                                      setIsModalOpen2(true);
+                                      // console.log(e)
+                                      // console.log(row)
+                                      setSelectedEmployee(row);
+                                    }}
                                     style={{
                                       color: "white",
                                       backgroundColor: "green",
@@ -278,7 +289,7 @@ export default function Member() {
                                     <Icon icon="uiw:edit" />
                                   </button>
                                 </OverlayTrigger>
-                          
+
                                 <OverlayTrigger
                                   key="tooltip7"
                                   placement="bottom"
@@ -303,7 +314,6 @@ export default function Member() {
                                     <Icon icon="fluent:delete-20-filled" />
                                   </button>
                                 </OverlayTrigger>
-
                               </td>
                             </tr>
                           ))}
@@ -317,6 +327,15 @@ export default function Member() {
           </div>
         </div>
       </div>
+      <EditEmployeeModel
+        selectedEmployee={selectedEmployee}
+        open={isModalOpen2}
+        onClose={() => setIsModalOpen2(false)}
+        onAdd={handleAddMember2}
+      />
+      <Register
+        openModal={openRegisterModal}
+      />
     </>
   );
 }

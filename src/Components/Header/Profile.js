@@ -1,132 +1,92 @@
-import React from "react";
-import './header.css'
+import React, { useEffect,useState } from "react";
+import "./header.css";
 import Header from "./Header";
 import Sidebar from "../Sidebar/Sidebar";
-
+import axios from "axios";
 
 export default function Profile() {
+  const [user, setUser] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        "http://192.168.1.211:8080/empdata"
+        // "http://localhost:8080/empdata"
+        // "https://dashboardbackend-production-9839.up.railway.app/get"
+      )
+      .then((response) => {
+        setUser(response.data);
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
   return (
     <>
-    <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
-      <Header />
-      <div className="app-main">
-        <Sidebar />
-        <div className="app-main__outer">
-          <div className="app-main__inner">
-            <div className="row">
-            <div className="page-content page-container" id="page-content">
-        <div className="padding">
-          <div className="row container d-flex justify-content-center">
-            <div className="col-xl-6 col-md-12">
-              <div className="card user-card-full">
-                <div className="row m-l-0 m-r-0">
-                  <div className="col-sm-4 bg-c-lite-green user-profile">
-                    <div className="card-block text-center text-white">
-                      <div className="m-b-25">
-                        <img
-                          src="https://img.icons8.com/bubbles/100/000000/user.png"
-                          className="img-radius"
-                          alt="User-Profile"
-                        />
+      <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        <Header />
+        <div className="app-main">
+          <Sidebar />
+          <div className="app-main__outer">
+            <div className="app-main__inner">
+              <div className="row">
+                {/* <ul>
+                  {user.map((employee) => {
+                    <li>{employee.email}</li>
+                    // <li>{employee.name}</li>
+                    // <li>{employee.email}</li>
+
+                  })}
+                </ul> */}
+                        <div className="table-responsive">
+          <table className="align-middle mb-0 table table-borderless table-striped table-hover">
+            <thead>
+              <tr>
+                <th className="text-center">ID</th>
+                <th>Name</th>
+                <th className="text-center">Email</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {user.map((row) => (
+                <tr>
+                  <td className="text-center text-muted">{row.Emp_ID}</td>
+                  <td>
+                    <div className="widget-content p-0">
+                      <div className="widget-content-wrapper">
+                        <div className="widget-content-left mr-3">
+                          <div className="widget-content-left">
+                            <img
+                              width="40"
+                              className="rounded-circle"
+                              src="assets/images/avatars/4.jpg"
+                              alt=""
+                            />
+                          </div>
+                        </div>
+                        <div className="widget-content-left flex2">
+                          <div className="widget-heading">{row.name}</div>
+                          <div className="widget-subheading opacity-7">
+                            {row.Emp_department}
+                          </div>
+                        </div>
                       </div>
-                      <h6 className="f-w-600">Hembo Tingor</h6>
-                      <p>Web Designer</p>
-                      <i className=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
                     </div>
-                  </div>
-                  <div className="col-sm-8">
-                    <div className="card-block">
-                      <h6 className="m-b-20 p-b-5 b-b-default f-w-600">
-                        Information
-                      </h6>
-                      <div className="row">
-                        <div className="col-sm-6">
-                          <p className="m-b-10 f-w-600">Email</p>
-                          <h6 className="text-muted f-w-400">
-                            rntng@gmail.com
-                          </h6>
-                        </div>
-                        <div className="col-sm-6">
-                          <p className="m-b-10 f-w-600">Phone</p>
-                          <h6 className="text-muted f-w-400">98979989898</h6>
-                        </div>
-                      </div>
-                      <h6 className="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">
-                        Projects
-                      </h6>
-                      <div className="row">
-                        <div className="col-sm-6">
-                          <p className="m-b-10 f-w-600">Recent</p>
-                          <h6 className="text-muted f-w-400">Sam Disuja</h6>
-                        </div>
-                        <div className="col-sm-6">
-                          <p className="m-b-10 f-w-600">Most Viewed</p>
-                          <h6 className="text-muted f-w-400">
-                            Dinoter husainm
-                          </h6>
-                        </div>
-                      </div>
-                      <ul className="social-link list-unstyled m-t-40 m-b-10">
-                        <li>
-                          <a
-                            href="/"
-                            data-toggle="tooltip"
-                            data-placement="bottom"
-                            title=""
-                            data-original-title="facebook"
-                            data-abc="true"
-                          >
-                            <i
-                              className="mdi mdi-facebook feather icon-facebook facebook"
-                              aria-hidden="true"
-                            ></i>
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="/"
-                            data-toggle="tooltip"
-                            data-placement="bottom"
-                            title=""
-                            data-original-title="twitter"
-                            data-abc="true"
-                          >
-                            <i
-                              className="mdi mdi-twitter feather icon-twitter twitter"
-                              aria-hidden="true"
-                            ></i>
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="/"
-                            data-toggle="tooltip"
-                            data-placement="bottom"
-                            title=""
-                            data-original-title="instagram"
-                            data-abc="true"
-                          >
-                            <i
-                              className="mdi mdi-instagram feather icon-instagram instagram"
-                              aria-hidden="true"
-                            ></i>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+                  </td>
+                  <td className="text-center">{row.email}</td>
+                  
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
               </div>
             </div>
           </div>
         </div>
-           </div>
-              </div>
-          </div>
-        </div>
       </div>
-    </div>
-
     </>
   );
 }

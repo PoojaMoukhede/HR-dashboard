@@ -39,7 +39,7 @@ export default function Updates() {
   // }, []);
   useEffect(() => {
   axios
-   .get("http://localhost:8080/employees")
+   .get("http://192.168.1.211:8080/employees")
    .then((response) => {
      setRows(response.data);
   

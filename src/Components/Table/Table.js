@@ -11,7 +11,7 @@ export default function Table() {
     // setRows(dummyData);
     axios
     .get( 
-      "http://localhost:8080/employees"
+      "http://192.168.1.211:8080/employees"
       // "https://dashboardbackend-production-9839.up.railway.app/get"
       )
     .then((response) => {
@@ -94,7 +94,7 @@ export default function Table() {
                         <div className="widget-content-left flex2">
                           <div className="widget-heading">{row.Emp_name}</div>
                           <div className="widget-subheading opacity-7">
-                            Web Developer
+                            {row.Emp_department}
                           </div>
                         </div>
                       </div>
