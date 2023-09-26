@@ -588,3 +588,9 @@ background-size: cover;
 .vertical-nav-menu li{
   cursor:pointer;
 }
+.complaint_cards li{
+  list-style: none;
+}
+.complaint_cards{
+  padding: 0;
+}

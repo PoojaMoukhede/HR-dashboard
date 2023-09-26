@@ -14,6 +14,7 @@ import axios from "axios";
 const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
   const [newEmployee, setNewEmployee] = useState({
     // id: Date.now(),
+    Emp_id:"",
     Emp_name: "",
     Emp_email: "",
     Emp_contact_No: "",
@@ -848,7 +849,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
   };
 
   const { onFormSubmitEdit } = useAPI();
-  const onFormSubmit = (e) => {
+  const onFormSubmit11 = (e) => {
     onFormSubmitEdit(selectedEmployee._id, newEmployee);
 
     if (!isEmailValid(newEmployee.Emp_email)) {
@@ -910,6 +911,17 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                     margin="normal"
                   />
                 </div>
+                <div className="grid-item">
+                <TextField
+                  type="text"
+                  name="Emp_id"
+                  label="Employee ID"
+                  value={newEmployee.Emp_id}
+                  onChange={handleInputChange}
+                  fullWidth
+                  margin="normal"
+                />
+              </div>
               </div>
               <div className="grid-row">
                 <div className="grid-item">
@@ -1072,7 +1084,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={onFormSubmit}
+                onClick={onFormSubmit11}
               >
                 Add Employee
               </Button>

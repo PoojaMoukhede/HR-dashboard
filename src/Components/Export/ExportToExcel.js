@@ -11,8 +11,28 @@ export const ExportToExcel = ({ apiData, fileName }) => {
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
 
+  // const exportToCSV = (apiData, fileName) => {
+  //   const ws = XLSX.utils.json_to_sheet(apiData);
+  //   const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+  //   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  //   const data = new Blob([excelBuffer], { type: fileType });
+  //   FileSaver.saveAs(data, fileName + fileExtension);
+  // };
+
   const exportToCSV = (apiData, fileName) => {
-    const ws = XLSX.utils.json_to_sheet(apiData);
+    const fieldsToExclude = ["_id","Emp_id"];
+  
+    // Filter the apiData to exclude the specified fields
+    const filteredData = apiData.map((item) => {
+      const filteredItem = { ...item };
+      fieldsToExclude.forEach((field) => {
+        delete filteredItem[field];
+      });
+      return filteredItem;
+    });
+  
+    // Convert the filtered data to a CSV
+    const ws = XLSX.utils.json_to_sheet(filteredData);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });

@@ -153,8 +153,8 @@ export default function Attandance() {
                     <div className="main-card mb-2">
                       <div className="card-header">Leave Applied</div>
                     </div>
-
-                    <LeaveTable />
+                    functionaity coming soon....
+                    {/* <LeaveTable /> */}
                   </div>
                 </div>
               </div>

@@ -136,107 +136,108 @@ export const UpdatesData = [
   },
 ];
 
-export const chartData = {
-  options: {
-    chart: {
-      id: "basic-bar",
-    },
-    xaxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sept",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-      labels: {
-        style: {
-          colors: "black",
-        },
-      },
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: "black",
-        },
-      },
-    },
-    colors: ["#2b5161"],
-    dataLabels: {
-      // Add this section to hide data labels on bars
-      enabled: false,
-    },
-  },
+// export const chartData = {
+//   options: {
+//     chart: {
+//       id: "basic-bar",
+//     },
+//     xaxis: {
+//       categories: [
+//         "Jan",
+//         "Feb",
+//         "Mar",
+//         "Apr",
+//         "May",
+//         "Jun",
+//         "Jul",
+//         "Aug",
+//         "Sept",
+//         "Oct",
+//         "Nov",
+//         "Dec",
+//       ],
+//       labels: {
+//         style: {
+//           colors: "black",
+//         },
+//       },
+//     },
+//     yaxis: {
+//       labels: {
+//         style: {
+//           colors: "black",
+//         },
+//       },
+//     },
+//     colors: ["#2b5161"],
+//     dataLabels: {
+//       // Add this section to hide data labels on bars
+//       enabled: false,
+//     },
+//   },
 
-  series: [
-    {
-      name: "Expenses",
-      data: [
-        38000, 40000, 55000, 50000, 49000, 46000, 70000, 62000, 68000, 73000,
-        55000, 68000,
-      ],
-    },
-  ],
-};
-export const chartData2 = {
-  options: {
-    chart: {
-      id: "basic-bar2",
-    },
-    xaxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sept",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-      labels: {
-        style: {
-          colors: "black",
-        },
-      },
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: "black",
-        },
-      },
-    },
-    colors: ["#22437e"],
-    tooltip: {
-      style: {
-        colors: "#fd929d", // Change this to your desired tooltip font color
-      },
-    },
-    dataLabels: {
-      // Add this section to hide data labels on bars
-      enabled: false,
-    },
-  },
-  series: [
-    {
-      name: "Fuel Consumption",
-      data: [32, 35, 48, 35, 42, 44, 55, 45, 36, 52, 46, 43],
-    },
-  ],
-};
+//   series: [
+//     {
+//       name: "Expenses",
+//       data: [
+//         38000, 40000, 55000, 50000, 49000, 46000, 70000, 62000, 68000, 73000,
+//         55000, 68000,
+//       ],
+//     },
+//   ],
+// };
+// export const chartData2 = {
+//   options: {
+//     chart: {
+//       id: "basic-bar2",
+//     },
+//     xaxis: {
+//       categories: [
+//         "Jan",
+//         "Feb",
+//         "Mar",
+//         "Apr",
+//         "May",
+//         "Jun",
+//         "Jul",
+//         "Aug",
+//         "Sept",
+//         "Oct",
+//         "Nov",
+//         "Dec",
+//       ],
+//       labels: {
+//         style: {
+//           colors: "black",
+//         },
+//       },
+//     },
+//     yaxis: {
+//       labels: {
+//         style: {
+//           colors: "black",
+//         },
+//       },
+//     },
+//     colors: ["#22437e"],
+//     tooltip: {
+//       style: {
+//         colors: "#fd929d", // Change this to your desired tooltip font color
+//       },
+//     },
+//     dataLabels: {
+//       // Add this section to hide data labels on bars
+//       enabled: false,
+//     },
+//   },
+//   series: [
+//     {
+//       name: "Fuel Consumption in liters",
+//       data :[]
+//       // data: [32, 35, 48, 35, 42, 44, 55, 45, 36, 52, 46, 43],
+//     },
+//   ],
+// };
 
 export const Baroptions = {
   series: [600, 579, 21],

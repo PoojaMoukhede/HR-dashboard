@@ -122,7 +122,7 @@ export default function FullCalendarComponent() {
     const eventId = state.clickInfo.event.id; // Use the event's unique identifier
   
     axios
-      .delete(`http://localhost:8080/delevent/${eventId}`)
+      .delete(`http://localhost:8080/event/${eventId}`)
       // .delete(`http://localhost:8000/events/${eventId}`)
 
       .then((response) => {
@@ -146,7 +146,7 @@ export default function FullCalendarComponent() {
     };
   
     axios
-      .put(`http://localhost:8080/addevent/${updatedEvent.id}`, updatedEvent)
+      .put(`http://localhost:8080/event/${updatedEvent.id}`, updatedEvent)
       // .put(`http://localhost:8000/events/${updatedEvent.id}`, updatedEvent)
 
       .then((response) => {
@@ -190,7 +190,7 @@ export default function FullCalendarComponent() {
     };
 
     axios
-      .post("http://localhost:8080/addevent", newEvent)
+      .post("http://localhost:8080/event", newEvent)
       // .post("http://localhost:8000/events", newEvent)
 
       .then((response) => {
@@ -215,7 +215,7 @@ export default function FullCalendarComponent() {
 
   useEffect((e) => {
     axios
-      .get("http://localhost:8080/getevent")
+      .get("http://localhost:8080/event")
       .then((response) => {
         setEvents(response.data);
       })

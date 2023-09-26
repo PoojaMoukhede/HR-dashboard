@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import Canteen from "../../Pages/Canteen";
 
 export default function Updates() {
   const [row, setRows] = useState([]);
@@ -293,7 +294,7 @@ export default function Updates() {
           </div>
         </div>
         <div className="col-md-12 col-lg-6">
-          <div className="mb-3 card">
+          {/* <div className="mb-3 card">
             <div className="card-header-tab card-header-tab-animation card-header">
               <div className="card-header-title">
                 <i className="header-icon lnr lnr-star-half icon-gradient  bg-love-kiss"></i>
@@ -345,7 +346,9 @@ export default function Updates() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
+                 <Canteen/>
+
         </div>
       </div>
       <ToastContainer

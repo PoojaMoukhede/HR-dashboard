@@ -1,18 +1,247 @@
-import React,{useContext } from "react";
+import React,{useContext,useEffect,useState } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import { chartData } from "../Data";
-import { chartData2 } from "../Data";
 import ReactApexChart from "react-apexcharts";
 import Table from "../Table/Table";
 import MapC from "../Map/MapC";
 import Updates from "../Updates/Updates";
-// import ComplaintD from "./ComplaintD";
-// import { Link } from "react-router-dom";
 import { ThemeContext } from "../Header/ThemeProvider";
 import Canteen from "../../Pages/Canteen";
+import axios from 'axios'
 
 export default function Dashboard() {
+  const [fuelData, setFuelData] = useState([]);
+  const [expData, setExpData] = useState([]);
+  const [cumulativeFuelConsumption, setCumulativeFuelConsumption] = useState([]);
+  const [currentMonthFuelExpense, setCurrentMonthFuelExpense] = useState(0);
+  const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] = useState(0);
+
+  const [lastMonthFuelExpense, setLastMonthFuelExpense] = useState(0);
+  const [cumulativeTotalPrevMonthExpanse, setCumulativeFuelConsumptionPrevMonthExpanse] = useState(0);
+  const [cumulativeTotalThisMonthExpanse, setCumulativeFuelConsumptionThisMonthExpanse] = useState(0);
+
+  const chartData2 = {
+    options: {
+      chart: {
+        id: "basic-bar2",
+      },
+      xaxis: {
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sept",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        labels: {
+          style: {
+            colors: "black",
+          },
+        },
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: "black",
+          },
+        },
+      },
+      colors: ["#22437e"],
+      tooltip: {
+        style: {
+          colors: "#fd929d",
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+    },
+    series: [
+      {
+        name: "Fuel Consumption in liters",
+        data: fuelData.map((entry) => entry.Liters),
+      },
+    ],
+  };
+  
+const chartData = {
+    options: {
+      chart: {
+        id: "basic-bar",
+      },
+      xaxis: {
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sept",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        labels: {
+          style: {
+            colors: "black",
+          },
+        },
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: "black",
+          },
+        },
+      },
+      colors: ["#2b5161"],
+      dataLabels: {
+        // Add this section to hide data labels on bars
+        enabled: false,
+      },
+    },
+  
+    series: [
+      {
+        name: "Expenses in INR",
+        data: expData.map((entry) => entry.money),
+      },
+    ],
+  };
+
   const { theme, toggleTheme } = useContext(ThemeContext);
+  useEffect(() => {
+    axios
+      .get('http://localhost:8080/fuel')
+      .then((response) => {
+        setFuelData(response.data);
+        console.log(response.data);
+
+        // Calculate the cumulative fuel consumption, current month's expense, and last month's expense
+        let cumulativeTotal = 0;
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const lastMonth = (currentMonth - 1 + 12) % 12; // Handle wrapping to previous year
+
+        response.data.forEach((entry) => {
+          cumulativeTotal += entry.Liters;
+          const entryDate = new Date(entry.Date);
+          const entryMonth = entryDate.getMonth();
+
+          if (entryMonth === currentMonth) {
+            setCurrentMonthFuelExpense((prevExpense) => prevExpense + entry.Liters);
+          }
+
+          if (entryMonth === lastMonth) {
+            setLastMonthFuelExpense((prevExpense) => prevExpense + entry.Liters);
+          }
+        });
+
+        setCumulativeFuelConsumption(cumulativeTotal);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get('http://localhost:8080/fuel')
+  //     .then((response) => {
+  //       setFuelData(response.data);
+  //       console.log(response.data);
+
+  //       // Calculate the cumulative fuel consumption up to the previous month
+  //       // and the cumulative fuel consumption up to the current month
+  //       const currentDate = new Date();
+  //       const currentMonth = currentDate.getMonth();
+
+  //       let cumulativeTotalPrevMonth = 0;
+  //       let cumulativeTotalThisMonth = 0;
+
+  //       response.data.forEach((entry) => {
+  //         const entryDate = new Date(entry.Date);
+  //         const entryMonth = entryDate.getMonth();
+
+  //         if (entryMonth < currentMonth) {
+  //           cumulativeTotalPrevMonth += entry.Liters;
+  //         }
+
+  //         if (entryMonth <= currentMonth) {
+  //           cumulativeTotalThisMonth += entry.Liters;
+  //         }
+  //       });
+
+  //       setCumulativeFuelConsumptionPrevMonth(cumulativeTotalPrevMonth);
+  //       setCumulativeFuelConsumptionThisMonth(cumulativeTotalThisMonth);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching data:', error);
+  //     });
+  // }, []);
+
+
+
+  //-----------
+  // useEffect(() => {
+  //   axios
+  //   .get('http://localhost:8080/expanse')
+  //   .then((response) => {
+  //     setExpData(response.data); 
+  //     console.log(response.data);
+  //   })
+  //   .catch((error) => {
+  //     console.error('Error fetching data:', error);
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   chartData.series[0].data = expData;
+  // }, [expData])
+useEffect(()=>{
+  axios
+  .get('http://localhost:8080/expanse')
+  .then((response) => {
+    setExpData(response.data);
+    console.log(response.data);
+
+    let cumulativeTotalExpanse = 0;
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const lastMonth = (currentMonth - 1 + 12) % 12; 
+
+    response.data.forEach((entry) => {
+      cumulativeTotalExpanse += entry.money;
+      const entryDate = new Date(entry.Date);
+      const entryMonth = entryDate.getMonth();
+
+      if (entryMonth === currentMonth) {
+        setCumulativeFuelConsumptionThisMonthExpanse((prevExpense) => prevExpense + entry.money);
+      }
+
+      if (entryMonth === lastMonth) {
+        setCumulativeFuelConsumptionPrevMonthExpanse((prevExpense) => prevExpense + entry.money);
+      }
+    });
+
+    setCurrentMonthFuelExpensetotal(cumulativeTotalExpanse);
+  })
+  .catch((error) => {
+    console.error('Error fetching data:', error);
+  });
+
+},[])
+  
+
   return (
     <>
      <div className={`App ${theme}`}>
@@ -30,7 +259,7 @@ export default function Dashboard() {
                     <div className="widget-content-left">
                       <div className="widget-heading">Attandance</div>
                       <div className="widget-subheading">
-                        Last week attandance
+                      Till Last month attandance
                       </div>
                     </div>
                     <div className="widget-content-right">
@@ -47,12 +276,12 @@ export default function Dashboard() {
                     <div className="widget-content-left">
                       <div className="widget-heading">Fuel Consumption</div>
                       <div className="widget-subheading">
-                        Last week fuel consumption
+                       Till Last month fuel consumption 
                       </div>
                     </div>
                     <div className="widget-content-right">
                       <div className="widget-numbers text-white">
-                        <span>58 liters</span>
+                        <span> {lastMonthFuelExpense} Liters</span>
                       </div>
                     </div>
                   </div>
@@ -62,12 +291,13 @@ export default function Dashboard() {
                 <div className=" mb-3 widget-content bg-asteroid">
                   <div className="widget-content-wrapper text-white">
                     <div className="widget-content-left">
-                      <div className="widget-heading">Expenses</div>
-                      <div className="widget-subheading">Last week expense</div>
+                      <div className="widget-heading">Expenses On Fuel</div>
+                      <div className="widget-subheading">Till Last month expense</div>
                     </div>
                     <div className="widget-content-right">
                       <div className="widget-numbers text-white">
-                        <span>48752</span> &#8377;
+                      <span> {cumulativeTotalPrevMonthExpanse} &#8377;</span>
+                        {/* <span>48752</span> &#8377; */}
                       </div>
                     </div>
                   </div>
@@ -83,7 +313,7 @@ export default function Dashboard() {
                       <div className="widget-heading">
                         Total Distance Covered
                       </div>
-                      <div className="widget-subheading">Till Today</div>
+                      <div className="widget-subheading">Till this month</div>
                     </div>
                     <div className="widget-content-right">
                       <div className="widget-numbers text-black">
@@ -100,11 +330,11 @@ export default function Dashboard() {
                       <div className="widget-heading">
                         Total Fuel Consumption
                       </div>
-                      <div className="widget-subheading">Till Today</div>
+                      <div className="widget-subheading">Till this month</div>
                     </div>
                     <div className="widget-content-right">
                       <div className="widget-numbers text-black">
-                        <span>176 Liters</span>
+                        <span>{cumulativeFuelConsumption} Liters</span>
                       </div>
                     </div>
                   </div>
@@ -115,11 +345,13 @@ export default function Dashboard() {
                   <div className="widget-content-wrapper text-black">
                     <div className="widget-content-left">
                       <div className="widget-heading">Total Expenses</div>
-                      <div className="widget-subheading">Till Today</div>
+                      <div className="widget-subheading">Till this month</div>
                     </div>
                     <div className="widget-content-right">
                       <div className="widget-numbers text-black">
-                        <span>1,78072 &#8377;</span>
+                        {/* <span>1,78072 &#8377;</span> */}
+                        <span>{currentMonthFuelExpensetotal} &#8377;</span> 
+                        {/* cumulativeTotalExpanse */}
                       </div>
                     </div>
                   </div>
@@ -143,10 +375,11 @@ export default function Dashboard() {
                       <div className="widget-chart p-3">
                         <div style={{ height: "370px" }}>
                           <ReactApexChart
-                            options={chartData2.options}
-                            series={chartData2.series}
-                            type="bar"
-                            height={350}
+                            // options={chartData2.options}
+                            // series={chartData2.series}
+                            // type="bar"
+                            // height={350}
+                            options={chartData2.options} series={chartData2.series} type="bar" height={350} 
                           />
                         </div>
                       </div>
@@ -350,13 +583,13 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-12">
                 <div className="mb-3 card">
                  <Canteen/>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

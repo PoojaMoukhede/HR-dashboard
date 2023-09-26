@@ -81,7 +81,7 @@ export default function Login() {
                           </a>
                         </div>
 
-                        <div className="d-flex align-items-center justify-content-center pb-4 ">
+                        {/* <div className="d-flex align-items-center justify-content-center pb-4 ">
                           <p className="mb-0 me-2">Don't have an account?</p>
                           <Link to="/register">
                             <button
@@ -91,7 +91,7 @@ export default function Login() {
                               Create new
                             </button>
                           </Link>
-                        </div>
+                        </div> */}
                       </form>
                     </div>
                   </div>

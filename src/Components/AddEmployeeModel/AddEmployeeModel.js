@@ -16,6 +16,7 @@ const AddEmployeeModal = ({
 }) => {
   const [newEmployee, setNewEmployee] = useState({
     // id: Date.now(),
+    Emp_id:'',
     Emp_name: "",
     Emp_email: "",
     Emp_contact_No: "",
@@ -888,6 +889,17 @@ const AddEmployeeModal = ({
                   name="Emp_name"
                   label="Employee Name"
                   value={newEmployee.Emp_name}
+                  onChange={handleInputChange}
+                  fullWidth
+                  margin="normal"
+                />
+              </div>
+              <div className="grid-item">
+                <TextField
+                  type="text"
+                  name="Emp_id"
+                  label="Employee ID"
+                  value={newEmployee.Emp_id}
                   onChange={handleInputChange}
                   fullWidth
                   margin="normal"

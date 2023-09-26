@@ -51,7 +51,7 @@ export default function Managers() {
         axios
           .post(
             // "https://dashboardbackend-production-9839.up.railway.app/importmanager",
-            "http://localhost:8080/manager",
+            "http://localhost:8080/importmanager",
             formData
           )
           .then((response) => {
@@ -255,6 +255,7 @@ export default function Managers() {
                             {/* <th>ID</th> */}
                             <th className="text-center">Email</th>
                             <th className="text-center">Contact Number</th>
+                            <th className="text-center">Department</th>
                             <th className="text-center">Blood Group</th>
                             <th className="text-center">City</th>
                             <th className="text-center">State</th>
@@ -288,15 +289,16 @@ export default function Managers() {
 
                               <td className="text-center">{row.email}</td>
                               <td className="text-center">{row.contact_no}</td>  
+                              <td className="text-center">{row.department}</td> 
                                {/*  please  change it for mongodb its contact_no */}
                               <td className="text-center">
-                                {/* {row.blood_group} */}
-                                SQL has no field
+                                {row.blood_group}
+                                {/* SQL has no field */}
                                 </td>
                               <td className="text-center">{row.city}</td>
                               <td className="text-center">{row.state}</td>
-                              <td className="d-flex">
-                                <OverlayTrigger
+                              <td className="d-flex justify-content-center ">
+                                {/* <OverlayTrigger
                                   key="tooltip2"
                                   placement="bottom"
                                   overlay={<Tooltip id="tooltip">Edit</Tooltip>}
@@ -312,7 +314,7 @@ export default function Managers() {
                                   >
                                     <Icon icon="uiw:edit" />
                                   </button>
-                                </OverlayTrigger>
+                                </OverlayTrigger> */}
 
                                 <OverlayTrigger
                                   key="tooltip3"

@@ -129,9 +129,9 @@ export default function Details() {
                         style={{ width: "115px" }}
                       />
                       <h5 className="my-2">{employeeData?.Emp_name}</h5>
-                      <p className="text-muted mb-1">Full Stack Developer</p>
+                      <p className="text-muted mb-1">{employeeData?.Emp_department}</p>
                       <p className="text-muted mb-1">
-                        Ahmedabad, Gujrat , India
+                      {employeeData?.Emp_city } , {employeeData?.Emp_state}
                       </p>
                     </div>
                   </div>
@@ -145,7 +145,7 @@ export default function Details() {
                           <p className="mb-0">Employee ID</p>
                         </div>
                         <div className="col-sm-9">
-                          <p className="text-muted mb-0">979</p>
+                          <p className="text-muted mb-0">{employeeData?.Emp_id}</p>
                         </div>
                       </div>
                       <hr />
@@ -154,7 +154,7 @@ export default function Details() {
                           <p className="mb-0">Full Name</p>
                         </div>
                         <div className="col-sm-9">
-                          <p className="text-muted mb-0">Mehul Sinh Zala</p>
+                          <p className="text-muted mb-0">{employeeData?.Emp_name}</p>
                         </div>
                       </div>
                       <hr />
@@ -164,7 +164,7 @@ export default function Details() {
                         </div>
                         <div className="col-sm-9">
                           <p className="text-muted mb-0">
-                            mehulsinhzala245@gmail.com
+                          {employeeData?.Emp_email}
                           </p>
                         </div>
                       </div>
@@ -174,7 +174,7 @@ export default function Details() {
                           <p className="mb-0">Phone</p>
                         </div>
                         <div className="col-sm-9">
-                          <p className="text-muted mb-0">7434090781</p>
+                          <p className="text-muted mb-0">{employeeData?.Emp_contact_No}</p>
                         </div>
                       </div>
 
@@ -184,7 +184,7 @@ export default function Details() {
                           <p className="mb-0">Address</p>
                         </div>
                         <div className="col-sm-9">
-                          <p className="text-muted mb-0">Ahmedabad, Gujrat</p>
+                          <p className="text-muted mb-0">{employeeData?.Emp_city} , {employeeData?.Emp_state}</p>
                         </div>
                       </div>
                     </div>
@@ -205,7 +205,7 @@ export default function Details() {
 
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          <span>2021-02-22</span>
+                          <span>{employeeData?.Emp_joining_date}</span>
                         </div>
                       </div>
                     </div>

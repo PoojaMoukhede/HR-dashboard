@@ -843,7 +843,7 @@ const AddManagers = ({ open, onClose }) => {
       alert("Invalid email format");
       return;
     }
-    // window.location.reload();
+    window.location.reload();
     console.log("new-------", newManager);
   };
 

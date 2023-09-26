@@ -26,7 +26,7 @@ function App() {
         <Routes>
         <Route exact path="/" element={<LandingPage />} />
         <Route exact path="/login" element={<Login/>} />
-        <Route exact path="/register" element={<Register/>} />
+        {/* <Route exact path="/register" element={<Register/>} /> */}
         <Route exact path="/main" element={
            localStorage.getItem("token") ? (
           <Main />

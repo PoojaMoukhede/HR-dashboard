@@ -45,7 +45,9 @@ export default function LandingPage() {
       <nav id="navbar" className="navbar">
         <ul>
           <li><a className="nav-link scrollto active" href="#hero">Home</a></li>
-          <li><Link to='/register'><button className="getstarted scrollto">Get Started</button></Link></li>
+          {/* <li><Link to='/register'><button className="getstarted scrollto">Get Started</button></Link></li> */}
+          <li><Link to='/login'><button className="getstarted scrollto">Get Started</button></Link></li>
+
         </ul>
         <i className="bi bi-list mobile-nav-toggle"></i>
       </nav>

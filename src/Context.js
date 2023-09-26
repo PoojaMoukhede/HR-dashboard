@@ -27,7 +27,7 @@ export function APIContextProvider({ children }) {
   // const editEmployeeURL = `${URL}putEmployee/${id}`;
   // const deleteEmployeeURL = `${URL}deleteEmployee/${id}`;
 
-  const addManagerURL = `${URL}managers`;
+  const addManagerURL = `${URL}manager`;
   // const addManagerURL = `${URL}addmanager`;
   // const editManagerURL = `${URL}delete/${id}`;
   // const deleteManagerURL = `${URL}put/${id}`

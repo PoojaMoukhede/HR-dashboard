@@ -77,7 +77,7 @@ export default function Table() {
             <tbody>
               {filteredRows.map((row) => (
                 <tr>
-                  <td className="text-center text-muted">{row.id}</td>
+                  <td className="text-center text-muted">{row.Emp_id}</td>
                   <td>
                     <div className="widget-content p-0">
                       <div className="widget-content-wrapper">

@@ -39,7 +39,7 @@ export default function Sidebar() {
   const currentPath = location.pathname;
 
 
-  console.log({currentPath});
+  // console.log({currentPath});
   return (
     <>
       <div
@@ -85,10 +85,6 @@ export default function Sidebar() {
            
               className="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav"
             >
-{/* dfdafafafafd */}
-
-toggler
-
               <span className="btn-icon-wrapper">
                  <i className="fa fa-ellipsis-v fa-w-6"></i>
                </span>
@@ -101,7 +97,7 @@ toggler
               <Link to="/main">
 
                 <li
-                  className={` item_s app-sidebar__heading ${currentPath=='/main'?'activate':''}`}
+                  className={` item_s app-sidebar__heading ${currentPath==='/main'?'activate':''}`}
                   onClick={() => handleItemClick("/main")}
                 >
                   <Icon icon="icon-park-outline:dashboard" style={style} />
@@ -110,9 +106,7 @@ toggler
               </Link>
               <Link to="/members">
                 <li
-                  className={` item_s app-sidebar__heading ${getActiveClass(
-                    "/members"
-                  )}`}
+                  className={` item_s app-sidebar__heading ${currentPath==='/members'?'activate':''}`}
                   onClick={() => handleItemClick("/members")}
                 >
                   <Icon icon="clarity:employee-group-line"  style={style}  />
@@ -121,9 +115,7 @@ toggler
               </Link>
               <Link to="/attandance">
                 <li
-                  className={` item_s app-sidebar__heading ${getActiveClass(
-                    "/attandance"
-                  )}`}
+                  className={` item_s app-sidebar__heading ${currentPath==='/attandance'?'activate':''}`}
                   onClick={() => handleItemClick("/attandance")}
                 >
                   <Icon icon="simple-line-icons:calender" style={style}  />
@@ -133,9 +125,7 @@ toggler
               
               <Link to="/managers">
                 <li
-                  className={` item_s app-sidebar__heading ${getActiveClass(
-                    "/managers"
-                  )}`}
+                  className={` item_s app-sidebar__heading ${currentPath==='/managers'?'activate':''}`}
                   onClick={() => handleItemClick("/managers")}
                 >
                   <Icon icon="majesticons:users-line" style={style}  />
@@ -144,9 +134,7 @@ toggler
               </Link>
               <Link to="/expanse">
                 <li
-                  className={` item_s app-sidebar__heading ${getActiveClass(
-                    "/expanse"
-                  )}`}
+                  className={` item_s app-sidebar__heading ${currentPath==='/expanse'?'activate':''}`}
                   onClick={() => handleItemClick("/expanse")}
                 >
                   <Icon icon="grommet-icons:money" style={style} />
@@ -155,9 +143,7 @@ toggler
               </Link>
               <Link to="/complaint">
                 <li
-                  className={` item_s app-sidebar__heading ${getActiveClass(
-                    "/complaint"
-                  )}`}
+                  className={` item_s app-sidebar__heading ${currentPath==='/complaint'?'activate':''}`}
                   onClick={() => handleItemClick("/complaint")}
                 >
                   <Icon icon="material-symbols:support-agent"  style={style} />
@@ -166,9 +152,7 @@ toggler
               </Link>
               <Link to="/calender">
                 <li
-                  className={` item_s app-sidebar__heading ${getActiveClass(
-                    "/calender"
-                  )}`}
+                  className={` item_s app-sidebar__heading ${currentPath==='/calender'?'activate':''}`}
                   onClick={() => handleItemClick("/calender")}
                 >
                   <Icon icon="uil:calender"  style={style} />
@@ -177,9 +161,7 @@ toggler
               </Link>
               <Link to="/canteen">
                 <li
-                  className={` item_s app-sidebar__heading ${getActiveClass(
-                    "/calender"
-                  )}`}
+                  className={` item_s app-sidebar__heading ${currentPath==='/canteen'?'activate':''}`}
                   onClick={() => handleItemClick("/canteen")}
                 >
                   <Icon icon="ep:food"  style={style} />
