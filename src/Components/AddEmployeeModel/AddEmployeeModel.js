@@ -36,6 +36,12 @@ const AddEmployeeModal = ({
       ...prevEmployee,
       [name]: value,
     }));
+    if (name === 'Emp_contact_No' && value.length === 10) {
+      setNewEmployee({ ...newEmployee, [name]: value });
+    } else if (name === 'Emp_contact_No' && value.length < 10) {
+     
+      console.error('Contact number must be 10 characters long.');
+    }
   };
 
   const [selectedState, setSelectedState] = useState("");

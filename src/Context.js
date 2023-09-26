@@ -20,17 +20,9 @@ export function APIContextProvider({ children }) {
 
   // TAKES email Password gives Token
   const loginUrl = `${URL}login`;
-
   //add new employeesemployees
   const addEmployeeURL = `${URL}employees`;
-  // const addEmployeeURL = `${URL}add`;
-  // const editEmployeeURL = `${URL}putEmployee/${id}`;
-  // const deleteEmployeeURL = `${URL}deleteEmployee/${id}`;
-
   const addManagerURL = `${URL}manager`;
-  // const addManagerURL = `${URL}addmanager`;
-  // const editManagerURL = `${URL}delete/${id}`;
-  // const deleteManagerURL = `${URL}put/${id}`
   
   //post user
   const signUpUser = (userData) => {
@@ -70,7 +62,9 @@ export function APIContextProvider({ children }) {
       })
       .catch((err) => {
         console.log(err);
-        window.alert(`Login Failed`);
+        // window.alert(`Login Failed`,err);
+        window.alert(err);
+
       }
       );
   };

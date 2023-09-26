@@ -35,7 +35,8 @@ export default function LandingPage() {
   return (
     <>
 
-  <nav id="header" className={`header fixed-top ${headerClass}`}>
+<div className='landing_page_'>
+<nav id="header" className={`header fixed-top ${headerClass}`}>
     <div className="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <a href="index.html" className="d-flex align-items-center">
@@ -160,6 +161,7 @@ export default function LandingPage() {
     </div>
   </footer>
 
+</div>
 
     {/* <div classNameName='landingpage d-flex flex-row'>
          <div classNameName='rightL'>

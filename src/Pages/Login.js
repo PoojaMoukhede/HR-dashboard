@@ -11,10 +11,24 @@ export default function Login() {
   });
   const handleChange = (e) => {
     setLogin((curr) => ({ ...curr, [e.target.name]: e.target.value }));
+    //for validation 
+    // const newPassword = e.target.value;
+    // setPassword(newPassword);
+    // validatePassword(newPassword);
   };
   const UserLogin = () => {
     loginUser(login);
   };
+  
+  // const [password, setPassword] = useState('');
+  // const [isValid, setIsValid] = useState(false);
+  // const validatePassword = (password) => {
+  //   const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$/;
+  //   const isValidPassword = passwordPattern.test(password);
+
+  //   setIsValid(isValidPassword);
+  // };
+
   return (
     <>
       <section
@@ -66,6 +80,20 @@ export default function Login() {
                             onChange={(e) => handleChange(e)}
                             name="password"
                           />
+
+{/* <input
+        type="password"
+        id="form2Example22"
+        className={`form-control ${isValid ? 'is-valid' : 'is-invalid'}`}
+        placeholder="Password"
+        onChange={handleChange}
+        name="password"
+      />
+      {isValid ? (
+        <div className="valid-feedback">Password is valid</div>
+      ) : (
+        <div className="invalid-feedback">Password must be 8 characters with at least one uppercase letter, one lowercase letter, one special character, and one number.</div>
+      )} */}
                         </div>
 
                         <div className="text-center pt-1 mb-5 pb-1">
