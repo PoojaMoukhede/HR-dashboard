@@ -4,7 +4,6 @@ import Sidebar from "../Components/Sidebar/Sidebar";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
-
 export default function Complaint() {
   const [showContainer, setShowContainer] = useState(true);
 
@@ -25,7 +24,6 @@ export default function Complaint() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-
     axios
       .get("http://192.168.1.211:8080/empdata")
       .then((response) => {
@@ -39,11 +37,54 @@ export default function Complaint() {
         console.error("Error fetching user data:", error);
       });
   }, []);
-  const countPendingComplaints = complaints.filter((complaint) => complaint.status === 'Pending').length;
-  const countResolvedComplaints = complaints.filter((complaint) => complaint.status === 'Resolved').length;
-  // const toastSuccess = () =>
-  //   toast.success("This complaint marked as completed");
-  
+  const [processCount, setProcessCount] = useState(
+    complaints.filter((complaint) => complaint.status === "Pending").length
+  );
+  const [resolvedCount, setResolvedCount] = useState(
+    complaints.filter((complaint) => complaint.status === "Resolved").length
+  );
+
+  // const handleResolve = () => {
+  //   if (processCount > 0) {
+  //     setResolvedCount((prevResolvedCount) => prevResolvedCount + 1);
+  //     setProcessCount((prevProcessCount) => prevProcessCount - 1);
+  //   }
+  // };
+
+  // const handleResolve = async (id) => {
+  //   try {
+  //     const response = await axios.put(`http://localhost:8080/complaint/${id}`);
+  //     const updatedComplaints = complaints.map((complaint) =>
+  //       complaint._id === id ? response.data : complaint
+  //     );
+  //     setComplaints(updatedComplaints);
+  //   } catch (error) {
+  //     console.error('Error resolving complaint:', error);
+  //   }
+  // };
+  const handleResolve = async (id) => {
+    try {
+      const response = await axios.put(`http://localhost:8080/complaint/${id}`);
+      const updatedComplaints = complaints.map((complaint) =>
+        complaint._id === id ? response.data : complaint
+      );
+      setComplaints(updatedComplaints);
+      setResolvedCount((prevResolvedCount) => prevResolvedCount + 1);
+      setProcessCount((prevProcessCount) => prevProcessCount - 1);
+      // console.log("updatedComplaints",response)
+    } catch (error) {
+      console.error('Error resolving complaint:', error);
+    }
+  };
+
+  const handleTake = () => {
+    if (processCount < complaints.length) {
+      setProcessCount((prevProcessCount) => prevProcessCount + 1);
+    }
+  };
+
+
+
   return (
     <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
       <Header />
@@ -81,7 +122,7 @@ export default function Complaint() {
 
                           <div>
                             <h5>Pending</h5>
-                            <h4>{countPendingComplaints}</h4>
+                            <h4>{complaints.length}</h4>
                             <div
                               className="square"
                               style={{ backgroundColor: "#27ceb8" }}
@@ -90,7 +131,7 @@ export default function Complaint() {
 
                           <div>
                             <h5>In Progress</h5>
-                            <h4>{complaints.length}</h4>
+                            <h4>{processCount}</h4>
                             <div
                               className="square"
                               style={{ backgroundColor: "#63619b" }}
@@ -99,7 +140,7 @@ export default function Complaint() {
 
                           <div>
                             <h5>Completed</h5>
-                            <h4>{countResolvedComplaints}</h4>
+                            <h4>{resolvedCount}</h4>
                             <div
                               className="square"
                               style={{ backgroundColor: "#f8b146" }}
@@ -193,26 +234,40 @@ export default function Complaint() {
             </div>
             <div className="row">
               <div className="col-md-6 col-xl-12">
-               {/* <div className="mb-3 card"> */}
-               {/* {showContainer && ( */}
+                {/* <div className="mb-3 card"> */}
+                {/* {showContainer && ( */}
                 <ul className="complaint_cards">
                   {complaints.map((complaint) => (
-
                     <div className="card mt-1">
-                      {/* <div className="card-header">Complaint Number 52</div> */}
+                      <div className="card-header">
+                        {users[complaint.userRef] ? (
+                          <p style={{ fontSize: "0.9rem" }}>
+                            {" "}
+                            <b>
+                              <i>Name : </i>
+                            </b>
+                            {users[complaint.userRef].name}
+                          </p>
+                        ) : (
+                          <p>Name: Loading...</p>
+                        )}
+                      </div>
                       <div className="card-body d-flex flex-row">
-                        <li key={complaint._id} style={{width:'80%'}}>
-                          <p className="text-dark" style={{fontSize:'0.9rem'}}> <b><i>Issue :</i></b> {complaint.Message[0].message}</p>
-
-                          {users[complaint.userRef] ? (
-                            <p style={{fontSize:'0.9rem'}}> <b><i>Name: </i></b>{users[complaint.userRef].name}</p>
-                          ) : (
-                            <p>Name: Loading...</p>
-                          )}
+                        <li key={complaint._id} style={{ width: "80%" }}>
+                          <p
+                            className="text-dark"
+                            style={{ fontSize: "0.9rem" }}
+                          >
+                            {" "}
+                            <b>
+                              <i>Issue :</i>
+                            </b>{" "}
+                            {complaint.Message[0].message}
+                          </p>
                         </li>
 
                         <div>
-                          {/* <button
+                          <button
                         className="mr-2 btn"
                         style={{
                           backgroundColor: "#403e93",
@@ -222,130 +277,85 @@ export default function Complaint() {
                           color: "white",
                           fontSize: "0.9rem",
                         }}
+                        // onClick={()=>{console.log(`onkeyup : ${complaint.Message[0].message}`)}}
+                        onClick={handleTake}
                       >
                         Take
-                      </button> */}
+                      </button>
                           <button
                             style={{
                               backgroundColor: "#f8b146",
                               border: "none",
                               padding: "0.5rem",
-                              margin: "1rem",
+                              margin: "0.3rem",
                               borderRadius: "0.3rem",
                               color: "white",
                               fontSize: "0.9rem",
-                           
                             }}
-                            // onClick={toastSuccess}
-                            onClick={handleRemoveContainer}
+                            onClick={() => handleResolve(complaint._id)}
+                            // onClick={handleResolve}
+                            disabled={processCount === 0 || resolvedCount === complaints.length}
                           >
                             Resolve
                           </button>
                         </div>
                       </div>
                     </div>
-                    
                   ))}
                 </ul>
-                 {/* )} */}
-                {/* <div className="card mt-4">
-                  <div className="card-header">Complaint Number 91</div>
-                  <div className="card-body d-flex">
-                    <blockquote
-                      className="blockquote mb-0"
-                      style={{ width: "85%" }}
-                    >
-                      <p>
-                        Hello sir/ma'am <br />
-                        Issue regarding advance payment.
-                        <br />
-                        Thankyou
-                      </p>
-                      <footer className="blockquote-footer">
-                        Dhruva Solanki <cite title="Source Title">{1554}</cite>
-                      </footer>
-                    </blockquote>
-                    <div>
-                      <button
-                        className="mr-2 btn"
-                        style={{
-                          backgroundColor: "#403e93",
-                          border: "none",
-                          padding: "0.5rem",
-                          borderRadius: "0.3rem",
-                          color: "white",
-                          fontSize: "0.9rem",
-                        }}
-                      >
-                        Take
-                      </button>
-                      <button
-                        style={{
-                          backgroundColor: "#f8b146",
-                          border: "none",
-                          padding: "0.5rem",
-                          borderRadius: "0.3rem",
-                          color: "white",
-                          fontSize: "0.9rem",
-                        }}
-                        onClick={toastSuccess}
-
-                      >
-                        Resolve
-                      </button>
+                {/* second design of complaint if user has more then one complaint */}
+                {/* <ul className="complaint_cards">
+                  {complaints.map((complaint) => (
+                    <div className="card mt-1" key={complaint._id}>
+                      <div className="card-header">
+                        {users[complaint.userRef] ? (
+                          <p style={{ fontSize: "0.9rem" }}>
+                            {" "}
+                            <b>
+                              <i>Name: </i>
+                            </b>
+                            {users[complaint.userRef].name}
+                          </p>
+                        ) : (
+                          <p>Name: Loading...</p>
+                        )}
+                      </div>
+                      <div className="card-body d-flex flex-row">
+                        <ul style={{ width: "80%" }}>
+                          {complaint.Message.map((message, index) => (
+                            <li
+                              key={message._id}
+                              style={{ fontSize: "0.9rem" ,padding:'0.4rem'}}
+                            >
+                              Message {index + 1}: {message.message}
+                            </li>
+                          ))}
+                        </ul>
+                        <div style={{ width: "20%", display:"flex",flexDirection:"column" }}>
+                          {complaint.Message.map((message, index) => (
+                            <button
+                              key={message._id}
+                              style={{
+                                backgroundColor: "#f8b146",
+                                border: "none",
+                                padding: "0.4rem",
+                                margin: "0.2rem",
+                                borderRadius: "0.3rem",
+                                color: "white",
+                                fontSize: "0.7rem",
+                                width: "20%",
+                              }}
+                              onClick={handleRemoveContainer}
+                            >
+                              Resolve
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-
-                <div className="card mt-4">
-                  <div className="card-header">Complaint Number 104</div>
-                  <div className="card-body d-flex">
-                    <blockquote className="blockquote mb-0" style={{width:'85%'}}>
-                      <p>
-                        Hello sir/ma'am <br />
-                        I have a complain about the booking of my flight ticket.
-                        It is showing that it has been booked but when i checked
-                        on the website no tickets are booked their.
-                        <br /> Kindly look into that.
-                        <br />
-                        Thankyou
-                      </p>
-                      <footer className="blockquote-footer">
-                        Swati Chauhan <cite title="Source Title">{1059}</cite>
-                      </footer>
-                    </blockquote>
-                    <div>
-                      <button
-                        className="mr-2 btn"
-                        style={{
-                          backgroundColor: "#403e93",
-                          border: "none",
-                          padding: "0.5rem",
-                          borderRadius: "0.3rem",
-                          color: "white",
-                          fontSize: "0.9rem",
-                        }}
-                      >
-                        Take
-                      </button>
-                      <button
-                        style={{
-                          backgroundColor: "#f8b146",
-                          border: "none",
-                          padding: "0.5rem",
-                          borderRadius: "0.3rem",
-                          color: "white",
-                          fontSize: "0.9rem",
-                        }}
-                        onClick={toastSuccess}
-                      >
-                        Resolve
-                      </button>
-                    </div>
-                  </div>
-                </div> */}
-              {/* </div>//extra div of card */}
-            </div>
+                  ))}
+                </ul> */}
+              </div>
             </div>
             <ToastContainer
               position="bottom-right"
