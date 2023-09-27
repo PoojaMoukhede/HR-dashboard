@@ -14,6 +14,7 @@ export function APIContextProvider({ children }) {
   const [userEmail, setUserEmail] = useState("");
   const [employeeData , setEmployeedata]= useState([]);
   const [managerData , setManagerdata]= useState([]);
+  const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] = useState(0);
 
 
 
@@ -25,6 +26,7 @@ export function APIContextProvider({ children }) {
   //add new employeesemployees
   const addEmployeeURL = `${URL}employees`;
   const addManagerURL = `${URL}manager`;
+  const CurrExpanseURL = `${URL}expanse/curr`
   
   //post user
   const signUpUser = (userData) => {
@@ -141,19 +143,25 @@ export function APIContextProvider({ children }) {
         console.error("Error:", error);
       });
   };
-  // const onFormSubmitEdit = async (id, data) => {
-  //   console.log("onFormSubmitEdit inside");
-    
-  //   try {
-  //     const response = await axios.put(`http://192.168.1.211:8080/putEmployee/${id}`);
-  //     const info = response.data;
-  //     console.log(`info ${info}`);
-  //     setEmployeedata(data);
-  //     console.log(`id while fetching ${id}`);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
+  const fuelExpanseGet = () => {
+    console.log();
+    try {
+      axios
+        .get(CurrExpanseURL)
+        .then((res) => {
+          console.log(res);
+        const moneyFromAPI = res.data[0].money;
+        setCurrentMonthFuelExpensetotal(moneyFromAPI);
+        console.log("Money from API:", moneyFromAPI);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
 
   return (
     <APIContext.Provider
@@ -166,6 +174,7 @@ export function APIContextProvider({ children }) {
         onFormSubmit,
         onFormSubmit21,
         onFormSubmitEdit,
+        fuelExpanseGet
       }}
     >
       {children}

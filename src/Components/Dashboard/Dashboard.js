@@ -16,9 +16,11 @@ export default function Dashboard() {
     []
   );
   const [currentMonthFuelExpense, setCurrentMonthFuelExpense] = useState(0);
+  const [currentMonthFuel, setCurrentMonthFuel] = useState(0);
   const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] =
     useState(0);
-
+    const [currentMonthFuelExpensetotal2, setCurrentMonthFuelExpensetotal2] =
+    useState(0);
   const [lastMonthFuelExpense, setLastMonthFuelExpense] = useState(0);
   const [
     cumulativeTotalPrevMonthExpanse,
@@ -28,6 +30,16 @@ export default function Dashboard() {
     cumulativeTotalThisMonthExpanse,
     setCumulativeFuelConsumptionThisMonthExpanse,
   ] = useState(0);
+
+
+  // const monthlyLiters = new Array(12).fill(0);
+  // fuelData.forEach((entry) => {
+  //   const date = new Date(entry.month);
+  //   const month = date.getMonth();
+  //   console.log(month)
+  //   monthlyLiters[month] += entry.Liters;
+  // });
+  
 
   const chartData2 = {
     options: {
@@ -99,6 +111,7 @@ export default function Dashboard() {
           "Oct",
           "Nov",
           "Dec",
+          // expData.map((entry) => entry.month)
         ],
         labels: {
           style: {
@@ -135,37 +148,64 @@ export default function Dashboard() {
       .then((response) => {
         setFuelData(response.data);
         console.log(response.data);
-
+  
         // Calculate the cumulative fuel consumption, current month's expense, and last month's expense
         let cumulativeTotal = 0;
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth();
-        const lastMonth = (currentMonth - 1 + 12) % 12; // Handle wrapping to previous year
-
+        const currentYear = currentDate.getFullYear();
+        const lastMonth = (currentMonth - 1 + 12) % 12; // Calculate the previous month
+        console.log(`lastMonth ${lastMonth}`);
         response.data.forEach((entry) => {
           cumulativeTotal += entry.Liters;
           const entryDate = new Date(entry.Date);
           const entryMonth = entryDate.getMonth();
-
-          if (entryMonth === currentMonth) {
+          const entryYear = entryDate.getFullYear();
+  
+          if (entryMonth === currentMonth && entryYear === currentYear) {
             setCurrentMonthFuelExpense(
               (prevExpense) => prevExpense + entry.Liters
             );
           }
-
-          if (entryMonth === lastMonth) {
+  
+          if (entryMonth === lastMonth && entryYear === currentYear) {
             setLastMonthFuelExpense(
               (prevExpense) => prevExpense + entry.Liters
             );
           }
         });
-
+  
         setCumulativeFuelConsumption(cumulativeTotal);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+
+
+      axios
+      .get("http://192.168.1.211:8080/expanse/curr")
+      .then((response) => {
+        const moneyFromAPI = response.data[0].money;
+        setCurrentMonthFuelExpensetotal2(moneyFromAPI);
+        console.log("Money from API:", moneyFromAPI);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+
+      axios
+      .get("http://192.168.1.211:8080/fuel/curr")
+      .then((response) => {
+        const Liters = response.data[0].Liters;
+        setCurrentMonthFuel(Liters);
+        console.log("Liters from API:", Liters);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+     
   }, []);
+  
   // useEffect(() => {
   //   axios
   //     .get('http://192.168.1.211:8080/fuel')
@@ -222,6 +262,7 @@ export default function Dashboard() {
     axios
       .get("http://192.168.1.211:8080/expanse")
       .then((response) => {
+        
         setExpData(response.data);
         console.log(response.data);
 
@@ -294,7 +335,8 @@ export default function Dashboard() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          <span> {lastMonthFuelExpense} Liters</span>
+                          {/* <span> {lastMonthFuelExpense} Liters</span> */}
+                          <span>{currentMonthFuel} Liters</span>
                         </div>
                       </div>
                     </div>
@@ -306,14 +348,14 @@ export default function Dashboard() {
                       <div className="widget-content-left">
                         <div className="widget-heading">Expenses On Fuel</div>
                         <div className="widget-subheading">
-                          Till Last month expense
+                          This month expense
                         </div>
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
                           <span>
                             {" "}
-                            {cumulativeTotalPrevMonthExpanse} &#8377;
+                            {currentMonthFuelExpensetotal2} &#8377;
                           </span>
                           {/* <span>48752</span> &#8377; */}
                         </div>

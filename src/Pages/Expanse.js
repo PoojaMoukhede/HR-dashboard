@@ -1,10 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../Components/Header/Header";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import PolorChart from "../Components/PolorChart";
+import { useAPI } from "../Context";
+import { useEffect } from "react";
+import axios from "axios";
 
 export default function Expanse() {
-  const chart1Labels = ['Food', 'Water','Fuel',"Hotel","Transport"];
+  const { fuelExpanseGet } = useAPI();
+  const [expanse, setExpanse] = useState([]);
+  const chart1Labels = ["Food", "Water", "Fuel", "Hotel", "Transport"];
+  const ExpanseGetData = () => {
+    fuelExpanseGet(expanse);
+    // console.log(expanse)
+  };
+
+  const [expData, setExpData] = useState([]);
+  const [chartData,setChartData] = useState([]);
+  const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/expanse/curr")
+      .then((response) => {
+        const moneyFromAPI = response.data[0].money;
+        setCurrentMonthFuelExpensetotal(moneyFromAPI);
+        console.log("Money from API:", moneyFromAPI);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+      // ExpanseGetData()
+  }, []);
+
+  // currentMonthFuelExpensetotal for expense calculations just for now
+  const totalAmount = currentMonthFuelExpensetotal;
+  const foodExpense = parseInt(totalAmount * 0.06);
+  const waterExpense = parseInt(totalAmount * 0.005);
+  const transportExpense = parseInt(totalAmount * 0.2);
+  const hotelExpense = parseInt(totalAmount * 0.15);
+  const fuelExpense =
+    totalAmount -
+    (foodExpense + waterExpense + transportExpense + hotelExpense);
+
+  // console.log("Food Expense:", foodExpense);
+  // console.log("Water Expense:", waterExpense);
+  // console.log("Transport Expense:", transportExpense);
+  // console.log("Hotel Expense:", hotelExpense);
+  // console.log("Fuel Expense:", fuelExpense);
 
   return (
     <>
@@ -15,7 +58,12 @@ export default function Expanse() {
           <div className="app-main__outer">
             <div className="app-main__inner">
               <div className="row">
-                <h2 className="text-center" style={{color:"rgba(13,27,62,.7)"}}>Monthly Expanses</h2>
+                <h2
+                  className="text-center"
+                  style={{ color: "rgba(13,27,62,.7)" }}
+                >
+                  Monthly Expanses
+                </h2>
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
                   <div className="col mb-4">
                     <div className="card">
@@ -26,14 +74,15 @@ export default function Expanse() {
                         alt="..."
                       />
                       <div className="card-body">
-                        {/* <h5 className="card-title d-flex">Food</h5>
-                        <p className="card-text">2000</p> */}
+
                         <div className="row">
                           <div className="col-sm-6">
                             <h5 className="card-title">Food</h5>
                           </div>
                           <div className="col-sm-6">
-                            <p className="card-text big">2000 &#8377;</p>
+                            <p className="card-text big">
+                              {foodExpense} &#8377;
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -53,7 +102,9 @@ export default function Expanse() {
                             <h5 className="card-title">Water</h5>
                           </div>
                           <div className="col-sm-6">
-                            <p className="card-text big">1500 &#8377;</p>
+                            <p className="card-text big">
+                              {waterExpense} &#8377;
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -72,7 +123,9 @@ export default function Expanse() {
                             <h5 className="card-title">Fuel</h5>
                           </div>
                           <div className="col-sm-6">
-                            <p className="card-text big">5000 &#8377;</p>
+                            <p className="card-text big">
+                              {fuelExpense} &#8377;
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -92,7 +145,9 @@ export default function Expanse() {
                             <h5 className="card-title">Hotel</h5>
                           </div>
                           <div className="col-sm-6">
-                            <p className="card-text big">4500 &#8377;</p>
+                            <p className="card-text big">
+                              {hotelExpense} &#8377;
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -112,7 +167,9 @@ export default function Expanse() {
                             <h5 className="card-title">Transport</h5>
                           </div>
                           <div className="col-sm-6">
-                            <p className="card-text big">2200 &#8377;</p>
+                            <p className="card-text big">
+                              {transportExpense} &#8377;
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -122,51 +179,41 @@ export default function Expanse() {
               </div>
 
               <div className="row">
-              <div className="col-md-12 col-lg-6">
-                <div className="mb-3 card">
-                  <div className="card-header-tab card-header">
-                    <div className="card-header-title">
-                      <i className="header-icon lnr lnr-pie-chart icon-gradient bg-love-kiss">
-                        {" "}
-                      </i>
-                      Monthly Expanse Report
+                <div className="col-md-12 col-lg-6">
+                  <div className="mb-3 card">
+                    <div className="card-header-tab card-header">
+                      <div className="card-header-title">
+                        <i className="header-icon lnr lnr-pie-chart icon-gradient bg-love-kiss">
+                          {" "}
+                        </i>
+                        Monthly Expanse Report
+                      </div>
                     </div>
-                  </div>
-                  <div className="tab-content">
-                    <div className="tab-pane fade active show" id="tab-eg-55">
-                      <div className="widget-chart p-3">
-                        <div style={{ height: "370px" }}>
-                        <PolorChart series={[2000,1500,5000,4500,2200]} labels={chart1Labels}/>
+                    <div className="tab-content">
+                      <div className="tab-pane fade active show" id="tab-eg-55">
+                        <div className="widget-chart p-3">
+                          <div style={{ height: "370px" }}>
+                            <PolorChart
+                              series={[foodExpense,waterExpense,fuelExpense,hotelExpense,transportExpense]}
+                              labels={chart1Labels}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-12 col-lg-6">
-                <div className="mb-3 card">
-                  <div className="card-header-tab card-header-tab-animation card-header">
-                    <div className="card-header-title">
-                      <i className="header-icon lnr lnr-pie-chart icon-gradient bg-love-kiss">
-                        {" "}
-                      </i>
-                      Monthly Expanse Report Table
+                <div className="col-md-12 col-lg-6">
+                  <div className="mb-3 card">
+                    <div className="card-header-tab card-header-tab-animation card-header">
+                      <div className="card-header-title">
+                        <i className="header-icon lnr lnr-pie-chart icon-gradient bg-love-kiss">
+                          {" "}
+                        </i>
+                        Monthly Expanse Report Table
+                      </div>
                     </div>
-                  </div>
-                  <div className="card-body">
-                    <div className="tab-content">
-                      <div
-                        className="tab-pane fade show active"
-                        id="tabs-eg-77"
-                      >
-                        <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" style={{ height: "370px" }} >
-                          {/* <ReactApexChart
-                            options={chartData.options}
-                            series={chartData.series}
-                            type="bar"
-                            height={350}
-                          /> */}
-                                              <div className="card-body">
+                    <div className="card-body">
                       <div className="tab-content">
                         <div
                           className="tab-pane fade show active"
@@ -174,89 +221,114 @@ export default function Expanse() {
                         >
                           <div
                             className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
-                            style={{ height: "300px" }}
+                            style={{ height: "370px" }}
                           >
-                            <div className="col-md-12 col-xl-12">
+                            {/* <ReactApexChart
+                            options={chartData.options}
+                            series={chartData.series}
+                            type="bar"
+                            height={350}
+                          /> */}
                             <div className="card-body">
-                              <div className="row">
-                                <div className="col-sm-6">
-                                  <p className="mb-0">Total Amount</p>
-                                </div>
-                                <div className="col-sm-6">
-                                  <p className="text-muted mb-0">15200 &#8377;</p>
+                              <div className="tab-content">
+                                <div
+                                  className="tab-pane fade show active"
+                                  id="tabs-eg-77"
+                                >
+                                  <div
+                                    className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
+                                    style={{ height: "300px" }}
+                                  >
+                                    <div className="col-md-12 col-xl-12">
+                                      <div className="card-body">
+                                        <div className="row">
+                                          <div className="col-sm-6">
+                                            <p className="mb-0">Total Amount</p>
+                                          </div>
+                                          <div className="col-sm-6">
+                                            <p className="text-muted mb-0">
+                                              {currentMonthFuelExpensetotal}{" "}
+                                              &#8377;
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                          <div className="col-sm-6">
+                                            <p className="mb-0">
+                                              Expanse On Food
+                                            </p>
+                                          </div>
+                                          <div className="col-sm-6">
+                                            <p className="text-muted mb-0">
+                                              {foodExpense} &#8377;
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                          <div className="col-sm-6">
+                                            <p className="mb-0">
+                                              Expanse On Water Bottle
+                                            </p>
+                                          </div>
+                                          <div className="col-sm-6">
+                                            <p className="text-muted mb-0">
+                                              {waterExpense} &#8377;
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                          <div className="col-sm-6">
+                                            <p className="mb-0">
+                                              Expanse On Fuel
+                                            </p>
+                                          </div>
+                                          <div className="col-sm-6">
+                                            <p className="text-muted mb-0">
+                                              {fuelExpense} &#8377;
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                          <div className="col-sm-6">
+                                            <p className="mb-0">Hotel Bills</p>
+                                          </div>
+                                          <div className="col-sm-6">
+                                            <p className="text-muted mb-0">
+                                              {hotelExpense} &#8377;
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                          <div className="col-sm-6">
+                                            <p className="mb-0">
+                                              Transportation (Other Vehical)
+                                            </p>
+                                          </div>
+                                          <div className="col-sm-6">
+                                            <p className="text-muted mb-0">
+                                              {transportExpense} &#8377;
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <hr />
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <hr />
-                              <div className="row">
-                                <div className="col-sm-6">
-                                  <p className="mb-0">Expanse On Food</p>
-                                </div>
-                                <div className="col-sm-6">
-                                  <p className="text-muted mb-0">
-                                    2000 &#8377;
-                                  </p>
-                                </div>
-                              </div>
-                              <hr />
-                              <div className="row">
-                                <div className="col-sm-6">
-                                  <p className="mb-0">Expanse On Water Bottle</p>
-                                </div>
-                                <div className="col-sm-6">
-                                  <p className="text-muted mb-0">
-                                    1500 &#8377;
-                                  </p>
-                                </div>
-                              </div>
-                              <hr />
-                              <div className="row">
-                                <div className="col-sm-6">
-                                  <p className="mb-0">Expanse On Fuel</p>
-                                </div>
-                                <div className="col-sm-6">
-                                  <p className="text-muted mb-0">
-                                    5000 &#8377;
-                                  </p>
-                                </div>
-                              </div>
-                              <hr />
-                              <div className="row">
-                                <div className="col-sm-6">
-                                  <p className="mb-0">Hotel Bills</p>
-                                </div>
-                                <div className="col-sm-6">
-                                  <p className="text-muted mb-0">
-                                    4500 &#8377;
-                                  </p>
-                                </div>
-                              </div>
-                              <hr />
-                              <div className="row">
-                                <div className="col-sm-6">
-                                  <p className="mb-0">Transportation (Other Vehical)</p>
-                                </div>
-                                <div className="col-sm-6">
-                                  <p className="text-muted mb-0">
-                                    2200 &#8377;
-                                  </p>
-                                </div>
-                              </div>
-                              <hr />
-                              
-                              
                             </div>
                           </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
             </div>
           </div>
         </div>
