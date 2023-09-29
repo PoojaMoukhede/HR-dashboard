@@ -32,8 +32,8 @@ export default function Login() {
   return (
     <>
       <section
-        className="h-100 gradient-form"
-        style={{ backgroundColor: "#fff" }}
+        className="gradient-form"
+        // style={{ backgroundColor: "#fff" }}
       >
         <div className="container h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">

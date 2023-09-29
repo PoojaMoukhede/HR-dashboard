@@ -11,61 +11,38 @@
     clip-path:polygon(20% 0,100% 0,100% 100%,0 100%);
     transform:translateX(250px);
 }
-input{
+/* input{
     display:none;
-}
-label{
+} */
+/* label{
     position:absolute;
     top:10px;
     left:20px;
     font-size:1.1rem;
     color:#e0e0e0;
-}
+} */
 input:checked + label{
     color:#fec331;
 }
 .text{
 position:relative;
-    margin-left:3rem;
+    margin-left:1.2rem;
     padding:.2rem;
     height:130px;
 }
-.detail{
-margin:5px 0;
-    display:flex;
-    font-size:.7rem;
-    color:#26242e;
-}
-.detail p{
-    margin-right:.9rem;
-}
-.fa-clock{
-    color:#3ac5f0;
-}
-.fa-star{
-    color:#fec331;
-}
-.fa-fire{
-    color:#fe2d38;
-}
 .text button{
     position:absolute;
-    right:10px;
-    bottom:10px;
+    /* right:10px;
+    bottom:10px; */
     padding:7px 25px;
     font-size:1rem;
     border:none;
     outline:none;
     color:#fff;
-    background:#fe2d38;
-    box-shadow:0 2px 4px rgba(254, 45, 56,.7);
+    background:rgb(248, 177, 70);
+    box-shadow:0 2px 4px rgb(248, 177, 70);
     border-radius:2px;
     font-family:'Alata', sans-serif;
-}
-#price{
-    position:absolute;
-    bottom:15px;
-    left:4px;
 }
 /* .container:hover .layer-one{
     transform:translateX(0);
@@ -92,7 +69,7 @@ margin:5px 0;
 
 
 
-    .grid {
+    /* .grid {
         display: grid;
         column-gap: 6.4rem;
         row-gap: 9.6rem;
@@ -108,20 +85,29 @@ margin:5px 0;
       
       strong {
         font-weight: 500;
-      }
+      } */
       /* FOOD SECTION */
-     
-      .meal {
-        box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.075);
-        border-radius: 11px;
-        overflow: hidden;
-        display: flex;
-      }
+.meal {
+    box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.075);
+    border-radius: 11px;
+    overflow: hidden;
+    display: flex;
+}
       
 
-      .meal-img {
-        width: 50%; 
-        height: 260px;
-        object-fit: cover;
-      }
+.meal-img {
+    width: 47%; 
+    height: 260px;
+    object-fit: cover;
+}
       
+.menu-card{
+    background-color: #fff;
+}
+.menuItem{
+    font-size: 1rem;
+}
+.rightText{
+    text-align: right;
+    color: #485D67;
+} 

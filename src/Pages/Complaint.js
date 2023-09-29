@@ -5,12 +5,6 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
 export default function Complaint() {
-  const [showContainer, setShowContainer] = useState(true);
-
-  const handleRemoveContainer = () => {
-    setShowContainer(false);
-    toast.success("This complaint marked as completed");
-  };
 
   const [complaints, setComplaints] = useState([]);
   const [users, setUsers] = useState({});
@@ -37,41 +31,31 @@ export default function Complaint() {
         console.error("Error fetching user data:", error);
       });
   }, []);
+
+
   const [processCount, setProcessCount] = useState(
     complaints.filter((complaint) => complaint.status === "Pending").length
   );
+
   const [resolvedCount, setResolvedCount] = useState(
     complaints.filter((complaint) => complaint.status === "Resolved").length
   );
 
-  // const handleResolve = () => {
-  //   if (processCount > 0) {
-  //     setResolvedCount((prevResolvedCount) => prevResolvedCount + 1);
-  //     setProcessCount((prevProcessCount) => prevProcessCount - 1);
-  //   }
-  // };
+  const [counter, setCouner] = useState(0)
+  console.log("counter is tell more in cunoth ")
 
-  // const handleResolve = async (id) => {
-  //   try {
-  //     const response = await axios.put(`http://localhost:8080/complaint/${id}`);
-  //     const updatedComplaints = complaints.map((complaint) =>
-  //       complaint._id === id ? response.data : complaint
-  //     );
-  //     setComplaints(updatedComplaints);
-  //   } catch (error) {
-  //     console.error('Error resolving complaint:', error);
-  //   }
-  // };
   const handleResolve = async (id) => {
     try {
-      const response = await axios.put(`http://localhost:8080/complaint/${id}`);
-      const updatedComplaints = complaints.map((complaint) =>
-        complaint._id === id ? response.data : complaint
-      );
-      setComplaints(updatedComplaints);
-      setResolvedCount((prevResolvedCount) => prevResolvedCount + 1);
-      setProcessCount((prevProcessCount) => prevProcessCount - 1);
-      // console.log("updatedComplaints",response)
+      if (processCount > 0) {
+        const response = await axios.delete(`http://localhost:8080/complaint/${id}`);
+        const updatedComplaints = complaints.filter((complaint) => complaint._id !== id);
+        setComplaints(updatedComplaints);
+        setResolvedCount((prevResolvedCount) => prevResolvedCount + 1);
+        setProcessCount((prevProcessCount) => prevProcessCount - 1);
+      } else {
+        // Show a toast message indicating that the user needs to take a complaint first
+        toast.success('Please take a complaint before resolving it');
+      }
     } catch (error) {
       console.error('Error resolving complaint:', error);
     }
