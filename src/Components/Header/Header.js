@@ -102,7 +102,7 @@ export default function Header() {
               </span>
 
               <span className="num">4</span>
-              <ul className="ul_list">
+              {/* <ul className="ul_list">
                 <li className="icon">
                   <span className="icon"></span>
                   <span className="text">Lorem ipsum dolor sit amet</span>
@@ -119,7 +119,7 @@ export default function Header() {
                   <span className="icon"></span>
                   <span className="text">Lorem ipsum dolor sit amet</span>
                 </li>
-              </ul>
+              </ul> */}
             </div>
 
             <DropDown />

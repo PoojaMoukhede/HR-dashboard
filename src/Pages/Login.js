@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import logo from "../Images/multilogo.png";
 import { Link } from "react-router-dom";
 import { useAPI } from "../Context";
+import Cookies from 'js-cookie';
 
 export default function Login() {
   const { loginUser } = useAPI();
@@ -11,15 +12,16 @@ export default function Login() {
   });
   const handleChange = (e) => {
     setLogin((curr) => ({ ...curr, [e.target.name]: e.target.value }));
-    //for validation 
+    //for validation
     // const newPassword = e.target.value;
     // setPassword(newPassword);
     // validatePassword(newPassword);
   };
   const UserLogin = () => {
     loginUser(login);
+    // Cookies.set('isLoggedIn', 'true');
   };
-  
+
   // const [password, setPassword] = useState('');
   // const [isValid, setIsValid] = useState(false);
   // const validatePassword = (password) => {
@@ -29,7 +31,9 @@ export default function Login() {
   //   setIsValid(isValidPassword);
   // };
 
-  return (
+  
+
+ return (
     <>
       <section
         className="gradient-form"
@@ -65,6 +69,7 @@ export default function Login() {
                             className="form-control"
                             placeholder="Email"
                             onChange={(e) => handleChange(e)}
+                            // onClick={(e)=>setEmail(e.target.value)}
                             name="email"
                           />
                         </div>
@@ -81,7 +86,7 @@ export default function Login() {
                             name="password"
                           />
 
-{/* <input
+                          {/* <input
         type="password"
         id="form2Example22"
         className={`form-control ${isValid ? 'is-valid' : 'is-invalid'}`}
@@ -127,11 +132,16 @@ export default function Login() {
                     <div className="text-white px-3 py-4 p-md-5 mx-md-4">
                       <h4 className="mb-4">We are more than just a company</h4>
                       <p className="small mb-0">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua. Ut enim ad minim veniam, quis
-                        nostrud exercitation ullamco laboris nisi ut aliquip ex
-                        ea commodo consequat.
+                        Multispan Control Instruments Pvt Ltd' has formed in
+                        1986 in a modest 1200 sq ft workshop on the concepts of
+                        offering user-friendly innovation-based panel-mounted
+                        Temperature controllers for injection moulding,
+                        extrusion units, and other plastic processing machinery
+                        manufacturers in India. Thanks to the company's R&D
+                        efforts, more than 50 products were converted to
+                        microcontroller technology between 1995 and 2000. About
+                        3500 square feet of space were devoted to the company's
+                        set up in that year.
                       </p>
                     </div>
                   </div>

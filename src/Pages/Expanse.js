@@ -18,6 +18,8 @@ export default function Expanse() {
   const [expData, setExpData] = useState([]);
   const [chartData,setChartData] = useState([]);
   const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] = useState(0);
+  const [previousMonthExpenses, setPreviousMonthExpenses] = useState([])
+
 
   useEffect(() => {
     axios
@@ -30,6 +32,17 @@ export default function Expanse() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+
+      // axios
+      // .get("http://localhost:8080/expanse/prev")
+      // .then((response) => {
+      //   const previousMonthExpensesFromAPI = response.data[0].money;
+      //   setPreviousMonthExpenses(previousMonthExpensesFromAPI);
+      //   console.log("Previous Month Expenses:", previousMonthExpensesFromAPI);
+      // })
+      // .catch((error) => {
+      //   console.error("Error fetching previous month expenses:", error);
+      // });
       // ExpanseGetData()
   }, []);
 
@@ -43,11 +56,15 @@ export default function Expanse() {
     totalAmount -
     (foodExpense + waterExpense + transportExpense + hotelExpense);
 
-  // console.log("Food Expense:", foodExpense);
-  // console.log("Water Expense:", waterExpense);
-  // console.log("Transport Expense:", transportExpense);
-  // console.log("Hotel Expense:", hotelExpense);
-  // console.log("Fuel Expense:", fuelExpense);
+    // // currentMonthFuelExpensetotal for expense calculations just for now
+    // const totalAmountPrev = previousMonthExpenses;
+    // const foodExpensePrev = parseInt(totalAmountPrev * 0.06);
+    // const waterExpensePrev = parseInt(totalAmountPrev * 0.005);
+    // const transportExpensePrev = parseInt(totalAmountPrev * 0.2);
+    // const hotelExpensePrev = parseInt(totalAmountPrev * 0.15);
+    // const fuelExpensePrev =
+    // totalAmountPrev -
+    //   (foodExpensePrev + waterExpensePrev + transportExpensePrev + hotelExpensePrev);  
 
   return (
     <>
@@ -81,7 +98,9 @@ export default function Expanse() {
                           </div>
                           <div className="col-sm-6">
                             <p className="card-text big">
+                              {/* {foodExpense} &#8377; */}
                               {foodExpense} &#8377;
+
                             </p>
                           </div>
                         </div>
@@ -103,6 +122,7 @@ export default function Expanse() {
                           </div>
                           <div className="col-sm-6">
                             <p className="card-text big">
+                              {/* {waterExpense} &#8377; */}
                               {waterExpense} &#8377;
                             </p>
                           </div>
@@ -124,7 +144,9 @@ export default function Expanse() {
                           </div>
                           <div className="col-sm-6">
                             <p className="card-text big">
+                              {/* {fuelExpense} &#8377; */}
                               {fuelExpense} &#8377;
+
                             </p>
                           </div>
                         </div>
@@ -146,7 +168,9 @@ export default function Expanse() {
                           </div>
                           <div className="col-sm-6">
                             <p className="card-text big">
+                              {/* {hotelExpense} &#8377; */}
                               {hotelExpense} &#8377;
+
                             </p>
                           </div>
                         </div>
@@ -168,7 +192,9 @@ export default function Expanse() {
                           </div>
                           <div className="col-sm-6">
                             <p className="card-text big">
+                              {/* {transportExpense} &#8377; */}
                               {transportExpense} &#8377;
+
                             </p>
                           </div>
                         </div>
@@ -197,6 +223,10 @@ export default function Expanse() {
                               series={[foodExpense,waterExpense,fuelExpense,hotelExpense,transportExpense]}
                               labels={chart1Labels}
                             />
+                            {/* <PolorChart
+                              series={[foodExpensePrev,waterExpensePrev,fuelExpensePrev,hotelExpensePrev,transportExpensePrev]}
+                              labels={chart1Labels}
+                            /> */}
                           </div>
                         </div>
                       </div>

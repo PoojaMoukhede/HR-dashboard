@@ -12,7 +12,9 @@ import Tooltip from "react-bootstrap/Tooltip";
 
 export default function CanteenFacility() {
   const [menuItems, setMenuItems] = useState({ today: null, tomorrow: null });
-  const [totalCouponCount, setCouponCount] = useState()
+  const [totalCouponCountToday, setCouponCountToday] = useState()
+  const [totalCouponCountTomorrow, setCouponCountTomorrow] = useState()
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAdd = (newMenu) => {
@@ -31,15 +33,17 @@ export default function CanteenFacility() {
         console.error("Error fetching data:", error);
       });
     
-        axios
-          .get('http://localhost:8080/menu/total_coupon_count')
-          .then((response) => {
-            setCouponCount(response.data.totalCouponCount);
-            // console.log(response.data.totalCouponCount)
-          })
-          .catch((error) => {
-            console.error('Error fetching coupon count:', error);
-          });
+      axios
+      .get('http://localhost:8080/menu/total_coupon_count')
+      .then((response) => {
+        console.log(response)
+        setCouponCountToday(response.data.today); 
+        setCouponCountTomorrow(response.data.tomorrow); 
+        console.log(`response.data.today : ${response.data.today} --- response.data.tomorrow : ${response.data.tomorrow}`);
+      })
+      .catch((error) => {
+        console.error('Error fetching coupon count:', error);
+      });
       }, []);
     
 
@@ -98,7 +102,7 @@ export default function CanteenFacility() {
                             </div>
                             <div className="d-flex">
                               <div style={{ width: "50%" }}>
-                                <button>BOUGHT - {totalCouponCount}</button>
+                                <button>BOUGHT - {totalCouponCountToday}</button>
                               </div>
                               <div>
                                 <p className="pt-2">Valid Till Tomarrow</p>
@@ -133,7 +137,7 @@ export default function CanteenFacility() {
                             </div>
                             <div className="d-flex">
                               <div style={{ width: "50%" }}>
-                                <button>BOUGHT - 12</button>
+                                <button>BOUGHT - {totalCouponCountTomorrow}</button>
                               </div>
                               <div>
                                 {/* <p className="pt-2">Valid Till Tomarrow</p> */}

@@ -938,7 +938,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                 </div>
                 <div className="grid-item">
                   <TextField
-                    type="text"
+                    type="tel"
                     name="Emp_contact_No"
                     label="Employee Contact Number"
                     value={newEmployee.Emp_contact_No}
@@ -946,6 +946,11 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                     fullWidth
                     margin="normal"
                     required
+                    inputProps={{
+                      inputMode: 'numeric',
+                      pattern: '[0-9]{10}', 
+                      maxLength: 10, 
+                    }}
                   />
                 </div>
               </div>

@@ -882,7 +882,7 @@ const AddManagers = ({ open, onClose }) => {
                 </div>
                 <div className="grid-item">
                   <TextField
-                    type="text"
+                    type="tel"
                     name="contact_no"
                     label="Contact Number"
                     value={newManager.contact_no}
@@ -890,6 +890,11 @@ const AddManagers = ({ open, onClose }) => {
                     fullWidth
                     margin="normal"
                     required
+                    inputProps={{
+                      inputMode: 'numeric', // Specify numeric input mode
+                      pattern: '[0-9]{10}', // Specify a pattern for 10 digits
+                      maxLength: 10, // Limit the input to 10 characters
+                    }}
                   />
                 </div>
               </div>

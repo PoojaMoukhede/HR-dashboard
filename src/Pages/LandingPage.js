@@ -92,7 +92,7 @@ export default function LandingPage() {
           <div className="row">
 
             <div className="col-xl-4 text-center" data-aos="fade-right" data-aos-delay="100">
-              <img src={amico} className="img-fluid p-4" alt=""/>
+              <img src={amico} className="img-fluid p-4" alt="" />
             </div>
 
             <div className="col-xl-8 d-flex content">

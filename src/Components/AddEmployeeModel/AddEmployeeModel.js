@@ -920,7 +920,7 @@ const AddEmployeeModal = ({
               </div>
               <div className="grid-item">
                 <TextField
-                  type="text"
+                  type="number"
                   name="Emp_id"
                   label="Employee ID"
                   value={newEmployee.Emp_id}
@@ -945,7 +945,7 @@ const AddEmployeeModal = ({
               </div>
               <div className="grid-item">
                 <TextField
-                  type="text"
+                  type="tel"
                   name="Emp_contact_No"
                   label="Employee Contact Number"
                   value={newEmployee.Emp_contact_No}
@@ -953,6 +953,11 @@ const AddEmployeeModal = ({
                   fullWidth
                   margin="normal"
                   required
+                  inputProps={{
+                    inputMode: 'numeric', 
+                    pattern: '[0-9]{10}', 
+                    maxLength: 10, 
+                  }}
                 />
               </div>
             </div>

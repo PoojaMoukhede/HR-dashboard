@@ -330,7 +330,7 @@ export default function Dashboard() {
                       <div className="widget-content-left">
                         <div className="widget-heading">Fuel Consumption</div>
                         <div className="widget-subheading">
-                          Till Last month fuel consumption
+                         Last month fuel consumption
                         </div>
                       </div>
                       <div className="widget-content-right">
