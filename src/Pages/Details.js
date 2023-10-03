@@ -12,51 +12,53 @@ import axios from 'axios'
 export default function Details() {
   const { id } = useParams();
   const [employeeData,setEmployeedata] = useState()
+  const [attandance,setAttandance] = useState([])
 
   const fetchData = async (id) => {
     try {
-      const url = process.env.REACT_APP_API_URL
-  
+      const url = `http://localhost:8080`
      const emp = await axios
       .get( 
-        `${url}/employees/${id}`
+        `${url}/Users/${id}`
     
         )
       .then((response) => {
-        console.log({response});
-        return response.data
-       
+        // console.log({response});
+        return response.data       
       })
-  
-      
-
       setEmployeedata(emp)
-    
-  
     }
     catch(error){
       console.log('err',error)
     }
-  
   };
-  
-  
 
   useEffect( () => {
-
-
     fetchData(id);
-
+    try{
+      axios
+        .get(`http://localhost:8080/attandance/${id}`)
+        .then((response) => {
+          // console.log(response)
+          setAttandance(response.data);
+          // console.log("Attendance from API:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+        
+    }catch(e){
+      console.log(e)
+    }
 
   } ,[])
-  
+
 
   const toastSuccess = () => toast.success('Leave Approved');
   const toastError = () => toast.error('Leave Rejected');
   const toastSuccess2 = () => toast.success('Advance Payment Request Approved');
   const toastError2 = () => toast.error('Advance Payment Request Rejected');
   
-
   const workHoursData = [
     { date: "2023-09-01", regularHours: 8, overtimeHours: 2, belowHours: 0 },
     { date: "2023-09-02", regularHours: 6, overtimeHours: 0, belowHours: 2 },
@@ -88,8 +90,10 @@ export default function Details() {
     { date: "2023-09-28", regularHours: 6, overtimeHours: 0, belowHours: 2 },
     { date: "2023-09-29", regularHours: 6, overtimeHours: 0, belowHours: 2 },
     { date: "2023-09-30", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    // Add more data for different days
+    // Add more workHoursData for different days
   ];
+
+
   return (
     <>
       <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -125,7 +129,7 @@ export default function Details() {
                           <p className="mb-0">Employee ID</p>
                         </div>
                         <div className="col-sm-9">
-                          <p className="text-muted mb-0">{employeeData?.Emp_id}</p>
+                          <p className="text-muted mb-0">{employeeData?.Emp_ID}</p>
                         </div>
                       </div>
                       <hr />

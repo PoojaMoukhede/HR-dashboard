@@ -835,21 +835,49 @@ const AddManagers = ({ open, onClose }) => {
       ))
     : null;
 
-  const { onFormSubmit21 } = useAPI();
-  const onFormSubmit1 = (e) => {
-    onFormSubmit21(newManager);
+  // const { onFormSubmit21 } = useAPI();
+  // const onFormSubmit1 = (e) => {
+  //   onFormSubmit21(newManager);
 
-    if (!isEmailValid(newManager.email)) {
-      alert("Invalid email format");
-      return;
-    }
-    window.location.reload();
-    console.log("new-------", newManager);
-  };
+  //   if (!isEmailValid(newManager.email)) {
+  //     alert("Invalid email format");
+  //     return;
+  //   }
+  //   if (!validateContactNumber(newManager.contact_no)) {
+  //     alert("Invalid contact number. Please enter a 10-digit number.");
+  //     return;
+  //   }
+  //   window.location.reload();
+  //   console.log("new-------", newManager);
+  // };
+  const { onFormSubmit21 } = useAPI();
+const onFormSubmit1 = (e) => {
+  if (!isEmailValid(newManager.email)) {
+    alert("Invalid email format");
+    return;
+  }
+  if (!validateContactNumber(newManager.contact_no)) {
+    alert("Invalid contact number. Please enter a 10-digit number.");
+    return;
+  }
+  onFormSubmit21(newManager)
+    .then(() => {
+      window.location.reload();
+      console.log("new-------", newManager);
+    })
+    .catch((error) => {
+      console.error("Error adding newManager to the database:", error);
+    });
+};
+
 
   const isEmailValid = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  };
+  const validateContactNumber = (tel) => {
+    const pattern = /^[0-9]{10}$/; // Simple pattern for a 10-digit number
+    return pattern.test(tel);
   };
 
   return (
@@ -867,13 +895,27 @@ const AddManagers = ({ open, onClose }) => {
           <div className="modal-container">
             <h2>Add New Manager</h2>
             <div className="grid-container">
-              <div className="grid-row">
+            <div className="grid-row">
                 <div className="grid-item">
                   <TextField
                     type="text"
                     name="name"
                     label="Name"
                     value={newManager.name}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                  />
+                </div>
+                </div>
+              <div className="grid-row">
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="department"
+                    label="Department"
+                    value={newManager.department}
                     onChange={handleInputChange}
                     fullWidth
                     margin="normal"
@@ -894,6 +936,7 @@ const AddManagers = ({ open, onClose }) => {
                       inputMode: 'numeric', // Specify numeric input mode
                       pattern: '[0-9]{10}', // Specify a pattern for 10 digits
                       maxLength: 10, // Limit the input to 10 characters
+                      minLength:10
                     }}
                   />
                 </div>

@@ -34,7 +34,7 @@ export default function Member() {
   useEffect(() => {
     axios
       .get(
-        "http://192.168.1.211:8080/employees"
+        "http://192.168.1.211:8080/Users"
         // "https://dashboardbackend-production-9839.up.railway.app/get"
       )
       .then((response) => {
@@ -68,7 +68,7 @@ export default function Member() {
         console.log(`id in delete ${id}`);
         axios
           // .delete(`https://dashboardbackend-production-9839.up.railway.app/deleteEmployee/${id}`)
-          .delete(`http://192.168.1.211:8080/employees/${id}`)
+          .delete(`http://192.168.1.211:8080/Users/${id}`)
 
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
@@ -211,7 +211,7 @@ export default function Member() {
                           <tr>
                             <th>Name</th>
                             {/* <th>ID</th> */}
-                            <th className="text-center">Email</th>
+                            <th className="text-center">Emp_email</th>
                             <th className="text-center">Contact Number</th>
                             <th className="text-center">Department</th>
                             <th className="text-center">Blood group</th>

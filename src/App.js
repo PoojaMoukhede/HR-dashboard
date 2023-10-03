@@ -17,9 +17,14 @@ import ToastNotification from './Components/ToastNotification';
 import FullCalendarComponent from './Components/Updates/FullCalendarComponent';
 import Profile from './Components/Header/Profile';
 import CanteenFacility from './Pages/CanteenFacility';
+import HRadmins from './HRadmins';
+
 
 
 function App() {
+
+
+
   return (
     <>
     <BrowserRouter>
@@ -32,6 +37,7 @@ function App() {
            localStorage.getItem("token") ? (
           <Main />
         ) : (<Login/>)}  />
+        {/* <Route exact path="/managers" element={isSuperAdmin() ? <Managers /> : null} /> */}
         <Route exact path="/main" element={<Main />} />
         <Route exact path="/members" element={<Member />} />
         <Route exact path="/managers" element={<Managers />} />
@@ -45,6 +51,7 @@ function App() {
         <Route exact path='/canteen' element={<CanteenFacility/>}/>
         <Route exact path='/calender' element={<FullCalendarComponent/>}/>
         <Route exact path='/profile' element={<Profile/>}/>
+        <Route exact path='/hradmins' element={<HRadmins/>}/>
         </Routes>
         </APIContextProvider>
     </BrowserRouter>
@@ -53,3 +60,15 @@ function App() {
 }
 
 export default App;
+
+{/* <Route
+exact
+path="/main"
+element={
+  localStorage.getItem('token') ? (
+    isSuperAdmin() ? <Managers /> : <Main />
+  ) : (
+    <Login />
+  )
+}
+/> */}

@@ -1,9 +1,11 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 
-function EmployeeWorkHoursChart({ data }) {
-  // Function to format the data for the chart
-  const formatChartData = (data) => {
+function EmployeeWorkHoursChart({data}) {
+  // Function to format the workHoursData for the chart
+  
+
+  const formatChartdata = (data) => {
     return {
       options: {
         chart: {
@@ -47,11 +49,11 @@ function EmployeeWorkHoursChart({ data }) {
     };
   };
 
-  const chartData = formatChartData(data);
+  const chartdata = formatChartdata(data);
 
   return (
     <div>
-      <Chart options={chartData.options} series={chartData.series} type="bar" width="100%" height={350} />
+      <Chart options={chartdata.options} series={chartdata.series} type="bar" width="100%" height={350} />
     </div>
   );
 }

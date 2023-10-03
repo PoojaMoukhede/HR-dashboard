@@ -24,9 +24,10 @@ export function APIContextProvider({ children }) {
   // TAKES email Password gives Token
   const loginUrl = `${URL}login`;
   //add new employeesemployees
-  const addEmployeeURL = `${URL}employees`;
+  // const addEmployeeURL = `${URL}Users`;
   const addManagerURL = `${URL}manager`;
   const CurrExpanseURL = `${URL}expanse/curr`
+  const addHrURL = `${URL}register`
   
   //post user
   const signUpUser = (userData) => {
@@ -37,7 +38,7 @@ export function APIContextProvider({ children }) {
         .then((res) => {
           console.log(res);
           window.alert(`Registeration Completed`);
-
+          setEmployeedata(userData)
           // navigate("/login");
           
         })
@@ -72,36 +73,63 @@ export function APIContextProvider({ children }) {
       }
       );
   };
-
+  // const loginUser = (loginData) => {
+  //   console.log(loginData);
+  //   axios
+  //     .post(loginUrl, loginData)
+  //     .then((res) => {
+  //       const myToken = res.data.token;
+  //       console.log(myToken);
+  //       localStorage.setItem("token", myToken);
+  //       localStorage.setItem("email", loginData.email);
+        
+  //       // const isSuperAdmin = loginData.email === 'superadmin@yopmail.com';
+        
+  //       // if (isSuperAdmin) {
+  //       //   navigate("/managers");
+  //       // } else {
+  //       //   navigate("/main");
+  //       // }
+        
+  //       document.location.reload();
+  //       setUserEmail(loginData.email);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       window.alert(err);
+  //     });
+  // };
   
-  const onFormSubmit = (data) => { //emplopyee
-    axios
-      .post(addEmployeeURL, data)
-      .then((res) => {
-        const {
-          Emp_name,
-          Emp_email,
-          Emp_contact_No,
-          Emp_department,
-          Emp_city,
-          Emp_state,
-          Emp_DOB,
-          Emp_joining_date,
-          Emp_blood_group,
-          Emp_qualification,
-          Emp_expertise
+  
+  // const onFormSubmit = (data) => { //emplopyee
+  //   axios
+  //     .post(addEmployeeURL, data)
+  //     .then((res) => {
+  //       const {
+  //         Emp_ID,
+  //         Emp_name,
+  //         email,
+  //         Emp_contact_No,
+  //         Emp_department,
+  //         Emp_city,
+  //         Emp_state,
+  //         Emp_DOB,
+  //         Emp_joining_date,
+  //         Emp_blood_group,
+  //         Emp_qualification,
+  //         Emp_expertise
 
-        } = res.data;
+  //       } = res.data;
 
-        console.log(Emp_name,Emp_email,Emp_contact_No,Emp_department, Emp_city, Emp_state,Emp_DOB,Emp_joining_date,Emp_expertise
-          ,Emp_qualification,Emp_blood_group );
-        setEmployeedata(data)
+  //       console.log(Emp_name,email,Emp_contact_No,Emp_department, Emp_city, Emp_state,Emp_DOB,Emp_joining_date,Emp_expertise
+  //         ,Emp_qualification,Emp_blood_group );
+  //       setEmployeedata(data)
       
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // };
 
   const onFormSubmit21 = (data) => {   //managers
     axios
@@ -128,7 +156,7 @@ export function APIContextProvider({ children }) {
   const onFormSubmitEdit = async(id, data) => { //emplopyee `${URL}putEmployee/${id}`
     console.log(" onformsubmitedit inside")
    await axios           
-      .put(`http://192.168.1.211:8080/employees/${id}`,data)
+      .put(`http://192.168.1.211:8080/Users/${id}`,data)
       // .put(`http://192.168.1.211:8000/employees/${id}`,data)
 
       // console.log("-------------")
@@ -163,6 +191,31 @@ export function APIContextProvider({ children }) {
   };
 
 
+  const signUpHR = (userData) => {
+    console.log(userData);
+    try {
+      axios
+        .post(addHrURL, userData)
+        .then((res) => {
+          console.log(res);
+          window.alert(`Registeration Completed`);
+
+          // navigate("/login");
+          
+        })
+        .catch((err) => {
+          console.log(err);
+          window.alert(`Registeration Failed`,err);
+        });
+    } catch (error) {
+      window.alert(error.message);
+    }
+  };
+
+
+
+
+
   return (
     <APIContext.Provider
       value={{
@@ -171,10 +224,11 @@ export function APIContextProvider({ children }) {
         signUpUser,
         loginUser,
         userEmail,
-        onFormSubmit,
+        // onFormSubmit,
         onFormSubmit21,
         onFormSubmitEdit,
-        fuelExpanseGet
+        fuelExpanseGet,
+        signUpHR
       }}
     >
       {children}

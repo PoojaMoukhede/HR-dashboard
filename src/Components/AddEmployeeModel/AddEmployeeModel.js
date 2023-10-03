@@ -16,9 +16,9 @@ const AddEmployeeModal = ({
 }) => {
   const [newEmployee, setNewEmployee] = useState({
     // id: Date.now(),
-    Emp_id:'',
+    Emp_ID:'',
     Emp_name: "",
-    Emp_email: "",
+    email: "",
     Emp_contact_No: "",
     Emp_department: "",
     Emp_city: "",
@@ -27,7 +27,9 @@ const AddEmployeeModal = ({
     Emp_joining_date: "",
     Emp_blood_group:"",
     Emp_qualification:"",
-    Emp_expertise:""
+    Emp_expertise:"",
+    password:"",
+    confirm_password: "",
   });
 
   const handleInputChange = (event) => {
@@ -874,23 +876,42 @@ const AddEmployeeModal = ({
     setSelectedDate(date);
   };
 
-  const { onFormSubmit } = useAPI();
+  // const { onFormSubmit } = useAPI();
+  const { signUpUser } = useAPI();
   const onFormSubmit1 = (e) => {
-    onFormSubmit( newEmployee);
 
-    if (!isEmailValid(newEmployee.Emp_email)) {
-      alert("Invalid email format");
-      return;
-    }
-    window.location.reload();
-    console.log(newEmployee);
+    // if (!isEmailValid(newEmployee.email)) {
+    //   alert("Invalid email format");
+    //   return;
+    // }
+    // if (!validateContactNumber(newEmployee.Emp_contact_No)) {
+    //   alert("Invalid contact number. Please enter a 10-digit number.");
+    //   return;
+    // }
+    signUpUser(newEmployee)
+    // .then(() => {
+    //   window.location.reload();
+    //   console.log("new-------", newEmployee);
+    // })
+    // .catch((error) => {
+    //   console.error("Error adding newEmployee to the database:", error);
+    // });
+  
   };
+  // const UserLogin = () => {
+  //   signUpUser(newEmployee);
+  //   handleCloseModal(); 
+  // };
 
   const isEmailValid = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
+  const validateContactNumber = (tel) => {
+    const pattern = /^[0-9]{10}$/; // Simple pattern for a 10-digit number
+    return pattern.test(tel);
+  };
   return (
     <> 
     <Modal
@@ -921,9 +942,9 @@ const AddEmployeeModal = ({
               <div className="grid-item">
                 <TextField
                   type="number"
-                  name="Emp_id"
+                  name="Emp_ID"
                   label="Employee ID"
-                  value={newEmployee.Emp_id}
+                  value={newEmployee.Emp_ID}
                   onChange={handleInputChange}
                   fullWidth
                   margin="normal"
@@ -934,9 +955,9 @@ const AddEmployeeModal = ({
               <div className="grid-item">
                 <TextField
                   type="email"
-                  name="Emp_email"
+                  name="email"
                   label="Employee E-mail"
-                  value={newEmployee.Emp_email}
+                  value={newEmployee.email}
                   onChange={handleInputChange}
                   fullWidth
                   margin="normal"
@@ -957,6 +978,7 @@ const AddEmployeeModal = ({
                     inputMode: 'numeric', 
                     pattern: '[0-9]{10}', 
                     maxLength: 10, 
+                    minLength:10
                   }}
                 />
               </div>
@@ -1013,6 +1035,36 @@ const AddEmployeeModal = ({
                 />
               </div>
             </div>
+
+            <div className="grid-row">
+              <div className="grid-item">
+                <TextField
+                  type="text"
+                  name="password"
+                  label="password"
+                  value={newEmployee.password}
+                  onChange={handleInputChange}
+                  fullWidth
+                  margin="normal"
+                  required
+                />
+              </div>
+              <div className="grid-item">
+                <TextField
+                  type="text"
+                  name="confirm_password"
+                  label="confirm_password"
+                  value={newEmployee.confirm_password}
+                  onChange={handleInputChange}
+                  fullWidth
+                  margin="normal"
+                  required
+                />
+              </div>
+            </div>
+
+
+
             <div className="grid-row">
               <div className="grid-item">
                 <Select

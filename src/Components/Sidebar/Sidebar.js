@@ -37,7 +37,18 @@ export default function Sidebar() {
   };
   const location = useLocation();
   const currentPath = location.pathname;
+  
+const superAdminCredentials ={
+  email: 'superadmin@yopmail.com',
+  password:'Admin@123'
+}
 
+const isSuperAdmin = () => {
+  const token = localStorage.getItem('token');
+  const user = localStorage.getItem('email'); 
+  return user  === superAdminCredentials.email;
+  // console.log(superAdminCredentials.email ,"..."  , user)
+};
 
   // console.log({currentPath});
   return (
@@ -104,6 +115,20 @@ export default function Sidebar() {
                   Dashboards
                 </li>
               </Link>
+              {isSuperAdmin() ? 
+              <Link to="/hradmins">
+
+                <li
+                  className={` item_s app-sidebar__heading ${currentPath==='/hradmins'?'activate':''}`}
+                  onClick={() => handleItemClick("/hradmins")}
+                >
+                  <Icon icon="icon-park-outline:dashboard" style={style} />
+                  HR Admin
+                </li>
+              </Link>
+              
+              : null}
+
               <Link to="/members">
                 <li
                   className={` item_s app-sidebar__heading ${currentPath==='/members'?'activate':''}`}

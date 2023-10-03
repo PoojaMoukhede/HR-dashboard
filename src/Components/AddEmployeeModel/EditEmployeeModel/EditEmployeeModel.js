@@ -14,7 +14,7 @@ import axios from "axios";
 const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
   const [newEmployee, setNewEmployee] = useState({
     // id: Date.now(),
-    Emp_id:"",
+    Emp_ID:'',
     Emp_name: "",
     Emp_email: "",
     Emp_contact_No: "",
@@ -23,9 +23,10 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
     Emp_state: "",
     Emp_DOB: "",
     Emp_joining_date: "",
-    Emp_blood_group: "",
-    Emp_qualification: "",
-    Emp_expertise: "",
+    Emp_blood_group:"",
+    Emp_qualification:"",
+    Emp_expertise:"",
+
   });
   // console.log(`selectedEmployee ${selectedEmployee}`);
   const handleInputChange = (event) => {
@@ -864,9 +865,14 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
+
+  
+
+
   useEffect(() => {
     if (selectedEmployee) {
       const emp = {
+        Emp_ID:selectedEmployee.Emp_ID,
         Emp_name: selectedEmployee.Emp_name,
         Emp_email: selectedEmployee.Emp_email,
         Emp_contact_No: selectedEmployee.Emp_contact_No,
@@ -914,9 +920,9 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                 <div className="grid-item">
                 <TextField
                   type="text"
-                  name="Emp_id"
+                  name="Emp_ID"
                   label="Employee ID"
-                  value={newEmployee.Emp_id}
+                  value={newEmployee.Emp_ID}
                   onChange={handleInputChange}
                   fullWidth
                   margin="normal"
@@ -950,6 +956,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                       inputMode: 'numeric',
                       pattern: '[0-9]{10}', 
                       maxLength: 10, 
+                      minLength:10
                     }}
                   />
                 </div>

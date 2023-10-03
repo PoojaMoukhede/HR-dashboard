@@ -36,7 +36,7 @@ export default function CanteenFacility() {
       axios
       .get('http://localhost:8080/menu/total_coupon_count')
       .then((response) => {
-        console.log(response)
+        // console.log(response)
         setCouponCountToday(response.data.today); 
         setCouponCountTomorrow(response.data.tomorrow); 
         console.log(`response.data.today : ${response.data.today} --- response.data.tomorrow : ${response.data.tomorrow}`);
