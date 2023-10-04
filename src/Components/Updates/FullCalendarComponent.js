@@ -175,7 +175,10 @@ export default function FullCalendarComponent() {
   });
 
   const handleDateClick = (arg) => {
-    toast.info(`No events on ${arg.dateStr}`);
+    if(!events){
+      toast.info(`No events on ${arg.dateStr}`);
+    }
+    toast.info(`events on ${arg.dateStr} ${formData.title}`);
   };
 
   const handleAddEvent = () => {
