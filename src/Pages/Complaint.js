@@ -5,7 +5,6 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
 export default function Complaint() {
-
   const [complaints, setComplaints] = useState([]);
   const [users, setUsers] = useState({});
   useEffect(() => {
@@ -32,7 +31,6 @@ export default function Complaint() {
       });
   }, []);
 
-
   const [processCount, setProcessCount] = useState(
     complaints.filter((complaint) => complaint.status === "Pending").length
   );
@@ -41,23 +39,27 @@ export default function Complaint() {
     complaints.filter((complaint) => complaint.status === "Resolved").length
   );
 
-  const [counter, setCouner] = useState(0)
-  console.log("counter is tell more in cunoth ")
+  const [counter, setCouner] = useState(0);
+  console.log("counter is tell more in cunoth ");
 
   const handleResolve = async (id) => {
     try {
       if (processCount > 0) {
-        const response = await axios.delete(`http://localhost:8080/complaint/${id}`);
-        const updatedComplaints = complaints.filter((complaint) => complaint._id !== id);
+        const response = await axios.delete(
+          `http://localhost:8080/complaint/${id}`
+        );
+        const updatedComplaints = complaints.filter(
+          (complaint) => complaint._id !== id
+        );
         setComplaints(updatedComplaints);
         setResolvedCount((prevResolvedCount) => prevResolvedCount + 1);
         setProcessCount((prevProcessCount) => prevProcessCount - 1);
       } else {
         // Show a toast message indicating that the user needs to take a complaint first
-        toast.success('Please take a complaint before resolving it');
+        toast.success("Please take a complaint before resolving it");
       }
     } catch (error) {
-      console.error('Error resolving complaint:', error);
+      console.error("Error resolving complaint:", error);
     }
   };
 
@@ -66,8 +68,6 @@ export default function Complaint() {
       setProcessCount((prevProcessCount) => prevProcessCount + 1);
     }
   };
-
-
 
   return (
     <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -252,20 +252,20 @@ export default function Complaint() {
 
                         <div>
                           <button
-                        className="mr-2 btn"
-                        style={{
-                          backgroundColor: "#403e93",
-                          border: "none",
-                          padding: "0.5rem",
-                          borderRadius: "0.3rem",
-                          color: "white",
-                          fontSize: "0.9rem",
-                        }}
-                        // onClick={()=>{console.log(`onkeyup : ${complaint.Message[0].message}`)}}
-                        onClick={handleTake}
-                      >
-                        Take
-                      </button>
+                            className="mr-2 btn"
+                            style={{
+                              backgroundColor: "#403e93",
+                              border: "none",
+                              padding: "0.5rem",
+                              borderRadius: "0.3rem",
+                              color: "white",
+                              fontSize: "0.9rem",
+                            }}
+                            // onClick={()=>{console.log(`onkeyup : ${complaint.Message[0].message}`)}}
+                            onClick={handleTake}
+                          >
+                            Take
+                          </button>
                           <button
                             style={{
                               backgroundColor: "#f8b146",
@@ -278,7 +278,10 @@ export default function Complaint() {
                             }}
                             onClick={() => handleResolve(complaint._id)}
                             // onClick={handleResolve}
-                            disabled={processCount === 0 || resolvedCount === complaints.length}
+                            disabled={
+                              processCount === 0 ||
+                              resolvedCount === complaints.length
+                            }
                           >
                             Resolve
                           </button>

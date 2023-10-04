@@ -1,41 +1,36 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import Header from "../Components/Header/Header";
 import Attandance from "../Components/Charts/Attandance";
 import AttandanceTable from "../Components/Charts/AttandanceTable";
 import BarChart from "../Components/Charts/BarChart";
-import { ToastContainer, toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
-import axios from 'axios'
-
+import { ToastContainer, toast } from "react-toastify";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import TripDetail from "../Components/Table/TripDetail";
 
 export default function Details() {
   const { id } = useParams();
-  const [employeeData,setEmployeedata] = useState()
-  const [attandance,setAttandance] = useState([])
+  const [employeeData, setEmployeedata] = useState();
+  const [attandance, setAttandance] = useState([]);
+  const [data_Attandance, setData_Attandance] = useState([]);
 
   const fetchData = async (id) => {
     try {
-      const url = `http://localhost:8080`
-     const emp = await axios
-      .get( 
-        `${url}/Users/${id}`
-    
-        )
-      .then((response) => {
+      const url = `http://localhost:8080`;
+      const emp = await axios.get(`${url}/Users/${id}`).then((response) => {
         // console.log({response});
-        return response.data       
-      })
-      setEmployeedata(emp)
-    }
-    catch(error){
-      console.log('err',error)
+        return response.data;
+      });
+      setEmployeedata(emp);
+    } catch (error) {
+      console.log("err", error);
     }
   };
 
-  useEffect( () => {
+  useEffect(() => {
     fetchData(id);
-    try{
+    try {
       axios
         .get(`http://localhost:8080/attandance/${id}`)
         .then((response) => {
@@ -46,19 +41,16 @@ export default function Details() {
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
-        
-    }catch(e){
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
+  }, []);
 
-  } ,[])
+  const toastSuccess = () => toast.success("Leave Approved");
+  const toastError = () => toast.error("Leave Rejected");
+  const toastSuccess2 = () => toast.success("Advance Payment Request Approved");
+  const toastError2 = () => toast.error("Advance Payment Request Rejected");
 
-
-  const toastSuccess = () => toast.success('Leave Approved');
-  const toastError = () => toast.error('Leave Rejected');
-  const toastSuccess2 = () => toast.success('Advance Payment Request Approved');
-  const toastError2 = () => toast.error('Advance Payment Request Rejected');
-  
   const workHoursData = [
     { date: "2023-09-01", regularHours: 8, overtimeHours: 2, belowHours: 0 },
     { date: "2023-09-02", regularHours: 6, overtimeHours: 0, belowHours: 2 },
@@ -93,6 +85,24 @@ export default function Details() {
     // Add more workHoursData for different days
   ];
 
+  useEffect(() => {
+    try {
+      axios
+        .get(`http://localhost:8080/location/${id}`)
+        .then((response) => {
+          console.log(response)
+          console.log(`response from location api ${response.data.message.Location_info}`)
+          setData_Attandance(response.data.message.Location_info);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
+
+
 
   return (
     <>
@@ -113,9 +123,11 @@ export default function Details() {
                         style={{ width: "115px" }}
                       />
                       <h5 className="my-2">{employeeData?.Emp_name}</h5>
-                      <p className="text-muted mb-1">{employeeData?.Emp_department}</p>
                       <p className="text-muted mb-1">
-                      {employeeData?.Emp_city } , {employeeData?.Emp_state}
+                        {employeeData?.Emp_department}
+                      </p>
+                      <p className="text-muted mb-1">
+                        {employeeData?.Emp_city} , {employeeData?.Emp_state}
                       </p>
                     </div>
                   </div>
@@ -129,7 +141,9 @@ export default function Details() {
                           <p className="mb-0">Employee ID</p>
                         </div>
                         <div className="col-sm-9">
-                          <p className="text-muted mb-0">{employeeData?.Emp_ID}</p>
+                          <p className="text-muted mb-0">
+                            {employeeData?.Emp_ID}
+                          </p>
                         </div>
                       </div>
                       <hr />
@@ -138,7 +152,9 @@ export default function Details() {
                           <p className="mb-0">Full Name</p>
                         </div>
                         <div className="col-sm-9">
-                          <p className="text-muted mb-0">{employeeData?.Emp_name}</p>
+                          <p className="text-muted mb-0">
+                            {employeeData?.Emp_name}
+                          </p>
                         </div>
                       </div>
                       <hr />
@@ -148,7 +164,7 @@ export default function Details() {
                         </div>
                         <div className="col-sm-9">
                           <p className="text-muted mb-0">
-                          {employeeData?.Emp_email}
+                            {employeeData?.email}
                           </p>
                         </div>
                       </div>
@@ -158,7 +174,9 @@ export default function Details() {
                           <p className="mb-0">Phone</p>
                         </div>
                         <div className="col-sm-9">
-                          <p className="text-muted mb-0">{employeeData?.Emp_contact_No}</p>
+                          <p className="text-muted mb-0">
+                            {employeeData?.Emp_contact_No}
+                          </p>
                         </div>
                       </div>
 
@@ -168,7 +186,9 @@ export default function Details() {
                           <p className="mb-0">Address</p>
                         </div>
                         <div className="col-sm-9">
-                          <p className="text-muted mb-0">{employeeData?.Emp_city} , {employeeData?.Emp_state}</p>
+                          <p className="text-muted mb-0">
+                            {employeeData?.Emp_city} , {employeeData?.Emp_state}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -229,7 +249,7 @@ export default function Details() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          <span>25</span>
+                          <span>{data_Attandance.length}</span>
                         </div>
                       </div>
                     </div>
@@ -287,9 +307,7 @@ export default function Details() {
                 <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
-                      <div className="card-header-title">
-                       Leave Status
-                      </div>
+                      <div className="card-header-title">Leave Status</div>
                     </div>
                     <div className="tab-content">
                       <div className="tab-pane fade active show" id="tab-eg-55">
@@ -320,9 +338,7 @@ export default function Details() {
                                   <p className="mb-0">Leave Used</p>
                                 </div>
                                 <div className="col-sm-6">
-                                  <p className="text-muted mb-0">
-                                    04
-                                  </p>
+                                  <p className="text-muted mb-0">04</p>
                                 </div>
                               </div>
                               <hr />
@@ -332,19 +348,29 @@ export default function Details() {
                                 </div>
                                 <div className="col-sm-6">
                                   <p className="text-muted mb-0">
-                                    Applied  for 01 days
+                                    Applied for 01 days
                                   </p>
                                 </div>
                               </div>
                               <hr />
                               <div className="row mt-5">
                                 <div className="col-sm-6">
-                                  <button className="btn_app approve" onClick={toastSuccess}>Approve</button>
+                                  <button
+                                    className="btn_app approve"
+                                    onClick={toastSuccess}
+                                  >
+                                    Approve
+                                  </button>
                                 </div>
                                 <div className="col-sm-6">
-                                 <button className="btn_app reject" onClick={toastError}>Reject</button>
+                                  <button
+                                    className="btn_app reject"
+                                    onClick={toastError}
+                                  >
+                                    Reject
+                                  </button>
                                 </div>
-                              </div> 
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -370,38 +396,52 @@ export default function Details() {
                             style={{ height: "300px" }}
                           >
                             <div className="col-md-12 col-xl-12">
-                            <div className="card-body">
-                              <div className="row">
-                                <div className="col-sm-6">
-                                  <p className="mb-0">Total Amount Till Last Month</p>
+                              <div className="card-body">
+                                <div className="row">
+                                  <div className="col-sm-6">
+                                    <p className="mb-0">
+                                      Total Amount Till Last Month
+                                    </p>
+                                  </div>
+                                  <div className="col-sm-6">
+                                    <p className="text-muted mb-0">
+                                      22000 &#8377;
+                                    </p>
+                                  </div>
                                 </div>
-                                <div className="col-sm-6">
-                                  <p className="text-muted mb-0">22000 &#8377;</p>
+                                <hr />
+                                <div className="row">
+                                  <div className="col-sm-6">
+                                    <p className="mb-0">Claim This Month</p>
+                                  </div>
+                                  <div className="col-sm-6">
+                                    <p className="text-muted mb-0">
+                                      4200 &#8377;
+                                    </p>
+                                  </div>
+                                </div>
+                                <hr />
+
+                                <div className="row mt-5">
+                                  <div className="col-sm-6">
+                                    <button
+                                      className="btn_app approve"
+                                      onClick={toastSuccess2}
+                                    >
+                                      Approve
+                                    </button>
+                                  </div>
+                                  <div className="col-sm-6">
+                                    <button
+                                      className="btn_app reject"
+                                      onClick={toastError2}
+                                    >
+                                      Reject
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
-                              <hr />
-                              <div className="row">
-                                <div className="col-sm-6">
-                                  <p className="mb-0">Claim This Month</p>
-                                </div>
-                                <div className="col-sm-6">
-                                  <p className="text-muted mb-0">
-                                    4200 &#8377;
-                                  </p>
-                                </div>
-                              </div>
-                              <hr />
-                              
-                              <div className="row mt-5">
-                                <div className="col-sm-6">
-                                  <button className="btn_app approve" onClick={toastSuccess2}>Approve</button>
-                                </div>
-                                <div className="col-sm-6">
-                                 <button className="btn_app reject" onClick={toastError2}>Reject</button>
-                                </div>
-                              </div> 
                             </div>
-                          </div>
                           </div>
                         </div>
                       </div>
@@ -409,17 +449,77 @@ export default function Details() {
                   </div>
                 </div>
               </div>
-<ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+
+              {/* <TripDetail /> */}
+
+              <div className="row">
+        <div className="col-md-12">
+          <div className="mb-3 card">
+            <div className="card-header-tab card-header">
+              <div className="card-header-title">
+                <i className="header-icon lnr-rocket icon-gradient bg-tempting-azure">
+                  {" "}
+                </i>
+                Employees Location / Trip Detail
+              </div>
+            </div>
+            <div className="table-responsive">
+              <table className="align-middle mb-0 table table-borderless table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>DATE</th>
+                    <th className="text-center">Start Point</th>
+                    <th className="text-center">End Point</th>
+                    {/* <th className="text-center">Expanse</th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data_Attandance.map((datas) => {
+                    return (
+                      <tr>
+                        <td>
+                          <div className="widget-content p-0">
+                            <div className="widget-content-wrapper">
+                              <div className="widget-content-left flex2">
+                                <div className="widget-heading">
+                                {new Date(datas.timestamp).toLocaleString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="text-center text-muted">
+                          {datas.startPoint}
+                        </td>
+                        <td className="text-center text-muted">{datas.endPoint}</td>
+                        {/* <td className="text-center text-muted">
+                          {}
+                        </td> */}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+              <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
             </div>
           </div>
         </div>

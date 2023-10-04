@@ -880,17 +880,17 @@ const AddEmployeeModal = ({
   const { signUpUser } = useAPI();
   const onFormSubmit1 = (e) => {
 
-    // if (!isEmailValid(newEmployee.email)) {
-    //   alert("Invalid email format");
-    //   return;
-    // }
-    // if (!validateContactNumber(newEmployee.Emp_contact_No)) {
-    //   alert("Invalid contact number. Please enter a 10-digit number.");
-    //   return;
-    // }
+    if (!isEmailValid(newEmployee.email)) {
+      alert("Invalid email format");
+      return;
+    }
+    if (!validateContactNumber(newEmployee.Emp_contact_No)) {
+      alert("Invalid contact number. Please enter a 10-digit number.");
+      return;
+    }
     signUpUser(newEmployee)
     // .then(() => {
-    //   window.location.reload();
+      window.location.reload();
     //   console.log("new-------", newEmployee);
     // })
     // .catch((error) => {

@@ -16,7 +16,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
     // id: Date.now(),
     Emp_ID:'',
     Emp_name: "",
-    Emp_email: "",
+    email: "",
     Emp_contact_No: "",
     Emp_department: "",
     Emp_city: "",
@@ -853,7 +853,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
   const onFormSubmit11 = (e) => {
     onFormSubmitEdit(selectedEmployee._id, newEmployee);
 
-    if (!isEmailValid(newEmployee.Emp_email)) {
+    if (!isEmailValid(newEmployee.email)) {
       alert("Invalid email format");
       return;
     }
@@ -874,7 +874,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
       const emp = {
         Emp_ID:selectedEmployee.Emp_ID,
         Emp_name: selectedEmployee.Emp_name,
-        Emp_email: selectedEmployee.Emp_email,
+        email: selectedEmployee.email,
         Emp_contact_No: selectedEmployee.Emp_contact_No,
         Emp_department: selectedEmployee.Emp_department,
         Emp_city: selectedEmployee.Emp_city,
@@ -933,9 +933,9 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                 <div className="grid-item">
                   <TextField
                     type="email"
-                    name="Emp_email"
+                    name="email"
                     label="Employee E-mail"
-                    value={newEmployee.Emp_email}
+                    value={newEmployee.email}
                     onChange={handleInputChange}
                     fullWidth
                     margin="normal"

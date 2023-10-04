@@ -10,9 +10,9 @@ export default function AttandanceTable() {
       axios
         .get(`http://localhost:8080/attandance/${id}`)
         .then((response) => {
-          console.log(`response : ${response}`);
+          // console.log(`response : ${response}`);
           setData(response.data.message.Employee_attandance);
-          console.log("Attendance:", response.data.message.Employee_attandance);
+          // console.log("Attendance:", response.data.message.Employee_attandance);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);

@@ -175,7 +175,7 @@ export default function Member() {
                   </div>
                 </OverlayTrigger>
                 {/* {showRegisterModal &&  */}
-              <Register openModal={openRegisterModal} />
+              {/* <Register openModal={openRegisterModal} /> */}
                 {/* } */}
               </div>
               <div className="row">
@@ -209,9 +209,9 @@ export default function Member() {
                       >
                         <thead>
                           <tr>
+                          <th>ID</th>
                             <th>Name</th>
-                            {/* <th>ID</th> */}
-                            <th className="text-center">Emp_email</th>
+                            <th className="text-center">Email</th>
                             <th className="text-center">Contact Number</th>
                             <th className="text-center">Department</th>
                             <th className="text-center">Blood group</th>
@@ -227,6 +227,7 @@ export default function Member() {
                         <tbody>
                           {filteredRows.map((row) => (
                             <tr key={row._id}>
+                              <td className="text-center">{row.Emp_ID}</td>
                               <td>
                                 <div className="widget-content p-0">
                                   <div className="widget-content-wrapper">
@@ -238,8 +239,8 @@ export default function Member() {
                                   </div>
                                 </div>
                               </td>
-                              {/* <td className="text-center">{row.empID}</td> */}
-                              <td className="text-center">{row.Emp_email}</td>
+                              
+                              <td className="text-center">{row.email}</td>
                               <td className="text-center">
                                 {row.Emp_contact_No}
                               </td>
