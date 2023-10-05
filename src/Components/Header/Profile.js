@@ -9,8 +9,8 @@ export default function Profile() {
   useEffect(() => {
     axios
       .get(
-        "http://192.168.1.211:8080/empdata"
-        // "http://localhost:8080/empdata"
+        "https://dashboardbackend-production-9839.up.railway.app/empdata"
+        // "https://dashboardbackend-production-9839.up.railway.app/empdata"
         // "https://dashboardbackend-production-9839.up.railway.app/get"
       )
       .then((response) => {

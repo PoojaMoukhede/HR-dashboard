@@ -23,18 +23,18 @@ export default function Expanse() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/expanse/curr")
+      .get("https://dashboardbackend-production-9839.up.railway.app/expanse/curr")
       .then((response) => {
         const moneyFromAPI = response.data[0].money;
         setCurrentMonthFuelExpensetotal(moneyFromAPI);
-        console.log("Money from API:", moneyFromAPI);
+        console.log("Money from API:", response);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
 
       // axios
-      // .get("http://localhost:8080/expanse/prev")
+      // .get("https://dashboardbackend-production-9839.up.railway.app/expanse/prev")
       // .then((response) => {
       //   const previousMonthExpensesFromAPI = response.data[0].money;
       //   setPreviousMonthExpenses(previousMonthExpensesFromAPI);

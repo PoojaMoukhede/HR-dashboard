@@ -17,7 +17,7 @@ export default function Details() {
 
   const fetchData = async (id) => {
     try {
-      const url = `http://localhost:8080`;
+      const url = `https://dashboardbackend-production-9839.up.railway.app/`;
       const emp = await axios.get(`${url}/Users/${id}`).then((response) => {
         // console.log({response});
         return response.data;
@@ -32,7 +32,7 @@ export default function Details() {
     fetchData(id);
     try {
       axios
-        .get(`http://localhost:8080/attandance/${id}`)
+        .get(`https://dashboardbackend-production-9839.up.railway.app/attandance/${id}`)
         .then((response) => {
           // console.log(response)
           setAttandance(response.data);
@@ -88,10 +88,12 @@ export default function Details() {
   useEffect(() => {
     try {
       axios
-        .get(`http://localhost:8080/location/${id}`)
+        .get(`https://dashboardbackend-production-9839.up.railway.app/location/${id}`)
         .then((response) => {
-          console.log(response)
-          console.log(`response from location api ${response.data.message.Location_info}`)
+          console.log(response);
+          console.log(
+            `response from location api ${response.data.message.Location_info}`
+          );
           setData_Attandance(response.data.message.Location_info);
         })
         .catch((error) => {
@@ -101,8 +103,6 @@ export default function Details() {
       console.log(e);
     }
   }, []);
-
-
 
   return (
     <>
@@ -453,61 +453,76 @@ export default function Details() {
               {/* <TripDetail /> */}
 
               <div className="row">
-        <div className="col-md-12">
-          <div className="mb-3 card">
-            <div className="card-header-tab card-header">
-              <div className="card-header-title">
-                <i className="header-icon lnr-rocket icon-gradient bg-tempting-azure">
-                  {" "}
-                </i>
-                Employees Location / Trip Detail
-              </div>
-            </div>
-            <div className="table-responsive">
-              <table className="align-middle mb-0 table table-borderless table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th>DATE</th>
-                    <th className="text-center">Start Point</th>
-                    <th className="text-center">End Point</th>
-                    {/* <th className="text-center">Expanse</th> */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data_Attandance.map((datas) => {
-                    return (
-                      <tr>
-                        <td>
-                          <div className="widget-content p-0">
-                            <div className="widget-content-wrapper">
-                              <div className="widget-content-left flex2">
-                                <div className="widget-heading">
-                                {new Date(datas.timestamp).toLocaleString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                    })}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="text-center text-muted">
-                          {datas.startPoint}
-                        </td>
-                        <td className="text-center text-muted">{datas.endPoint}</td>
-                        {/* <td className="text-center text-muted">
+                <div className="col-md-12">
+                  <div className="mb-3 card">
+                    <div className="card-header-tab card-header">
+                      <div className="card-header-title">
+                        <i className="header-icon lnr-rocket icon-gradient bg-tempting-azure">
+                          {" "}
+                        </i>
+                        Employees Location / Trip Detail
+                      </div>
+                    </div>
+                    <div className="table-responsive">
+                      <table className="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>DATE</th>
+                            <th>TIME</th>
+                            <th className="text-center">Start Point</th>
+                            <th className="text-center">End Point</th>
+                            {/* <th className="text-center">Expanse</th> */}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {data_Attandance.map((datas) => {
+                            return (
+                              <tr>
+                                <td>
+                                  <div className="widget-content p-0">
+                                    <div className="widget-content-wrapper">
+                                      <div className="widget-content-left flex2">
+                                        <div className="widget-heading">
+                                          {new Date(
+                                            datas.timestamp
+                                          ).toLocaleString("en-US", {
+                                            year: "numeric",
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                          })}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  {new Date(datas.timestamp).toLocaleString(
+                                    "en-US",
+                                    {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      second: "2-digit",
+                                    }
+                                  )}
+                                </td>
+                                <td className="text-center text-muted">
+                                  {datas.startPoint}
+                                </td>
+                                <td className="text-center text-muted">
+                                  {datas.endPoint}
+                                </td>
+                                {/* <td className="text-center text-muted">
                           {}
                         </td> */}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <ToastContainer
                 position="bottom-right"

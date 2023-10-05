@@ -144,7 +144,7 @@ export default function Dashboard() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   useEffect(() => {
     axios
-      .get("http://192.168.1.211:8080/fuel")
+      .get("https://dashboardbackend-production-9839.up.railway.app/fuel")
       .then((response) => {
         setFuelData(response.data);
         console.log(response.data);
@@ -183,7 +183,7 @@ export default function Dashboard() {
 
 
       axios
-      .get("http://192.168.1.211:8080/expanse/curr")
+      .get("https://dashboardbackend-production-9839.up.railway.app/expanse/curr")
       .then((response) => {
         const moneyFromAPI = response.data[0].money;
         setCurrentMonthFuelExpensetotal2(moneyFromAPI);
@@ -194,7 +194,7 @@ export default function Dashboard() {
       });
 
       axios
-      .get("http://192.168.1.211:8080/fuel/curr")
+      .get("https://dashboardbackend-production-9839.up.railway.app/fuel/curr")
       .then((response) => {
         const Liters = response.data[0].Liters;
         setCurrentMonthFuel(Liters);
@@ -208,7 +208,7 @@ export default function Dashboard() {
   
   // useEffect(() => {
   //   axios
-  //     .get('http://192.168.1.211:8080/fuel')
+  //     .get('https://dashboardbackend-production-9839.up.railway.app/fuel')
   //     .then((response) => {
   //       setFuelData(response.data);
   //       console.log(response.data);
@@ -245,7 +245,7 @@ export default function Dashboard() {
   //-----------
   // useEffect(() => {
   //   axios
-  //   .get('http://192.168.1.211:8080/expanse')
+  //   .get('https://dashboardbackend-production-9839.up.railway.app/expanse')
   //   .then((response) => {
   //     setExpData(response.data);
   //     console.log(response.data);
@@ -260,7 +260,7 @@ export default function Dashboard() {
   // }, [expData])
   useEffect(() => {
     axios
-      .get("http://192.168.1.211:8080/expanse")
+      .get("https://dashboardbackend-production-9839.up.railway.app/expanse")
       .then((response) => {
         
         setExpData(response.data);
@@ -346,7 +346,7 @@ export default function Dashboard() {
                   <div className=" mb-3 widget-content bg-asteroid">
                     <div className="widget-content-wrapper text-white">
                       <div className="widget-content-left">
-                        <div className="widget-heading">Expenses On Fuel</div>
+                        <div className="widget-heading">Expenses</div>
                         <div className="widget-subheading">
                           This month expense
                         </div>

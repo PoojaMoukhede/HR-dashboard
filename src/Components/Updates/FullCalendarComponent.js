@@ -11,8 +11,8 @@ import { FormGroup, Label, Input } from "reactstrap";
 import { nanoid } from "nanoid";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 
-// const Event_get  = "http://192.168.1.211:8080/getevent";
-// const Event_post  = "http://192.168.1.211:8080/postevent";
+// const Event_get  = "https://dashboardbackend-production-9839.up.railway.app/getevent";
+// const Event_post  = "https://dashboardbackend-production-9839.up.railway.app/postevent";
 let todayStr = new Date().toISOString().replace(/T.*$/, "");
 export default function FullCalendarComponent() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -122,7 +122,7 @@ export default function FullCalendarComponent() {
     const eventId = state.clickInfo.event.id; // Use the event's unique identifier
   
     axios
-      .delete(`http://192.168.1.211:8080/event/${eventId}`)
+      .delete(`https://dashboardbackend-production-9839.up.railway.app/event/${eventId}`)
       // .delete(`http://192.168.1.211:8000/events/${eventId}`)
 
       .then((response) => {
@@ -146,7 +146,7 @@ export default function FullCalendarComponent() {
     };
   
     axios
-      .put(`http://192.168.1.211:8080/event/${updatedEvent.id}`, updatedEvent)
+      .put(`https://dashboardbackend-production-9839.up.railway.app/event/${updatedEvent.id}`, updatedEvent)
       // .put(`http://192.168.1.211:8000/events/${updatedEvent.id}`, updatedEvent)
 
       .then((response) => {
@@ -193,7 +193,7 @@ export default function FullCalendarComponent() {
     };
 
     axios
-      .post("http://192.168.1.211:8080/event", newEvent)
+      .post("https://dashboardbackend-production-9839.up.railway.app/event", newEvent)
       // .post("http://192.168.1.211:8000/events", newEvent)
 
       .then((response) => {
@@ -218,7 +218,7 @@ export default function FullCalendarComponent() {
 
   useEffect((e) => {
     axios
-      .get("http://192.168.1.211:8080/event")
+      .get("https://dashboardbackend-production-9839.up.railway.app/event")
       .then((response) => {
         setEvents(response.data);
       })

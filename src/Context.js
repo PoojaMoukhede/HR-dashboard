@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 const APIContext = createContext();
 
 export function APIContextProvider({ children }) {
-  const URL = "http://192.168.1.211:8080/";
-  // const URL = "http://localhost:8080/";
+  // const URL = "https://dashboardbackend-production-9839.up.railway.app/";
+  // const URL = "https://dashboardbackend-production-9839.up.railway.app/
 
-  // const URL = "https://dashboardbackend-production-9839.up.railway.app/"
+  const URL = "https://dashboardbackend-production-9839.up.railway.app/"
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [userEmail, setUserEmail] = useState("");
@@ -37,8 +37,8 @@ export function APIContextProvider({ children }) {
         .post(SignUpUrl, userData)
         .then((res) => {
           console.log(res);
-          window.alert(`Registeration Completed`);
           setEmployeedata(userData)
+          window.alert(`Registeration Completed`);
           // navigate("/login");
           
         })
@@ -156,7 +156,7 @@ export function APIContextProvider({ children }) {
   const onFormSubmitEdit = async(id, data) => { //emplopyee `${URL}putEmployee/${id}`
     console.log(" onformsubmitedit inside")
    await axios           
-      .put(`http://192.168.1.211:8080/Users/${id}`,data)
+      .put(`https://dashboardbackend-production-9839.up.railway.app/Users/${id}`,data)
       // .put(`http://192.168.1.211:8000/employees/${id}`,data)
 
       // console.log("-------------")

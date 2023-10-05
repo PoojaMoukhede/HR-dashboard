@@ -6,7 +6,7 @@ function PolorChart({series,labels}) {
 //   const [chartData,setChartData] = useState([]);
 //   useEffect(() => {
 //     axios
-//     .get("http://localhost:8080/expanse")
+//     .get("https://dashboardbackend-production-9839.up.railway.app/expanse")
 //     .then((response) => {
 //       const data = response.data; 
 //       const series = data.map((item) => item.money);

@@ -8,7 +8,7 @@ export default function AttandanceTable() {
   useEffect(() => {
     try {
       axios
-        .get(`http://localhost:8080/attandance/${id}`)
+        .get(`https://dashboardbackend-production-9839.up.railway.app/attandance/${id}`)
         .then((response) => {
           // console.log(`response : ${response}`);
           setData(response.data.message.Employee_attandance);
@@ -36,25 +36,20 @@ export default function AttandanceTable() {
           </thead>
           <tbody>
             {data.map((datas) => {
-              const punchIn = new Date(datas.timestamp).toLocaleString(
-                "en-US",
-                {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                }
-              );
-              const punchOut = new Date(datas.timer)
-                .toISOString()
-                .slice(11, 19);
-              const total_time = punchIn + punchOut;
-              console.log(`total_time ${total_time}`)
-              // const hours = Math.floor(total_time / 3600000); 
-              // const minutes = Math.floor((total_time % 3600000) / 60000);
-              // const seconds = Math.floor((total_time % 60000) / 1000);
+              // const punchIn = new Date(datas.timestamp).toLocaleString(
+              //   "en-US",
+              //   {
+              //     hour: "2-digit",
+              //     minute: "2-digit",
+              //     second: "2-digit",
+              //   }
+              // );
+              // const punchOut = new Date(datas.timer)
+              //   .toISOString()
+              //   .slice(11, 19);
+              // const total_time = punchIn + punchOut;
+              // console.log(`total_time ${total_time}`)
 
-              // Format the time difference as HH:mm:ss
-              // const formattedTimeDifference = `${hours}:${minutes}:${seconds}`;
               return (
                 <tr>
                   <td>
@@ -62,7 +57,7 @@ export default function AttandanceTable() {
                       <div className="widget-content-wrapper">
                         <div className="widget-content-left flex2">
                           <div className="widget-heading">
-                            {new Date(datas.timestamp).toLocaleString("en-US", {
+                            {new Date(datas.punch_in).toLocaleString("en-US", {
                               year: "numeric",
                               month: "2-digit",
                               day: "2-digit",
@@ -73,14 +68,29 @@ export default function AttandanceTable() {
                     </div>
                   </td>
                   <td className="text-center text-muted">
-                    {new Date(datas.timestamp).toLocaleString("en-US", {
+                    {/* {new Date(datas.punch_in).toLocaleString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })} */}
+                    {new Date(datas.punch_in).toLocaleString(
+                                    "en-US",
+                                    {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      second: "2-digit",
+                                      hour12:true,
+                                    }
+                                  )}
+                  </td>
+                  <td className="text-center text-muted">
+                  
+                    {/* {total_time} */}
+                    {new Date(datas.punch_out).toLocaleString("en-US", {
                       hour: "2-digit",
                       minute: "2-digit",
                       second: "2-digit",
                     })}
-                  </td>
-                  <td className="text-center text-muted">
-                    {total_time}
                   </td>
                   <td className="text-center text-muted">
                     {new Date(datas.timer).toISOString().slice(11, 19)}

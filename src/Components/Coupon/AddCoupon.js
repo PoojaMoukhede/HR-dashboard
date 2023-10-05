@@ -22,7 +22,7 @@ const AddCoupon = ({ open, onClose }) => {
     const data = { ...newMenu };
 
     axios
-      .post('http://localhost:8080/menu', data)
+      .post('https://dashboardbackend-production-9839.up.railway.app/menu', data)
       .then((res) => {
         const { date, menu } = res.data;
         console.log('Response:', res );

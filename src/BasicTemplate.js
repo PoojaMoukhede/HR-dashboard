@@ -28,33 +28,51 @@ export default function BasicTemplate() {
 
 Employee URl  
 
- GET - http://192.168.1.211:8080/get
- GET by ID - http://192.168.1.211:8080/getemployee/:id
- POST - http://192.168.1.211:8080/add
- PUT - http://192.168.1.211:8080/putEmployee/:id
- DELETE - http://192.168.1.211:8080/deleteEmployee/:id
- IMPORT -  http://192.168.1.211:8080/importdata
+ GET - https://dashboardbackend-production-9839.up.railway.app/
+/get
+ GET by ID - https://dashboardbackend-production-9839.up.railway.app/
+/getemployee/:id
+ POST - https://dashboardbackend-production-9839.up.railway.app/
+/add
+ PUT - https://dashboardbackend-production-9839.up.railway.app/
+/putEmployee/:id
+ DELETE - https://dashboardbackend-production-9839.up.railway.app/
+/deleteEmployee/:id
+ IMPORT -  https://dashboardbackend-production-9839.up.railway.app/
+/importdata
 
 ADMIN URL
 
-  REGISTER POST - http://192.168.1.211:8080/register
-  LOGIN POST - http://192.168.1.211:8080/login
-  GET - http://192.168.1.211:8080/getAdmin
-  GET by ID - http://192.168.1.211:8080/get/:id
+  REGISTER POST - https://dashboardbackend-production-9839.up.railway.app/
+/register
+  LOGIN POST - https://dashboardbackend-production-9839.up.railway.app/
+/login
+  GET - https://dashboardbackend-production-9839.up.railway.app/
+/getAdmin
+  GET by ID - https://dashboardbackend-production-9839.up.railway.app/
+/get/:id
 
 
 EVENT URL
-  GET - http://192.168.1.211:8080/getevent
-  POST - http://192.168.1.211:8080/addevent
+  GET - https://dashboardbackend-production-9839.up.railway.app/
+/getevent
+  POST - https://dashboardbackend-production-9839.up.railway.app/
+/addevent
  
 Employee URl  
 
- GET - http://192.168.1.211:8080/getmanager
- GET by ID - http://192.168.1.211:8080/getmanager/:id
- POST - http://192.168.1.211:8080/addmanager
- PUT - http://192.168.1.211:8080/put/:id
- DELETE - http://192.168.1.211:8080/delete/:id
- IMPORT -  http://192.168.1.211:8080/importmanager
+ GET - https://dashboardbackend-production-9839.up.railway.app/
+/getmanager
+ GET by ID - https://dashboardbackend-production-9839.up.railway.app/
+/getmanager/:id
+ POST - https://dashboardbackend-production-9839.up.railway.app/
+/addmanager
+ PUT - https://dashboardbackend-production-9839.up.railway.app/
+/put/:id
+ DELETE - https://dashboardbackend-production-9839.up.railway.app/
+/delete/:id
+ IMPORT -  https://dashboardbackend-production-9839.up.railway.app/
+/importmanager
 
 
 

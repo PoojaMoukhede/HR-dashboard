@@ -14,7 +14,7 @@ export default function HRadmins() {
   const [searchValue, setSearchValue] = useState("");
   useEffect(() => {
     axios
-      .get("http://192.168.1.211:8080/getAdmin")
+      .get("https://dashboardbackend-production-9839.up.railway.app/getAdmin")
       .then((response) => {
         setRows(response.data);
         console.log(response.data);
@@ -48,7 +48,7 @@ export default function HRadmins() {
         console.log(`id in delete ${id}`);
         axios
           // .delete(`https://dashboardbackend-production-9839.up.railway.app/deleteEmployee/${id}`)
-          .delete(`http://192.168.1.211:8080/admin/${id}`)
+          .delete(`https://dashboardbackend-production-9839.up.railway.app/admin/${id}`)
 
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);

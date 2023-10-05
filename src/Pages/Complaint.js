@@ -9,7 +9,7 @@ export default function Complaint() {
   const [users, setUsers] = useState({});
   useEffect(() => {
     axios
-      .get("http://192.168.1.211:8080/complaint")
+      .get("https://dashboardbackend-production-9839.up.railway.app/complaint")
       .then((response) => {
         setComplaints(response.data.message);
         console.log(response.data.message);
@@ -18,7 +18,7 @@ export default function Complaint() {
         console.error("Error fetching data:", error);
       });
     axios
-      .get("http://192.168.1.211:8080/empdata")
+      .get("https://dashboardbackend-production-9839.up.railway.app/empdata")
       .then((response) => {
         const userLookup = {};
         response.data.forEach((user) => {
@@ -46,7 +46,7 @@ export default function Complaint() {
     try {
       if (processCount > 0) {
         const response = await axios.delete(
-          `http://localhost:8080/complaint/${id}`
+          `https://dashboardbackend-production-9839.up.railway.app/complaint/${id}`
         );
         const updatedComplaints = complaints.filter(
           (complaint) => complaint._id !== id

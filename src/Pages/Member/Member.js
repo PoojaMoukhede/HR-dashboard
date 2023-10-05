@@ -34,7 +34,7 @@ export default function Member() {
   useEffect(() => {
     axios
       .get(
-        "http://192.168.1.211:8080/Users"
+        "https://dashboardbackend-production-9839.up.railway.app/Users"
         // "https://dashboardbackend-production-9839.up.railway.app/get"
       )
       .then((response) => {
@@ -68,7 +68,7 @@ export default function Member() {
         console.log(`id in delete ${id}`);
         axios
           // .delete(`https://dashboardbackend-production-9839.up.railway.app/deleteEmployee/${id}`)
-          .delete(`http://192.168.1.211:8080/Users/${id}`)
+          .delete(`https://dashboardbackend-production-9839.up.railway.app/Users/${id}`)
 
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
@@ -99,7 +99,7 @@ export default function Member() {
 
         axios
           // .post("https://dashboardbackend-production-9839.up.railway.app/importdata", formData)
-          .post("http://192.168.1.211:8080/importdata", formData)
+          .post("https://dashboardbackend-production-9839.up.railway.app/importdata", formData)
 
           .then((response) => {
             console.log("Import response:", response);

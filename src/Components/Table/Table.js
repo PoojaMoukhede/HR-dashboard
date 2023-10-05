@@ -11,7 +11,7 @@ export default function Table() {
     // setRows(dummyData);
     axios
     .get( 
-      "http://192.168.1.211:8080/Users"
+      "https://dashboardbackend-production-9839.up.railway.app/Users"
       // "https://dashboardbackend-production-9839.up.railway.app/get"
       )
     .then((response) => {
