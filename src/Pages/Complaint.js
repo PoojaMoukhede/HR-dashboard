@@ -9,7 +9,7 @@ export default function Complaint() {
   const [users, setUsers] = useState({});
   useEffect(() => {
     axios
-      .get("https://dashboardbackend-production-9839.up.railway.app/complaint")
+      .get("http://localhost:8080/complaint")
       .then((response) => {
         setComplaints(response.data.message);
         console.log(response.data.message);
@@ -18,7 +18,7 @@ export default function Complaint() {
         console.error("Error fetching data:", error);
       });
     axios
-      .get("https://dashboardbackend-production-9839.up.railway.app/empdata")
+      .get("http://localhost:8080/empdata")
       .then((response) => {
         const userLookup = {};
         response.data.forEach((user) => {
@@ -46,7 +46,8 @@ export default function Complaint() {
     try {
       if (processCount > 0) {
         const response = await axios.delete(
-          `https://dashboardbackend-production-9839.up.railway.app/complaint/${id}`
+          `http://localhost:8080/
+complaint/${id}`
         );
         const updatedComplaints = complaints.filter(
           (complaint) => complaint._id !== id

@@ -8,11 +8,7 @@ export default function Profile() {
   const [user, setUser] = useState([]);
   useEffect(() => {
     axios
-      .get(
-        "https://dashboardbackend-production-9839.up.railway.app/empdata"
-        // "https://dashboardbackend-production-9839.up.railway.app/empdata"
-        // "https://dashboardbackend-production-9839.up.railway.app/get"
-      )
+      .get("http://localhost:8080/empdata")
       .then((response) => {
         setUser(response.data);
         console.log(response.data)

@@ -24,7 +24,7 @@ export default function CanteenFacility() {
   };
   useEffect(() => {
     axios
-      .get("https://dashboardbackend-production-9839.up.railway.app/menu")
+      .get("http://localhost:8080/menu")
       .then((response) => {
         setMenuItems(response.data);
         // console.log(response.data);
@@ -34,7 +34,7 @@ export default function CanteenFacility() {
       });
     
       axios
-      .get('https://dashboardbackend-production-9839.up.railway.app/menu/total_coupon_count')
+      .get('http://localhost:8080/menu/total_coupon_count')
       .then((response) => {
         // console.log(response)
         setCouponCountToday(response.data.today); 

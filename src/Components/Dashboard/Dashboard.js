@@ -144,7 +144,7 @@ export default function Dashboard() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   useEffect(() => {
     axios
-      .get("https://dashboardbackend-production-9839.up.railway.app/fuel")
+      .get("http://localhost:8080/fuel")
       .then((response) => {
         setFuelData(response.data);
         console.log(response.data);
@@ -183,7 +183,7 @@ export default function Dashboard() {
 
 
       axios
-      .get("https://dashboardbackend-production-9839.up.railway.app/expanse/curr")
+      .get("http://localhost:8080/expanse/curr")
       .then((response) => {
         const moneyFromAPI = response.data[0].money;
         setCurrentMonthFuelExpensetotal2(moneyFromAPI);
@@ -194,7 +194,7 @@ export default function Dashboard() {
       });
 
       axios
-      .get("https://dashboardbackend-production-9839.up.railway.app/fuel/curr")
+      .get("http://localhost:8080/fuel/curr")
       .then((response) => {
         const Liters = response.data[0].Liters;
         setCurrentMonthFuel(Liters);
@@ -208,7 +208,7 @@ export default function Dashboard() {
   
   // useEffect(() => {
   //   axios
-  //     .get('https://dashboardbackend-production-9839.up.railway.app/fuel')
+  //     .get('http://localhost:8080/fuel')
   //     .then((response) => {
   //       setFuelData(response.data);
   //       console.log(response.data);
@@ -245,7 +245,7 @@ export default function Dashboard() {
   //-----------
   // useEffect(() => {
   //   axios
-  //   .get('https://dashboardbackend-production-9839.up.railway.app/expanse')
+  //   .get('http://localhost:8080/expanse')
   //   .then((response) => {
   //     setExpData(response.data);
   //     console.log(response.data);
@@ -260,7 +260,7 @@ export default function Dashboard() {
   // }, [expData])
   useEffect(() => {
     axios
-      .get("https://dashboardbackend-production-9839.up.railway.app/expanse")
+      .get("http://localhost:8080/expanse")
       .then((response) => {
         
         setExpData(response.data);

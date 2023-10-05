@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import dummyData from "../MOCK_DATA.json";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 
@@ -11,9 +10,7 @@ export default function Table() {
     // setRows(dummyData);
     axios
     .get( 
-      "https://dashboardbackend-production-9839.up.railway.app/Users"
-      // "https://dashboardbackend-production-9839.up.railway.app/get"
-      )
+      "http://localhost:8080/Users")
     .then((response) => {
       setRows(response.data);
     })

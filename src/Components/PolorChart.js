@@ -1,12 +1,12 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import axios from 'axios';
+
 
 function PolorChart({series,labels}) {
 //   const [chartData,setChartData] = useState([]);
 //   useEffect(() => {
 //     axios
-//     .get("https://dashboardbackend-production-9839.up.railway.app/expanse")
+//     .get("http://localhost:8080/expanse")
 //     .then((response) => {
 //       const data = response.data; 
 //       const series = data.map((item) => item.money);

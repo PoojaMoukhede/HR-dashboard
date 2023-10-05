@@ -14,7 +14,7 @@ export default function HRadmins() {
   const [searchValue, setSearchValue] = useState("");
   useEffect(() => {
     axios
-      .get("https://dashboardbackend-production-9839.up.railway.app/getAdmin")
+      .get("http://localhost:8080/getAdmin")
       .then((response) => {
         setRows(response.data);
         console.log(response.data);
@@ -47,8 +47,8 @@ export default function HRadmins() {
         // User confirmed deletion, proceed with the delete request
         console.log(`id in delete ${id}`);
         axios
-          // .delete(`https://dashboardbackend-production-9839.up.railway.app/deleteEmployee/${id}`)
-          .delete(`https://dashboardbackend-production-9839.up.railway.app/admin/${id}`)
+          // .delete(`http://localhost:8080/deleteEmployee/${id}`)
+          .delete(`http://localhost:8080/admin/${id}`)
 
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);

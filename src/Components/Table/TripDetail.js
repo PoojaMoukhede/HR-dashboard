@@ -10,7 +10,7 @@ export default function TripDetail() {
   useEffect(() => {
     try {
       axios
-        .get(`https://dashboardbackend-production-9839.up.railway.app/attandance/${id}`)
+        .get(`http://localhost:8080/attandance/${id}`)
         .then((response) => {
           // console.log(response)
           setData(response.data);

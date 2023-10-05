@@ -17,8 +17,7 @@ export default function Details() {
 
   const fetchData = async (id) => {
     try {
-      const url = `https://dashboardbackend-production-9839.up.railway.app/`;
-      const emp = await axios.get(`${url}/Users/${id}`).then((response) => {
+      const emp = await axios.get(`http://localhost:8080/Users/${id}`).then((response) => {
         // console.log({response});
         return response.data;
       });
@@ -32,7 +31,7 @@ export default function Details() {
     fetchData(id);
     try {
       axios
-        .get(`https://dashboardbackend-production-9839.up.railway.app/attandance/${id}`)
+        .get(`http://localhost:8080/attandance/${id}`)
         .then((response) => {
           // console.log(response)
           setAttandance(response.data);
@@ -88,7 +87,7 @@ export default function Details() {
   useEffect(() => {
     try {
       axios
-        .get(`https://dashboardbackend-production-9839.up.railway.app/location/${id}`)
+        .get(`http://localhost:8080/location/${id}`)
         .then((response) => {
           console.log(response);
           console.log(

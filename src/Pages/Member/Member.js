@@ -34,8 +34,8 @@ export default function Member() {
   useEffect(() => {
     axios
       .get(
-        "https://dashboardbackend-production-9839.up.railway.app/Users"
-        // "https://dashboardbackend-production-9839.up.railway.app/get"
+        "http://localhost:8080/Users"
+        // "http://localhost:8080/get"
       )
       .then((response) => {
         setRows(response.data);
@@ -67,8 +67,8 @@ export default function Member() {
         // User confirmed deletion, proceed with the delete request
         console.log(`id in delete ${id}`);
         axios
-          // .delete(`https://dashboardbackend-production-9839.up.railway.app/deleteEmployee/${id}`)
-          .delete(`https://dashboardbackend-production-9839.up.railway.app/Users/${id}`)
+          // .delete(`http://localhost:8080/deleteEmployee/${id}`)
+          .delete(`http://localhost:8080/Users/${id}`)
 
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
@@ -98,8 +98,8 @@ export default function Member() {
         formData.append("file", selected_file);
 
         axios
-          // .post("https://dashboardbackend-production-9839.up.railway.app/importdata", formData)
-          .post("https://dashboardbackend-production-9839.up.railway.app/importdata", formData)
+          // .post("http://localhost:8080/importdata", formData)
+          .post("http://localhost:8080/importdata", formData)
 
           .then((response) => {
             console.log("Import response:", response);

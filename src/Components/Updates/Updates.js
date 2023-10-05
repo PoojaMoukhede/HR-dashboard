@@ -39,7 +39,7 @@ export default function Updates() {
   // }, []);
   useEffect(() => {
   axios
-   .get("https://dashboardbackend-production-9839.up.railway.app/employees")
+   .get("http://localhost:8080/employees")
    .then((response) => {
      setRows(response.data);
   

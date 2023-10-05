@@ -29,8 +29,8 @@ export default function Managers() {
 
   useEffect(() => {
     axios
-      // .get("https://dashboardbackend-production-9839.up.railway.app/getmanager")
-      .get("https://dashboardbackend-production-9839.up.railway.app/manager")
+      // .get("http://localhost:8080/getmanager")
+      .get("http://localhost:8080/manager")
 
       .then((response) => {
         setRows(response.data);
@@ -50,10 +50,8 @@ export default function Managers() {
 
         axios
           .post(
-            // "https://dashboardbackend-production-9839.up.railway.app/importmanager",
-            "https://dashboardbackend-production-9839.up.railway.app/importmanager",
-            formData
-          )
+            // "http://localhost:8080/importmanager",
+            "http://localhost:8080/importmanager",formData)
           .then((response) => {
             console.log("Import response:", response);
           })
@@ -86,8 +84,8 @@ export default function Managers() {
         console.log(`id in delete ${id}`);
         axios
           .delete(
-            // `https://dashboardbackend-production-9839.up.railway.app/delete/${id}`
-            `https://dashboardbackend-production-9839.up.railway.app/manager/${id}`
+            // `http://localhost:8080/delete/${id}`
+            `http://localhost:8080/manager/${id}`
           )
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
@@ -126,7 +124,7 @@ export default function Managers() {
     console.log("delete All requested")
     axios
     .delete(
-      'https://dashboardbackend-production-9839.up.railway.app/manager')
+      'http://localhost:8080/manager')
     .then((res) => {
       const newData = rows.filter((row) => !selectedRows.includes(row.email));
     setRows(newData);

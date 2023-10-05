@@ -22,7 +22,7 @@ export default function Sidebar() {
     sessionStorage.clear();
     localStorage.clear();
     window.location.replace("/login");
-    navigate("/");
+    // navigate("/");
   }
 
   // Function to handle item click and set the selected item

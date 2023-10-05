@@ -23,7 +23,7 @@ export default function Expanse() {
 
   useEffect(() => {
     axios
-      .get("https://dashboardbackend-production-9839.up.railway.app/expanse/curr")
+      .get("http://localhost:8080/expanse/curr")
       .then((response) => {
         const moneyFromAPI = response.data[0].money;
         setCurrentMonthFuelExpensetotal(moneyFromAPI);
@@ -34,7 +34,7 @@ export default function Expanse() {
       });
 
       // axios
-      // .get("https://dashboardbackend-production-9839.up.railway.app/expanse/prev")
+      // .get("http://localhost:8080/expanse/prev")
       // .then((response) => {
       //   const previousMonthExpensesFromAPI = response.data[0].money;
       //   setPreviousMonthExpenses(previousMonthExpensesFromAPI);
