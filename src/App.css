@@ -18,7 +18,7 @@
 }
 .cardp {
   height: 500px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 .rightL,
 .leftL {
@@ -591,4 +591,20 @@ background-size: cover;
 }
 .complaint_cards{
   padding: 0;
+}
+/* Regular input field style */
+.input-field {
+  border: 1px solid #ccc;
+}
+
+/* Error input field style with red border */
+.input-field-error {
+  border: 1px solid red;
+}
+
+.table-responsive::-webkit-scrollbar { 
+  display: none; 
+}
+.cardp::-webkit-scrollbar { 
+  display: none; 
 }

@@ -41,8 +41,18 @@ const AddEmployeeModal = ({
     if (name === 'Emp_contact_No' && value.length === 10) {
       setNewEmployee({ ...newEmployee, [name]: value });
     } else if (name === 'Emp_contact_No' && value.length < 10) {
-     
       console.error('Contact number must be 10 characters long.');
+    }
+    if (value.trim() === "") {
+      setEmptyFields({
+        ...emptyFields,
+        [name]: true,
+      });
+    } else {
+      setEmptyFields({
+        ...emptyFields,
+        [name]: false,
+      });
     }
   };
 
@@ -878,7 +888,10 @@ const AddEmployeeModal = ({
 
   // const { onFormSubmit } = useAPI();
   const { signUpUser } = useAPI();
+  const [emptyFields, setEmptyFields] = useState({});
   const onFormSubmit1 = (e) => {
+
+    const emptyFieldNames = [];
 
     if (!isEmailValid(newEmployee.email)) {
       alert("Invalid email format");
@@ -888,28 +901,64 @@ const AddEmployeeModal = ({
       alert("Invalid contact number. Please enter a 10-digit number.");
       return;
     }
-    signUpUser(newEmployee)
-    // .then(() => {
-      window.location.reload();
-    //   console.log("new-------", newEmployee);
-    // })
-    // .catch((error) => {
-    //   console.error("Error adding newEmployee to the database:", error);
-    // });
-  
-  };
-  // const UserLogin = () => {
-  //   signUpUser(newEmployee);
-  //   handleCloseModal(); 
-  // };
 
+    if (!newEmployee.Emp_name) {
+      emptyFieldNames.push("Employee Name");
+    }
+    if (!newEmployee.email) {
+      emptyFieldNames.push("Employee Email");
+    }
+    if (!newEmployee.Emp_contact_No) {
+      emptyFieldNames.push("Employee Contact Number");
+    }
+    if(!newEmployee.Emp_qualification){
+      emptyFieldNames.push("Employee Qualification");
+    }
+    if(!newEmployee.Emp_department){
+      emptyFieldNames.push("Employee Department");
+    }
+  
+    if(!newEmployee.Emp_expertise){
+      emptyFieldNames.push("Employee Expertise");
+    }
+  
+    if(!newEmployee.Emp_blood_group){
+      emptyFieldNames.push("Employee Blood Group");
+    }
+  
+    if(!newEmployee.password){
+      emptyFieldNames.push("Employee Password");
+    }
+    if(!newEmployee.confirm_password){
+      emptyFieldNames.push("Employee Confirm Passwordr");
+    }
+    if(!newEmployee.Emp_state){
+      emptyFieldNames.push("Employee State");
+    }
+    if(!newEmployee.Emp_city){
+      emptyFieldNames.push("Employee City");
+    }
+    if(!newEmployee.Emp_DOB){
+      emptyFieldNames.push("Employee Date of Birth");
+    }
+    if(!newEmployee.Emp_joining_date){
+      emptyFieldNames.push("Employee Joining Date");
+    }
+    if (emptyFieldNames.length > 0) {
+      alert(`Please fill in the following required field(s): ${emptyFieldNames.join(", ")}`);
+      return; 
+    }
+    signUpUser(newEmployee);
+    window.location.reload();
+  };
+  
   const isEmailValid = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   const validateContactNumber = (tel) => {
-    const pattern = /^[0-9]{10}$/; // Simple pattern for a 10-digit number
+    const pattern = /^[0-9]{10}$/; 
     return pattern.test(tel);
   };
   return (
@@ -937,6 +986,7 @@ const AddEmployeeModal = ({
                   onChange={handleInputChange}
                   fullWidth
                   margin="normal"
+                  className={emptyFields.Emp_name ? "input-field-error" : "input-field"}
                 />
               </div>
               <div className="grid-item">
@@ -948,6 +998,7 @@ const AddEmployeeModal = ({
                   onChange={handleInputChange}
                   fullWidth
                   margin="normal"
+                  className={emptyFields.Emp_ID ? "input-field-error" : "input-field"}
                 />
               </div>
             </div>
@@ -962,6 +1013,7 @@ const AddEmployeeModal = ({
                   fullWidth
                   margin="normal"
                   required
+                  className={emptyFields.email ? "input-field-error" : "input-field"}
                 />
               </div>
               <div className="grid-item">
@@ -980,6 +1032,7 @@ const AddEmployeeModal = ({
                     maxLength: 10, 
                     minLength:10
                   }}
+                  className={emptyFields.Emp_contact_No ? "input-field-error" : "input-field"}
                 />
               </div>
             </div>
@@ -994,6 +1047,7 @@ const AddEmployeeModal = ({
                   fullWidth
                   margin="normal"
                   required
+                  className={emptyFields.Emp_qualification ? "input-field-error" : "input-field"}
                 />
               </div>
               <div className="grid-item">
@@ -1006,6 +1060,7 @@ const AddEmployeeModal = ({
                   fullWidth
                   margin="normal"
                   required
+                  className={emptyFields.Emp_department ? "input-field-error" : "input-field"}
                 />
               </div>
             </div>
@@ -1020,6 +1075,7 @@ const AddEmployeeModal = ({
                   fullWidth
                   margin="normal"
                   required
+                  className={emptyFields.Emp_expertise ? "input-field-error" : "input-field"}
                 />
               </div>
               <div className="grid-item">
@@ -1032,6 +1088,7 @@ const AddEmployeeModal = ({
                   fullWidth
                   margin="normal"
                   required
+                  className={emptyFields.Emp_blood_group ? "input-field-error" : "input-field"}
                 />
               </div>
             </div>
@@ -1047,6 +1104,7 @@ const AddEmployeeModal = ({
                   fullWidth
                   margin="normal"
                   required
+                  className={emptyFields.password ? "input-field-error" : "input-field"}
                 />
               </div>
               <div className="grid-item">
@@ -1059,6 +1117,7 @@ const AddEmployeeModal = ({
                   fullWidth
                   margin="normal"
                   required
+                  className={emptyFields.confirm_password ? "input-field-error" : "input-field"}
                 />
               </div>
             </div>
@@ -1122,6 +1181,7 @@ const AddEmployeeModal = ({
                     marginTop: "5px",
                     maxWidth: "100%",
                   }}
+                  className={emptyFields.Emp_DOB ? "input-field-error" : "input-field"}
                 />
               </div>
 
@@ -1141,6 +1201,7 @@ const AddEmployeeModal = ({
                     maxWidth: "100%",
                   }}
                   min="2010-01-01"
+                  className={emptyFields.Emp_joining_date ? "input-field-error" : "input-field"}
                 />
               </div>
             </div>

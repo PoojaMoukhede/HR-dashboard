@@ -13,14 +13,16 @@ export default function Details() {
   const { id } = useParams();
   const [employeeData, setEmployeedata] = useState();
   const [attandance, setAttandance] = useState([]);
-  const [data_Attandance, setData_Attandance] = useState([]);
+  const [data_location, setData_location] = useState([]);
 
   const fetchData = async (id) => {
     try {
-      const emp = await axios.get(`http://localhost:8080/Users/${id}`).then((response) => {
-        // console.log({response});
-        return response.data;
-      });
+      const emp = await axios
+        .get(`http://localhost:8080/Users/${id}`)
+        .then((response) => {
+          // console.log({response});
+          return response.data;
+        });
       setEmployeedata(emp);
     } catch (error) {
       console.log("err", error);
@@ -35,7 +37,6 @@ export default function Details() {
         .then((response) => {
           // console.log(response)
           setAttandance(response.data);
-          // console.log("Attendance from API:", response.data);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -84,24 +85,38 @@ export default function Details() {
     // Add more workHoursData for different days
   ];
 
+
+  const [distance, setDistance] = useState(null);
+  const [totalDistance, setTotalDistance] = useState(null); 
+
   useEffect(() => {
     try {
       axios
         .get(`http://localhost:8080/location/${id}`)
         .then((response) => {
-          console.log(response);
-          console.log(
-            `response from location api ${response.data.message.Location_info}`
-          );
-          setData_Attandance(response.data.message.Location_info);
+          const locationInfo = response.data.message.Location_info;
+          const distances = locationInfo.map((location) => location.distance);
+          setData_location(locationInfo);
+          setDistance(distances); 
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
     } catch (e) {
-      console.log(e);
+      console.error("Error:", e);
     }
   }, []);
+  
+  useEffect(() => {
+    if (distance !== null) {
+      const total = distance.reduce((acc, current) => acc + parseFloat(current), 0);
+      setTotalDistance(total.toFixed(2)); 
+      console.log(`total :${total}`);
+    }
+    console.log("Total Distance:", totalDistance);
+  }, [distance]);
+  
+  
 
   return (
     <>
@@ -223,12 +238,16 @@ export default function Details() {
                           className="widget-heading"
                           style={{ fontSize: "1.2rem" }}
                         >
-                          Total Hours
+                          Total Distance
                         </div>
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          <span>1200</span>
+                          {totalDistance ? (
+                            <span>{totalDistance} KM</span>
+                          ) : (
+                            <span>No records</span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -248,7 +267,7 @@ export default function Details() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          <span>{data_Attandance.length}</span>
+                          <span>{data_location.length}</span>
                         </div>
                       </div>
                     </div>
@@ -462,7 +481,10 @@ export default function Details() {
                         Employees Location / Trip Detail
                       </div>
                     </div>
-                    <div className="table-responsive">
+                    <div
+                      className="table-responsive"
+                      style={{ overflowY: "scroll" }}
+                    >
                       <table className="align-middle mb-0 table table-borderless table-striped table-hover">
                         <thead>
                           <tr>
@@ -470,11 +492,13 @@ export default function Details() {
                             <th>TIME</th>
                             <th className="text-center">Start Point</th>
                             <th className="text-center">End Point</th>
+                            <th>Distance</th>
+                            {/* <th className="" >Distance</th> */}
                             {/* <th className="text-center">Expanse</th> */}
                           </tr>
                         </thead>
                         <tbody>
-                          {data_Attandance.map((datas) => {
+                          {data_location.map((location, index) => {
                             return (
                               <tr>
                                 <td>
@@ -483,7 +507,7 @@ export default function Details() {
                                       <div className="widget-content-left flex2">
                                         <div className="widget-heading">
                                           {new Date(
-                                            datas.timestamp
+                                            location.timestamp
                                           ).toLocaleString("en-US", {
                                             year: "numeric",
                                             month: "2-digit",
@@ -495,7 +519,7 @@ export default function Details() {
                                   </div>
                                 </td>
                                 <td>
-                                  {new Date(datas.timestamp).toLocaleString(
+                                  {new Date(location.timestamp).toLocaleString(
                                     "en-US",
                                     {
                                       hour: "2-digit",
@@ -505,14 +529,12 @@ export default function Details() {
                                   )}
                                 </td>
                                 <td className="text-center text-muted">
-                                  {datas.startPoint}
+                                  {location.startPoint.startPointname}
                                 </td>
                                 <td className="text-center text-muted">
-                                  {datas.endPoint}
+                                  {location.endPoint.endPointname}
                                 </td>
-                                {/* <td className="text-center text-muted">
-                          {}
-                        </td> */}
+                                <td>{location.distance} km</td>
                               </tr>
                             );
                           })}

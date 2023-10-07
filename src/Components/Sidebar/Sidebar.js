@@ -138,7 +138,7 @@ const isSuperAdmin = () => {
                   Employee
                 </li>
               </Link>
-              {/* <Link to="/attandance">
+              <Link to="/attandance">
                 <li
                   className={` item_s app-sidebar__heading ${currentPath==='/attandance'?'activate':''}`}
                   onClick={() => handleItemClick("/attandance")}
@@ -146,7 +146,7 @@ const isSuperAdmin = () => {
                   <Icon icon="simple-line-icons:calender" style={style}  />
                   Attendance
                 </li>
-              </Link> */}
+              </Link>
               
               <Link to="/managers">
                 <li

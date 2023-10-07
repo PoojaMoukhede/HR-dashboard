@@ -5,6 +5,7 @@ import ReactApexChart from "react-apexcharts";
 import { Baroptions } from "../Components/Data";
 import PolorChart from "../Components/PolorChart";
 import LeaveTable from "./LeaveTable";
+import AttandanceDepartmentWise from "../Components/Table/AttandanceDepartmentWise";
 
 export default function Attandance() {
   const chart1Labels = ['Absent', 'Present'];
@@ -19,32 +20,29 @@ export default function Attandance() {
           <div className="app-main__outer">
             <div className="app-main__inner">
               <div className="row">
-                <div className="col-md-12 col-lg-4">
+                <div className="col-md-12 col-lg-8">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
                         <i className="header-icon lnr-rocket icon-gradient bg-tempting-azure">
                           {" "}
                         </i>
-                        Monthly Attandance Report
+                        Daily Attandance Report Table
                       </div>
                     </div>
                     <div className="tab-content">
                       <div className="tab-pane fade active show" id="tab-eg-55">
                         <div className="widget-chart p-3">
                           <div style={{ height: "370px" }}>
-                            {/* <PolorChart
-                              series={[82, 47]}
-                              labels={chart1Labels}
-                            /> */}
-                             <PolorChart series={[82, 47]} labels={chart1Labels}/>
+                            <AttandanceDepartmentWise/>
+                             {/* <PolorChart series={[82, 47]} labels={chart1Labels}/> */}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-md-12 col-lg-4">
+                {/* <div className="col-md-12 col-lg-4">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header-tab-animation card-header">
                       <div className="card-header-title">
@@ -64,14 +62,13 @@ export default function Attandance() {
                             className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
                             style={{ height: "370px" }}
                           >
-                            {/* <PolorChart series={[42, 47]} /> */}
                             <PolorChart series={[82, 47]} labels={chart2Labels}/>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="col-md-12 col-lg-4">
                   <div className="mb-3 card">
@@ -93,7 +90,6 @@ export default function Attandance() {
                             className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
                             style={{ height: "370px" }}
                           >
-                            {/* <PolorChart series={[42, 47, 54]} /> */}
                             <PolorChart series={[42, 47,54]} labels={chart3Labels}/>
                           </div>
                         </div>

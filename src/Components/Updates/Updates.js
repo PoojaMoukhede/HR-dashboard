@@ -38,43 +38,40 @@ export default function Updates() {
   //   fetchData();
   // }, []);
   useEffect(() => {
-  axios
-   .get("http://localhost:8080/employees")
-   .then((response) => {
-     setRows(response.data);
-  
-   })
-   .catch((error) => {
-     console.error("Error fetching data:", error);
-   });
-      
-  // Example usage
-  // const todayBirthdayPeople = Today(Data);
-  // console.log(todayBirthdayPeople);
-  
+    axios
+      .get("http://localhost:8080/employees")
+      .then((response) => {
+        setRows(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+
+    // Example usage
+    // const todayBirthdayPeople = Today(Data);
+    // console.log(todayBirthdayPeople);
   }, []);
 
   const toastSuccess = () => toast.success("Wishes Sent");
 
   function Today(person) {
     const currentDate = new Date(); // Get the current date
-  
+
     // Extract the current day and month
     const currentDay = currentDate.getDate();
     const currentMonth = currentDate.getMonth();
-  
+
     // Filter the data based on matching day and month
     const filteredData = person.filter((data) => {
       const birthdayDate = new Date(data.birthday);
       const birthdayDay = birthdayDate.getDate();
       const birthdayMonth = birthdayDate.getMonth();
-  
+
       return currentDay === birthdayDay && currentMonth === birthdayMonth;
     });
-  
+
     return filteredData;
   }
-  
 
   return (
     <>
@@ -92,16 +89,17 @@ export default function Updates() {
             <div className="tab-content">
               <div className="tab-pane fade active show" id="tab-eg-55">
                 <div className="widget-chart p-3">
-                {/* {row.map((data)=>{ */}
-                                
-                             
-                  <div style={{ height: "370px", overflowY: "scroll" }}>
-                    <div className="table-responsive">
+                  {/* {row.map((data)=>{ */}
+
+                  <div>
+                    <div
+                      className="table-responsive"
+                      style={{ height: "370px", overflowY: "scroll" }}
+                    >
                       <div className="widget-content p-0">
                         <div className="widget-content-wrapper">
                           <div className="widget-content-left flex2">
                             <div className="widget-heading">
-                              
                               <div
                                 className="card mb-2"
                                 style={{ maxwidth: "540px" }}
@@ -130,9 +128,9 @@ export default function Updates() {
                                       </p>
                                       <p className="card-text">
                                         <small className="text-muted">
-                                          Today 
-                                        {/* {Today(data)} */}
-                                          </small>
+                                          Today
+                                          {/* {Today(data)} */}
+                                        </small>
                                         <button
                                           className="btn"
                                           style={{
@@ -165,7 +163,9 @@ export default function Updates() {
                                   </div>
                                   <div className="col-md-10">
                                     <div className="card-body">
-                                      <h5 className="card-title">Happy Birthday</h5>
+                                      <h5 className="card-title">
+                                        Happy Birthday
+                                      </h5>
                                       <p className="card-text">
                                         The warmest wishes to{" "}
                                         <b>Pooja Moukhede</b> a great member of
@@ -287,7 +287,7 @@ export default function Updates() {
                       </div>
                     </div>
                   </div>
-                   {/* })} */}
+                  {/* })} */}
                 </div>
               </div>
             </div>
@@ -347,8 +347,7 @@ export default function Updates() {
               </div>
             </div>
           </div> */}
-                 <Canteen/>
-
+          <Canteen />
         </div>
       </div>
       <ToastContainer

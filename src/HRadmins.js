@@ -97,7 +97,7 @@ export default function HRadmins() {
                       </div>
                     </div>
 
-                    <div className="table-responsive">
+                    <div className="table-responsive"  style={{ overflowY: "scroll" }}>
                       <table className="align-middle mb-0 table table-borderless table-striped table-hover">
                         <thead>
                           <tr>

@@ -40,14 +40,13 @@ export default function Complaint() {
   );
 
   const [counter, setCouner] = useState(0);
-  console.log("counter is tell more in cunoth ");
+  // console.log("counter is tell more in cunoth ");
 
   const handleResolve = async (id) => {
     try {
       if (processCount > 0) {
         const response = await axios.delete(
-          `http://localhost:8080/
-complaint/${id}`
+          `http://localhost:8080/complaint/${id}`
         );
         const updatedComplaints = complaints.filter(
           (complaint) => complaint._id !== id
@@ -55,7 +54,8 @@ complaint/${id}`
         setComplaints(updatedComplaints);
         setResolvedCount((prevResolvedCount) => prevResolvedCount + 1);
         setProcessCount((prevProcessCount) => prevProcessCount - 1);
-      } else {
+      } 
+      else {
         // Show a toast message indicating that the user needs to take a complaint first
         toast.success("Please take a complaint before resolving it");
       }
@@ -67,8 +67,11 @@ complaint/${id}`
   const handleTake = () => {
     if (processCount < complaints.length) {
       setProcessCount((prevProcessCount) => prevProcessCount + 1);
+      toast.info("You take this complaint");
     }
+   
   };
+
 
   return (
     <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
