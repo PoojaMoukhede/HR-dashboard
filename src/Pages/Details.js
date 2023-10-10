@@ -85,9 +85,8 @@ export default function Details() {
     // Add more workHoursData for different days
   ];
 
-
   const [distance, setDistance] = useState(null);
-  const [totalDistance, setTotalDistance] = useState(null); 
+  const [totalDistance, setTotalDistance] = useState(null);
 
   useEffect(() => {
     try {
@@ -97,7 +96,7 @@ export default function Details() {
           const locationInfo = response.data.message.Location_info;
           const distances = locationInfo.map((location) => location.distance);
           setData_location(locationInfo);
-          setDistance(distances); 
+          setDistance(distances);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -106,17 +105,33 @@ export default function Details() {
       console.error("Error:", e);
     }
   }, []);
-  
+
   useEffect(() => {
     if (distance !== null) {
-      const total = distance.reduce((acc, current) => acc + parseFloat(current), 0);
-      setTotalDistance(total.toFixed(2)); 
-      console.log(`total distancce type :${typeof total}`);
+      const total = distance.reduce(
+        (acc, current) => acc + parseFloat(current),
+        0
+      );
+      setTotalDistance(total.toFixed(2));
+      // console.log(`total distancce type :${typeof total}`);
     }
-    console.log("Total Distance:", totalDistance);
+    // console.log("Total Distance:", totalDistance);
   }, [distance]);
-  
-  
+  const [clearanceData, setClearanceData] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/form/${id}`)
+      .then((response) => {
+        setClearanceData(response.data.message.FormData);
+        console.log(response);
+        // console.log(`clearance data : ${response.data.message.FormData}`);
+
+      })
+      .catch((error) => {
+        console.error("Error fetching clearance data:", error);
+      });
+  }, [id]);
 
   return (
     <>
@@ -243,7 +258,7 @@ export default function Details() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          { totalDistance ? (
+                          {totalDistance ? (
                             <span>{totalDistance} KM</span>
                           ) : (
                             <span>No records</span>
@@ -280,7 +295,7 @@ export default function Details() {
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
-                      <i className="header-icon lnr lnr-chart-bars icon-gradient bg-night-sky">
+                        <i className="header-icon lnr lnr-chart-bars icon-gradient bg-night-sky">
                           {" "}
                         </i>
                         Daily Attandance Report
@@ -302,7 +317,7 @@ export default function Details() {
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
-                      <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
+                        <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
                           {" "}
                         </i>
                         Daily In-Out Report
@@ -332,7 +347,7 @@ export default function Details() {
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
-                      <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
+                        <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
                           {" "}
                         </i>
                         Leave Status
@@ -411,7 +426,7 @@ export default function Details() {
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
-                      <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
+                        <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
                           {" "}
                         </i>
                         Advance Payment Details
@@ -555,6 +570,34 @@ export default function Details() {
                         </tbody>
                       </table>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="mb-3 card cardp">
+
+                    {clearanceData?.map((formData, index) => (
+                      <div key={index}>
+                        <p>Transport Type: {formData.Transport_type}</p>
+                        <p>Total Expense: {formData.Total_expense}</p>
+                        {formData.images && (
+                        
+                          <img
+                            src={`data:${
+                              formData.images.contentType
+                            };base64,${formData.images.data.toString(
+                              "base64"
+                            )}`}
+                          
+                            alt={`Imag ${index}`}
+                            style={{ maxWidth: "300px" }}
+                          />
+                        )}
+                      </div>
+                    ))}
+
                   </div>
                 </div>
               </div>

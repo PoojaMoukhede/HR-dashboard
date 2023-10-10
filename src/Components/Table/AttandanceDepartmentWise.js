@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import PolorChart from "../PolorChart";
 
 export default function AttandancedepartmentWise() {
-  
   const [selectedDepartment, setSelectedDepartment] = useState(null);
 
   const dummyData = [
@@ -24,8 +23,8 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Jermaine Copcutt",
-      attendance: "absent",
-      department: "Business Development",
+      attendance: "present",
+      department: "Software",
     },
     {
       name: "Calvin Haworth",
@@ -45,12 +44,12 @@ export default function AttandancedepartmentWise() {
     {
       name: "Charlot Shubotham",
       attendance: "present",
-      department: "Engineering",
+      department: "Software",
     },
     {
       name: "Aldrich Enderlein",
       attendance: "present",
-      department: "Engineering",
+      department: "Software",
     },
     {
       name: "Lawton Dumingo",
@@ -60,7 +59,7 @@ export default function AttandancedepartmentWise() {
     {
       name: "Bonni Hartburn",
       attendance: "present",
-      department: "Business Development",
+      department: "Software",
     },
     {
       name: "Martyn Spier",
@@ -79,8 +78,8 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Curry Tollmache",
-      attendance: "absent",
-      department: "Business Development",
+      attendance: "present",
+      department: "Software",
     },
     {
       name: "Hyacinthia Challes",
@@ -94,12 +93,12 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Paton Wiggington",
-      attendance: "absent",
+      attendance: "present",
       department: "Support",
     },
     {
       name: "Daisi Camidge",
-      attendance: "absent",
+      attendance: "present",
       department: "Accounting",
     },
     {
@@ -114,7 +113,7 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Erinn Ert",
-      attendance: "absent",
+      attendance: "present",
       department: "Accounting",
     },
     {
@@ -129,7 +128,7 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Charlean Leetham",
-      attendance: "absent",
+      attendance: "present",
       department: "Services",
     },
     {
@@ -139,27 +138,27 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Raphael Stollsteiner",
-      attendance: "absent",
+      attendance: "present",
       department: "Sales",
     },
     {
       name: "Kelley Huntley",
-      attendance: "absent",
+      attendance: "present",
       department: "Human Resources",
     },
     {
       name: "Thaddus Ives",
-      attendance: "absent",
+      attendance: "present",
       department: "Training",
     },
     {
       name: "Lorelle Heaney",
-      attendance: "absent",
-      department: "Business Development",
+      attendance: "present",
+      department: "Software",
     },
     {
       name: "Aundrea Clews",
-      attendance: "absent",
+      attendance: "present",
       department: "Sales",
     },
     {
@@ -189,12 +188,12 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Lora Matejovsky",
-      attendance: "absent",
+      attendance: "present",
       department: "Services",
     },
     {
       name: "Kitti Williamson",
-      attendance: "absent",
+      attendance: "present",
       department: "Training",
     },
     {
@@ -204,7 +203,7 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Lazarus Bonallack",
-      attendance: "absent",
+      attendance: "present",
       department: "Legal",
     },
     {
@@ -214,7 +213,7 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Nicolais Ruse",
-      attendance: "absent",
+      attendance: "present",
       department: "Sales",
     },
     {
@@ -229,12 +228,12 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Duncan Forker",
-      attendance: "absent",
+      attendance: "present",
       department: "Marketing",
     },
     {
       name: "Hortense Halbard",
-      attendance: "absent",
+      attendance: "present",
       department: "Sales",
     },
     {
@@ -264,7 +263,7 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Weider Nottingham",
-      attendance: "absent",
+      attendance: "present",
       department: "Services",
     },
     {
@@ -274,17 +273,17 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Georgy Vasey",
-      attendance: "absent",
+      attendance: "present",
       department: "Product Management",
     },
     {
       name: "Rolph Quinnette",
-      attendance: "absent",
+      attendance: "present",
       department: "Sales",
     },
     {
       name: "Saba Hessay",
-      attendance: "absent",
+      attendance: "present",
       department: "Research and Development",
     },
     {
@@ -300,7 +299,7 @@ export default function AttandancedepartmentWise() {
     {
       name: "Meggie Massot",
       attendance: "present",
-      department: "Engineering",
+      department: "Software",
     },
     {
       name: "Lavina Maudlen",
@@ -320,7 +319,7 @@ export default function AttandancedepartmentWise() {
     {
       name: "Luce Pursey",
       attendance: "present",
-      department: "Engineering",
+      department: "Software",
     },
     {
       name: "Bennie Rose",
@@ -330,16 +329,16 @@ export default function AttandancedepartmentWise() {
     {
       name: "Ainslie Mealham",
       attendance: "present",
-      department: "Engineering",
+      department: "Software",
     },
     {
       name: "Orsola Gotch",
-      attendance: "absent",
+      attendance: "present",
       department: "Support",
     },
     {
       name: "Salomon Devita",
-      attendance: "absent",
+      attendance: "present",
       department: "Legal",
     },
     {
@@ -359,13 +358,13 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Tiffi Rymour",
-      attendance: "absent",
+      attendance: "present",
       department: "Training",
     },
     {
       name: "Linzy Dacca",
       attendance: "present",
-      department: "Engineering",
+      department: "Software",
     },
     {
       name: "Kleon Oliva",
@@ -384,23 +383,23 @@ export default function AttandancedepartmentWise() {
     },
     {
       name: "Gwendolen Kermannes",
-      attendance: "absent",
+      attendance: "present",
       department: "Research and Development",
     },
     {
       name: "Beryl Norres",
-      attendance: "absent",
-      department: "Business Development",
+      attendance: "present",
+      department: "Software",
     },
     {
       name: "Irwinn Cleen",
-      attendance: "absent",
+      attendance: "present",
       department: "Training",
     },
     {
       name: "Wainwright Cossington",
       attendance: "absent",
-      department: "Business Development",
+      department: "Software",
     },
     {
       name: "Collen Scothron",
@@ -410,17 +409,17 @@ export default function AttandancedepartmentWise() {
     {
       name: "Robbert O'Rourke",
       attendance: "present",
-      department: "Engineering",
+      department: "Software",
     },
     {
       name: "Bucky Claughton",
       attendance: "present",
-      department: "Business Development",
+      department: "Software",
     },
     {
       name: "Boy Heinssen",
       attendance: "present",
-      department: "Engineering",
+      department: "Software",
     },
     {
       name: "Arny Breslane",
@@ -593,10 +592,12 @@ export default function AttandancedepartmentWise() {
                     className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
                     style={{ height: "370px" }}
                   >
-                    <PolorChart
-                              series={[50,80,40,20,50,80,20,37,40,30,70]}
-                              labels={chart3Labels}
-                            />
+                   
+                      <PolorChart
+                        series={[7, 9, 6, 14, 9, 3, 6, 12, 6, 6, 11]}
+                        labels={chart3Labels}
+                      />
+         
                   </div>
                 </div>
               </div>
