@@ -6,7 +6,7 @@ export default function MapC() {
     <>
       <div className="card-header-tab card-header">
         <div className="card-header-title">
-          <i className="header-icon lnr-rocket icon-gradient bg-tempting-azure">
+          <i className="header-icon lnr lnr-map-marker icon-gradient bg-asteroid">
             {" "}
           </i>
           Active Employees Location 

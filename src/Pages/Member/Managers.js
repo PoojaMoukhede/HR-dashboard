@@ -51,7 +51,9 @@ export default function Managers() {
         axios
           .post(
             // "http://localhost:8080/importmanager",
-            "http://localhost:8080/importmanager",formData)
+            "http://localhost:8080/importmanager",
+            formData
+          )
           .then((response) => {
             console.log("Import response:", response);
           })
@@ -121,32 +123,14 @@ export default function Managers() {
     setRows(newData);
   };
   const handleDeleteRows = () => {
-    console.log("delete All requested")
-    axios
-    .delete(
-      'http://localhost:8080/manager')
-    .then((res) => {
+    console.log("delete All requested");
+    axios.delete("http://localhost:8080/manager").then((res) => {
       const newData = rows.filter((row) => !selectedRows.includes(row.email));
-    setRows(newData);
-    
-    // setSelectedRows([]);
-    })
-    
+      setRows(newData);
+
+      // setSelectedRows([]);
+    });
   };
-  // const handleChange=(e)=>{ 
-  //       const { name, checked}= e.target;
-  //     if(name==="allselect")
-  //     {
-  //     const checkedvalue = selectedRows.map( (user)=>{ return {...user, isChecked:checked}});
-  //     console.log(checkedvalue);
-  //     setRows(checkedvalue);
-  //     } else{
-  //      const checkedvalue= selectedRows.map( (user)=>
-  //      user.username ===name? {...user, isChecked:checked}:user);
-  //      console.log(checkedvalue);
-  //      setRows(checkedvalue);
-  //     }
-  //   }
 
   return (
     <>
@@ -158,20 +142,23 @@ export default function Managers() {
           <div className="app-main__outer">
             <div className="app-main__inner">
               <div className="d-flex">
-              <OverlayTrigger
+                <OverlayTrigger
                   key="tooltip"
                   placement="top"
                   overlay={<Tooltip id="tooltip">Delete All</Tooltip>}
                 >
-                 
-                <button
-                  className="btn btn-primary mb-2 mr-2"
-                  name="allselect"
-                  // onClick={handleDeleteRows}
-                  style={{ borderRadius: "30px", padding: "10px" }}
-                >
-                  <Icon icon="fluent:delete-16-regular" color="white"  width="1.5rem"/>
-                </button>
+                  <button
+                    className="btn btn-primary mb-2 mr-2"
+                    name="allselect"
+                    // onClick={handleDeleteRows}
+                    style={{ borderRadius: "30px", padding: "10px" }}
+                  >
+                    <Icon
+                      icon="fluent:delete-16-regular"
+                      color="white"
+                      width="1.5rem"
+                    />
+                  </button>
                 </OverlayTrigger>
                 <OverlayTrigger
                   key="tooltip"
@@ -221,6 +208,9 @@ export default function Managers() {
                 <div className="col-md-12">
                   <div className="main-card mb-3 card">
                     <div className="card-header">
+                      <i className="header-icon lnr lnr-users icon-gradient bg-asteroid">
+                        {" "}
+                      </i>
                       Manager contact detail
                       <div className="btn-actions-pane-right">
                         <div className="search-wrapper">
@@ -235,7 +225,10 @@ export default function Managers() {
                         </div>
                       </div>
                     </div>
-                    <div className="table-responsive"  style={{ overflowY: "scroll" }}>
+                    <div
+                      className="table-responsive"
+                      style={{height:"80vh"}}
+                    >
                       <table
                         className="align-middle mb-0 table table-borderless table-striped table-hover"
                         style={{ fontSize: "0.9rem" }}
@@ -244,9 +237,10 @@ export default function Managers() {
                           <tr>
                             <th className="select-header">
                               {/* <p>Select</p> */}
-                            <input type="checkbox"
-                             style={{ height: "1rem", width: "2rem" }}
-                            />
+                              <input
+                                type="checkbox"
+                                style={{ height: "1rem", width: "2rem" }}
+                              />
                             </th>
                             <th>Name</th>
                             {/* <th>ID</th> */}
@@ -285,13 +279,13 @@ export default function Managers() {
                               {/* <td className="text-center">{row.mID}</td> */}
 
                               <td className="text-center">{row.email}</td>
-                              <td className="text-center">{row.contact_no}</td>  
-                              <td className="text-center">{row.department}</td> 
-                               {/*  please  change it for mongodb its contact_no */}
+                              <td className="text-center">{row.contact_no}</td>
+                              <td className="text-center">{row.department}</td>
+                              {/*  please  change it for mongodb its contact_no */}
                               <td className="text-center">
                                 {row.blood_group}
                                 {/* SQL has no field */}
-                                </td>
+                              </td>
                               <td className="text-center">{row.city}</td>
                               <td className="text-center">{row.state}</td>
                               <td className="d-flex justify-content-center ">

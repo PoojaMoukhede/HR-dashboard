@@ -122,7 +122,7 @@ const isSuperAdmin = () => {
                   className={` item_s app-sidebar__heading ${currentPath==='/hradmins'?'activate':''}`}
                   onClick={() => handleItemClick("/hradmins")}
                 >
-                  <Icon icon="icon-park-outline:dashboard" style={style} />
+                  <Icon icon="eos-icons:admin-outlined" style={style} />
                   HR Admin
                 </li>
               </Link>

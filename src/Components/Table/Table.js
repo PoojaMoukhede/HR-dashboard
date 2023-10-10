@@ -48,6 +48,9 @@ export default function Table() {
     <>
       <div className="main-card mb-3 card">
         <div className="card-header">
+        <i className="header-icon lnr lnr-users icon-gradient bg-asteroid">
+                          {" "}
+                        </i>
           Active Users
           <div className="btn-actions-pane-right">
             <div className="search-wrapper">

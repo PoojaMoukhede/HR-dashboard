@@ -82,7 +82,11 @@ export default function HRadmins() {
                 <div className="col-md-12">
                   <div className="main-card mb-3 card">
                     <div className="card-header">
+                    <i className="header-icon lnr lnr-users icon-gradient bg-asteroid">
+              {" "}
+            </i>
                       HR Admin Data
+                      
                       <div className="btn-actions-pane-right">
                         <div className="search-wrapper">
                           <input

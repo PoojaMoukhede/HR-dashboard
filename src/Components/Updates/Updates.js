@@ -80,7 +80,7 @@ export default function Updates() {
           <div className="mb-3 card">
             <div className="card-header-tab card-header">
               <div className="card-header-title">
-                <i className="header-icon lnr lnr-chart-bars icon-gradient bg-tempting-azure">
+                <i className="header-icon lnr lnr-magic-wand icon-gradient bg-asteroid">
                   {" "}
                 </i>
                 Updates For this month

@@ -1,16 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Components/Header/Header";
 import Sidebar from "../Components/Sidebar/Sidebar";
-import ReactApexChart from "react-apexcharts";
-import { Baroptions } from "../Components/Data";
-import PolorChart from "../Components/PolorChart";
-import LeaveTable from "./LeaveTable";
 import AttandanceDepartmentWise from "../Components/Table/AttandanceDepartmentWise";
+import dummydata from "../Components/Table/Mock.json";
 
 export default function Attandance() {
-  const chart1Labels = ['Absent', 'Present'];
-  const chart2Labels = ['Absent', 'Present'];
-  const chart3Labels = ['On-Site', 'In-Office', 'Pending'];
+
+  const [absentCount, setAbsentCount] = useState(0);
+  const [presentCount, setPresentCount] = useState(0);
+
+  useEffect(() => {
+    fetchDataAndCount();
+  }, []);
+
+  const fetchDataAndCount = async () => {
+    try {
+      const response = dummydata;
+      let absent = 0;
+      let present = 0;
+      response.forEach((record) => {
+        if (record.attendance === "present") {
+          present++;
+        } else if (record.attendance === "absent") {
+          absent++;
+        }
+      });
+
+      setAbsentCount(absent);
+      setPresentCount(present);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <>
       <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -19,87 +41,11 @@ export default function Attandance() {
           <Sidebar />
           <div className="app-main__outer">
             <div className="app-main__inner">
-              <div className="row">
-                <div className="col-md-12 col-lg-8">
-                  <div className="mb-3 card">
-                    <div className="card-header-tab card-header">
-                      <div className="card-header-title">
-                        <i className="header-icon lnr-rocket icon-gradient bg-tempting-azure">
-                          {" "}
-                        </i>
-                        Daily Attandance Report Table
-                      </div>
-                    </div>
-                    <div className="tab-content">
-                      <div className="tab-pane fade active show" id="tab-eg-55">
-                        <div className="widget-chart p-3">
-                          <div style={{ height: "370px" }}>
-                            <AttandanceDepartmentWise/>
-                             {/* <PolorChart series={[82, 47]} labels={chart1Labels}/> */}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* <div className="col-md-12 col-lg-4">
-                  <div className="mb-3 card">
-                    <div className="card-header-tab card-header-tab-animation card-header">
-                      <div className="card-header-title">
-                        <i className="header-icon lnr-apartment icon-gradient bg-love-kiss">
-                          {" "}
-                        </i>
-                        Weekly Attandance Report
-                      </div>
-                    </div>
-                    <div className="card-body">
-                      <div className="tab-content">
-                        <div
-                          className="tab-pane fade show active"
-                          id="tabs-eg-77"
-                        >
-                          <div
-                            className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
-                            style={{ height: "370px" }}
-                          >
-                            <PolorChart series={[82, 47]} labels={chart2Labels}/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
+            <AttandanceDepartmentWise />
 
-                <div className="col-md-12 col-lg-4">
-                  <div className="mb-3 card">
-                    <div className="card-header-tab card-header-tab-animation card-header">
-                      <div className="card-header-title">
-                        <i className="header-icon lnr-apartment icon-gradient bg-love-kiss">
-                          {" "}
-                        </i>
-                        Daily Attandance Report
-                      </div>
-                    </div>
-                    <div className="card-body">
-                      <div className="tab-content">
-                        <div
-                          className="tab-pane fade show active"
-                          id="tabs-eg-77"
-                        >
-                          <div
-                            className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
-                            style={{ height: "370px" }}
-                          >
-                            <PolorChart series={[42, 47,54]} labels={chart3Labels}/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               <div className="row">
+                
                 <div className="col-md-6 col-xl-4">
                   <div className="card11 mb-4 widget-content ">
                     <div className="widget-content-wrapper text-black">
@@ -108,12 +54,14 @@ export default function Attandance() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-black">
-                          <span>600</span>
+                          <span>{dummydata.length}</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
+
                 <div className="col-md-6 col-xl-4">
                   <div className="card11 mb-4 widget-content">
                     <div className="widget-content-wrapper text-black">
@@ -122,12 +70,14 @@ export default function Attandance() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-black">
-                          <span>579</span>
+                          <span>{presentCount}</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
+
                 <div className="col-md-6 col-xl-4">
                   <div className="card11 mb-4 widget-content ">
                     <div className="widget-content-wrapper text-black">
@@ -136,24 +86,33 @@ export default function Attandance() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-black">
-                          <span>21</span>
+                          <span>{absentCount}</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
               </div>
+
+      
               <div className="row">
                 <div className="col-md-12">
                   <div className="mb-3 card cardp">
                     <div className="main-card mb-2">
-                      <div className="card-header">Leave Applied</div>
+                      <div className="card-header">
+                      <i className="header-icon lnr lnr-paperclip icon-gradient bg-asteroid">
+                        {" "}
+                      </i>
+                        Leave Applied</div>
                     </div>
                     functionaity coming soon....
                     {/* <LeaveTable /> */}
                   </div>
                 </div>
               </div>
+
+
             </div>
           </div>
         </div>

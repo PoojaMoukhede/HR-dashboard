@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import Header from "../../Components/Header/Header";
 import { Icon } from "@iconify/react";
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import swal from "sweetalert";
 import AddEmployeeModel from "../../Components/AddEmployeeModel/AddEmployeeModel";
@@ -10,13 +9,11 @@ import { ExportToExcel } from "../../Components/Export/ExportToExcel";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import EditEmployeeModel from "../../Components/AddEmployeeModel/EditEmployeeModel/EditEmployeeModel";
-import Register from "../Register";
 
 const fileName = "EmployeeData";
 export default function Member() {
   const [rows, setRows] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  // const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
@@ -35,7 +32,6 @@ export default function Member() {
     axios
       .get(
         "http://localhost:8080/Users"
-        // "http://localhost:8080/get"
       )
       .then((response) => {
         setRows(response.data);
@@ -64,10 +60,8 @@ export default function Member() {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        // User confirmed deletion, proceed with the delete request
         console.log(`id in delete ${id}`);
         axios
-          // .delete(`http://localhost:8080/deleteEmployee/${id}`)
           .delete(`http://localhost:8080/Users/${id}`)
 
           .then((res) => {
@@ -83,7 +77,6 @@ export default function Member() {
             console.log(`id in delete ${res}`);
           });
       } else {
-        // User clicked "Cancel" or closed the dialog, do nothing
         swal("Cancelled", "Employee data is safe 😊", "info");
       }
     });
@@ -98,7 +91,6 @@ export default function Member() {
         formData.append("file", selected_file);
 
         axios
-          // .post("http://localhost:8080/importdata", formData)
           .post("http://localhost:8080/importdata", formData)
 
           .then((response) => {
@@ -116,14 +108,6 @@ export default function Member() {
   };
 
 
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-
-  const openRegisterModal = () => {
-    setShowRegisterModal(true);
-    console.log("kkkkkkkkkkk")
-  };
-
-
 
   return (
     <>
@@ -135,7 +119,6 @@ export default function Member() {
           <div className="app-main__outer">
             <div className="app-main__inner">
               <div className="d-flex">
-              
                 <OverlayTrigger
                   key="tooltip4"
                   placement="top"
@@ -146,7 +129,7 @@ export default function Member() {
                     className="btn btn-primary mb-2 "
                     style={{ borderRadius: "30px", padding: "10px" }}
                   >
-                    {/* Add Employee */}
+  
                     <Icon
                       icon="mingcute:add-fill"
                       color="white"
@@ -154,7 +137,7 @@ export default function Member() {
                     />
                   </button>
                 </OverlayTrigger>
-               
+
                 <ExportToExcel apiData={rows} fileName={fileName} />
                 <OverlayTrigger
                   key="tooltip5"
@@ -171,17 +154,17 @@ export default function Member() {
                       onChange={handleImport}
                     />
                     <Icon icon="pajamas:import" color="white" width="1.5rem" />
-                    {/* <span>Import</span> */}
                   </div>
                 </OverlayTrigger>
-                {/* {showRegisterModal &&  */}
-              {/* <Register openModal={openRegisterModal} /> */}
-                {/* } */}
+
               </div>
               <div className="row">
                 <div className="col-md-12">
                   <div className="main-card mb-3 card">
                     <div className="card-header">
+                      <i className="header-icon lnr lnr-users icon-gradient bg-asteroid">
+                        {" "}
+                      </i>
                       Employee Data
                       <div className="btn-actions-pane-right">
                         <div className="search-wrapper">
@@ -202,14 +185,17 @@ export default function Member() {
                       onAdd={handleAddMember}
                     />
 
-                    <div className="table-responsive"  style={{ overflowY: "scroll" }}>
+                    <div
+                      className="table-responsive"
+                      style={{ height: "80vh" }}
+                    >
                       <table
                         className="align-middle mb-0 table table-borderless table-striped table-hover"
                         style={{ fontSize: "0.9rem" }}
                       >
                         <thead>
                           <tr>
-                          <th>ID</th>
+                            <th>ID</th>
                             <th>Name</th>
                             <th className="text-center">Email</th>
                             <th className="text-center">Contact Number</th>
@@ -239,7 +225,7 @@ export default function Member() {
                                   </div>
                                 </div>
                               </td>
-                              
+
                               <td className="text-center">{row.email}</td>
                               <td className="text-center">
                                 {row.Emp_contact_No}
@@ -275,8 +261,7 @@ export default function Member() {
                                   <button
                                     onClick={(e) => {
                                       setIsModalOpen2(true);
-                                      // console.log(e)
-                                      // console.log(row)
+                                     
                                       setSelectedEmployee(row);
                                     }}
                                     style={{
@@ -334,9 +319,7 @@ export default function Member() {
         onClose={() => setIsModalOpen2(false)}
         onAdd={handleAddMember2}
       />
-      <Register
-        openModal={openRegisterModal}
-      />
+      {/* <Register openModal={openRegisterModal} /> */}
     </>
   );
 }

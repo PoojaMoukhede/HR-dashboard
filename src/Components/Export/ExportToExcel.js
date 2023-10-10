@@ -5,22 +5,15 @@ import * as XLSX from "xlsx";
 import { Icon } from "@iconify/react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import { SHA256 } from 'crypto-js';
 
 export const ExportToExcel = ({ apiData, fileName }) => {
   const fileType =
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
 
-  // const exportToCSV = (apiData, fileName) => {
-  //   const ws = XLSX.utils.json_to_sheet(apiData);
-  //   const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-  //   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  //   const data = new Blob([excelBuffer], { type: fileType });
-  //   FileSaver.saveAs(data, fileName + fileExtension);
-  // };
-
   const exportToCSV = (apiData, fileName) => {
-    const fieldsToExclude = ["_id","Emp_id"];
+    const fieldsToExclude = ["_id","Emp_ID"];
   
     // Filter the apiData to exclude the specified fields
     const filteredData = apiData.map((item) => {
@@ -38,6 +31,40 @@ export const ExportToExcel = ({ apiData, fileName }) => {
     const data = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(data, fileName + fileExtension);
   };
+
+
+  // for email and contact no hashing
+
+  // const exportToCSV = (apiData, fileName) => {
+  //   const fieldsToExclude = ["_id", "Emp_ID", "password"];
+  
+  //   // Filter the apiData to exclude the specified fields and hash email and contact_No
+  //   const filteredData = apiData.map((item) => {
+  //     const filteredItem = { ...item };
+  //     fieldsToExclude.forEach((field) => {
+  //       delete filteredItem[field];
+  //     });
+  
+  //     // Hash the email field (assuming it's a string)
+  //     if (filteredItem.email) {
+  //       filteredItem.email = SHA256(filteredItem.email).toString();
+  //     }
+  
+  //     // Hash the contact_No field (assuming it's a string)
+  //     if (filteredItem.Emp_contact_No) {
+  //       filteredItem.Emp_contact_No = SHA256(filteredItem.Emp_contact_No).toString();
+  //     }
+  
+  //     return filteredItem;
+  //   });
+  
+  //   // Convert the filtered data to a CSV
+  //   const ws = XLSX.utils.json_to_sheet(filteredData);
+  //   const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+  //   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  //   const data = new Blob([excelBuffer], { type: fileType });
+  //   FileSaver.saveAs(data, fileName + fileExtension);
+  // }
 
   return (
     <OverlayTrigger

@@ -5,16 +5,13 @@ import Sidebar from "../Components/Sidebar/Sidebar";
 import axios from "axios";
 import food from "../Images/lai-yuching-WxePxgrIJbQ-unsplash (1).jpg";
 import food2 from "../Images/zoshua-colah-dncjnYtmWHo-unsplash (1).jpg";
-import AddCoupon from '../Components/Coupon/AddCoupon'
+import AddCoupon from "../Components/Coupon/AddCoupon";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-
 export default function CanteenFacility() {
   const [menuItems, setMenuItems] = useState({ today: null, tomorrow: null });
-  const [totalCouponCountToday, setCouponCountToday] = useState()
-  const [totalCouponCountTomorrow, setCouponCountTomorrow] = useState()
-
+  const [couponCounts, setCouponCounts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAdd = (newMenu) => {
@@ -32,20 +29,21 @@ export default function CanteenFacility() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-    
-      axios
-      .get('http://localhost:8080/menu/total_coupon_count')
+
+    axios
+      .get("http://localhost:8080/coupon-count-by-menu")
       .then((response) => {
-        // console.log(response)
-        setCouponCountToday(response.data.today); 
-        setCouponCountTomorrow(response.data.tomorrow); 
-        console.log(`response.data.today : ${response.data.today} --- response.data.tomorrow : ${response.data.tomorrow}`);
+        setCouponCounts(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching coupon count:', error);
+        console.error("Error fetching coupon counts:", error);
       });
-      }, []);
-    
+  }, []);
+
+  const getCouponCountForMenu = (menuId) => {
+    const couponCount = couponCounts.find((count) => count._id === menuId);
+    return couponCount ? couponCount.totalCoupons : 0;
+  };
 
   return (
     <>
@@ -55,31 +53,32 @@ export default function CanteenFacility() {
           <Sidebar />
           <div className="app-main__outer">
             <div className="app-main__inner">
-
-            <div className="d-flex">
-              
-              <OverlayTrigger
-                key="tooltip14"
-                placement="top"
-                overlay={<Tooltip id="tooltip">Add Menu</Tooltip>}
-              >
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="btn mb-2 "
-                  style={{ padding: "10px",border:' 2px solid #00c6f8',borderRadius:'5px'}}
-                >ADD MENU
-                </button>
-              </OverlayTrigger>
-            </div>
-            <AddCoupon
-            open = {isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onAdd={handleAdd}
-            />
-        
+              <div className="d-flex">
+                <OverlayTrigger
+                  key="tooltip14"
+                  placement="top"
+                  overlay={<Tooltip id="tooltip">Add Menu</Tooltip>}
+                >
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="btn mb-2 "
+                    style={{
+                      padding: "10px",
+                      border: " 2px solid #00c6f8",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    ADD MENU
+                  </button>
+                </OverlayTrigger>
+              </div>
+              <AddCoupon
+                open={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onAdd={handleAdd}
+              />
 
               <div className="row">
-               
                 <div className="col-md-12 col-lg-6">
                   {menuItems.today && (
                     <div className="menu-card">
@@ -98,14 +97,16 @@ export default function CanteenFacility() {
                                     <li key={index}>{item}</li>
                                   ))}
                               </ul>
-                              {/* <p className="menuItem">{menuItems.today.menu}</p> */}
                             </div>
                             <div className="d-flex">
                               <div style={{ width: "50%" }}>
-                                <button>BOUGHT - {totalCouponCountToday}</button>
+                                <button>
+                                  BOUGHT -{" "}
+                                  {getCouponCountForMenu(menuItems.today._id)}
+                                </button>
                               </div>
                               <div>
-                                <p className="pt-2">Valid Till Tomarrow</p>
+                                <p className="pt-2">Valid Till Tomorrow</p>
                               </div>
                             </div>
                           </div>
@@ -133,14 +134,14 @@ export default function CanteenFacility() {
                                     <li key={index}>{item}</li>
                                   ))}
                               </ul>
-                              {/* <p className="menuItem">{menuItems.today.menu}</p> */}
                             </div>
                             <div className="d-flex">
                               <div style={{ width: "50%" }}>
-                                <button>BOUGHT - {totalCouponCountTomorrow}</button>
+                                <button>
+                                  BOUGHT - {getCouponCountForMenu(menuItems.tomorrow._id)}
+                                </button>
                               </div>
                               <div>
-                                {/* <p className="pt-2">Valid Till Tomarrow</p> */}
                               </div>
                             </div>
                           </div>

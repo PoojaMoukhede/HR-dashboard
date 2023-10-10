@@ -111,7 +111,7 @@ export default function Details() {
     if (distance !== null) {
       const total = distance.reduce((acc, current) => acc + parseFloat(current), 0);
       setTotalDistance(total.toFixed(2)); 
-      console.log(`total :${total}`);
+      console.log(`total distancce type :${typeof total}`);
     }
     console.log("Total Distance:", totalDistance);
   }, [distance]);
@@ -243,7 +243,7 @@ export default function Details() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          {totalDistance ? (
+                          { totalDistance ? (
                             <span>{totalDistance} KM</span>
                           ) : (
                             <span>No records</span>
@@ -280,6 +280,9 @@ export default function Details() {
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
+                      <i className="header-icon lnr lnr-chart-bars icon-gradient bg-night-sky">
+                          {" "}
+                        </i>
                         Daily Attandance Report
                       </div>
                     </div>
@@ -299,6 +302,9 @@ export default function Details() {
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
+                      <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
+                          {" "}
+                        </i>
                         Daily In-Out Report
                       </div>
                     </div>
@@ -325,7 +331,12 @@ export default function Details() {
                 <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
-                      <div className="card-header-title">Leave Status</div>
+                      <div className="card-header-title">
+                      <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
+                          {" "}
+                        </i>
+                        Leave Status
+                      </div>
                     </div>
                     <div className="tab-content">
                       <div className="tab-pane fade active show" id="tab-eg-55">
@@ -400,6 +411,9 @@ export default function Details() {
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
+                      <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
+                          {" "}
+                        </i>
                         Advance Payment Details
                       </div>
                     </div>
@@ -475,7 +489,7 @@ export default function Details() {
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
-                        <i className="header-icon lnr-rocket icon-gradient bg-tempting-azure">
+                        <i className="header-icon  lnr lnr-rocket icon-gradient bg-night-sky">
                           {" "}
                         </i>
                         Employees Location / Trip Detail

@@ -9,17 +9,9 @@ export default function Complaint() {
   const [users, setUsers] = useState({});
   useEffect(() => {
     axios
-      .get("http://localhost:8080/complaint")
-      .then((response) => {
-        setComplaints(response.data.message);
-        console.log(response.data.message);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-    axios
       .get("http://localhost:8080/empdata")
       .then((response) => {
+        console.log(`userlookup :`, response.data);
         const userLookup = {};
         response.data.forEach((user) => {
           userLookup[user._id] = user;
@@ -29,6 +21,30 @@ export default function Complaint() {
       .catch((error) => {
         console.error("Error fetching user data:", error);
       });
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(`userlookup :`, users);
+  // }, [users]);
+
+  const fetchComplaints = () => {
+    axios
+      .get("http://localhost:8080/complaint")
+      .then((response) => {
+        setComplaints(response.data.message);
+        console.log(response.data.message);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchComplaints();
+    const intervalId = setInterval(() => {
+      fetchComplaints();
+    }, 5000);
+    return () => clearInterval(intervalId);
   }, []);
 
   const [processCount, setProcessCount] = useState(
@@ -42,22 +58,22 @@ export default function Complaint() {
   const [counter, setCouner] = useState(0);
   // console.log("counter is tell more in cunoth ");
 
-  const handleResolve = async (id) => {
+  const handleResolve = async (complaintId, messageId) => {
     try {
       if (processCount > 0) {
-        const response = await axios.delete(
-          `http://localhost:8080/complaint/${id}`
+        await axios.delete(
+          `http://localhost:8080/complaint/${complaintId}/message/${messageId}`
         );
+
         const updatedComplaints = complaints.filter(
-          (complaint) => complaint._id !== id
+          (complaint) => complaint._id !== complaintId
         );
         setComplaints(updatedComplaints);
         setResolvedCount((prevResolvedCount) => prevResolvedCount + 1);
         setProcessCount((prevProcessCount) => prevProcessCount - 1);
-      } 
-      else {
+      } else {
         // Show a toast message indicating that the user needs to take a complaint first
-        toast.success("Please take a complaint before resolving it");
+        toast.info("Please take a complaint before resolving it");
       }
     } catch (error) {
       console.error("Error resolving complaint:", error);
@@ -69,9 +85,7 @@ export default function Complaint() {
       setProcessCount((prevProcessCount) => prevProcessCount + 1);
       toast.info("You take this complaint");
     }
-   
   };
-
 
   return (
     <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -224,9 +238,9 @@ export default function Complaint() {
               <div className="col-md-6 col-xl-12">
                 {/* <div className="mb-3 card"> */}
                 {/* {showContainer && ( */}
-                <ul className="complaint_cards">
+                {/* <ul className="complaint_cards">
                   {complaints.map((complaint) => (
-                    <div className="card mt-1">
+                    <div className="card mt-1" key={complaints._id}>
                       <div className="card-header">
                         {users[complaint.userRef] ? (
                           <p style={{ fontSize: "0.9rem" }}>
@@ -293,19 +307,22 @@ export default function Complaint() {
                       </div>
                     </div>
                   ))}
-                </ul>
+                </ul> */}
                 {/* second design of complaint if user has more then one complaint */}
-                {/* <ul className="complaint_cards">
+                <ul className="complaint_cards">
                   {complaints.map((complaint) => (
                     <div className="card mt-1" key={complaint._id}>
                       <div className="card-header">
                         {users[complaint.userRef] ? (
-                          <p style={{ fontSize: "0.9rem" }}>
+                          <p style={{ fontSize: "0.9rem", color: "gray" }}>
                             {" "}
-                            <b>
-                              <i>Name: </i>
+                            <b style={{color: "black" }}>
+                              <i>Name : </i>
                             </b>
-                            {users[complaint.userRef].name}
+                            <b style={{color: "black" }}>
+                              <i>{users[complaint.userRef].Emp_name}</i>
+                            </b>&nbsp; 
+                        - {users[complaint.userRef].Emp_ID}
                           </p>
                         ) : (
                           <p>Name: Loading...</p>
@@ -316,36 +333,61 @@ export default function Complaint() {
                           {complaint.Message.map((message, index) => (
                             <li
                               key={message._id}
-                              style={{ fontSize: "0.9rem" ,padding:'0.4rem'}}
+                              style={{ fontSize: "0.9rem", padding: "0.4rem" }}
                             >
                               Message {index + 1}: {message.message}
                             </li>
                           ))}
                         </ul>
-                        <div style={{ width: "20%", display:"flex",flexDirection:"column" }}>
+                        <div
+                          style={{
+                            width: "20%",
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
                           {complaint.Message.map((message, index) => (
-                            <button
-                              key={message._id}
-                              style={{
-                                backgroundColor: "#f8b146",
-                                border: "none",
-                                padding: "0.4rem",
-                                margin: "0.2rem",
-                                borderRadius: "0.3rem",
-                                color: "white",
-                                fontSize: "0.7rem",
-                                width: "20%",
-                              }}
-                              onClick={handleRemoveContainer}
-                            >
-                              Resolve
-                            </button>
+                            <div key={message._id}>
+                              <button
+                                className="mr-2 btn"
+                                style={{
+                                  backgroundColor: "#403e93",
+                                  border: "none",
+                                  padding: "0.4rem",
+                                  borderRadius: "0.2rem",
+                                  color: "white",
+                                  fontSize: "0.7rem",
+                                }}
+                                // onClick={()=>{console.log(`onkeyup : ${complaint.Message[0].message}`)}}
+                                onClick={handleTake}
+                              >
+                                Take
+                              </button>
+                              <button
+                                style={{
+                                  backgroundColor: "#f8b146",
+                                  border: "none",
+                                  padding: "0.4rem",
+                                  margin: "0.2rem",
+                                  borderRadius: "0.3rem",
+                                  color: "white",
+                                  fontSize: "0.7rem",
+                                  width: "20%",
+                                }}
+                                // onClick={() => handleResolve(complaint._id)}
+                                onClick={() =>
+                                  handleResolve(complaint._id, message._id)
+                                }
+                              >
+                                Resolve
+                              </button>
+                            </div>
                           ))}
                         </div>
                       </div>
                     </div>
                   ))}
-                </ul> */}
+                </ul>
               </div>
             </div>
             <ToastContainer
