@@ -7,7 +7,7 @@ import BarChart from "../Components/Charts/BarChart";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import TripDetail from "../Components/Table/TripDetail";
+// import TripDetail from "../Components/Table/TripDetail";
 
 export default function Details() {
   const { id } = useParams();
@@ -118,15 +118,26 @@ export default function Details() {
     // console.log("Total Distance:", totalDistance);
   }, [distance]);
   const [clearanceData, setClearanceData] = useState(null);
+  const [imageData, setImageData] = useState(null);
 
   useEffect(() => {
     axios
       .get(`http://localhost:8080/form/${id}`)
       .then((response) => {
         setClearanceData(response.data.message.FormData);
-        console.log(response);
-        // console.log(`clearance data : ${response.data.message.FormData}`);
+        const binaryData = response.data.message.FormData;
+        binaryData.forEach((formData) => {
+          const imageBuffer = formData.images.data.data;
+          // console.log(`imageBuffer: ${imageBuffer}`);
+          const blob = new Blob([imageBuffer], {
+            type: formData.images.contentType,
+          });
+          const imageUrl = URL.createObjectURL(blob);
 
+          // Display or use the image URL as needed
+          setImageData(imageUrl);
+          console.log(`imageUrl ${imageUrl}`);
+        });
       })
       .catch((error) => {
         console.error("Error fetching clearance data:", error);
@@ -573,31 +584,94 @@ export default function Details() {
                   </div>
                 </div>
               </div>
-
+              {/* 
               <div className="row">
                 <div className="col-md-12">
                   <div className="mb-3 card cardp">
-
                     {clearanceData?.map((formData, index) => (
                       <div key={index}>
                         <p>Transport Type: {formData.Transport_type}</p>
                         <p>Total Expense: {formData.Total_expense}</p>
-                        {formData.images && (
                         
-                          <img
-                            src={`data:${
-                              formData.images.contentType
-                            };base64,${formData.images.data.toString(
-                              "base64"
-                            )}`}
-                          
-                            alt={`Imag ${index}`}
-                            style={{ maxWidth: "300px" }}
-                          />
+                        {imageData ? (
+                          <img src={imageData} alt={`${formData.ImageName}`} />
+                        ) : (
+                          <p>No image available</p>
                         )}
                       </div>
                     ))}
+                  </div>
+                </div>
+              </div> */}
 
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="mb-3 card">
+                    <div className="card-header-tab card-header">
+                      <div className="card-header-title">
+                        <i className="header-icon  lnr lnr-rocket icon-gradient bg-night-sky">
+                          {" "}
+                        </i>
+                        Bills
+                      </div>
+                    </div>
+                    <div
+                      className="table-responsive"
+                      style={{ overflowY: "scroll" }}
+                    >
+                      <table className="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>DATE</th>
+                            <th className="text-center">Transportation Type</th>
+                            <th className="text-center">Expanse</th>
+                            <th>Imgae Name</th>
+                            <th>Image</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {clearanceData?.map((formData, index) => {
+                            return (
+                              <tr>
+                                <td>
+                                  <div className="widget-content p-0">
+                                    <div className="widget-content-wrapper">
+                                      <div className="widget-content-left flex2">
+                                        <div className="widget-heading">
+                                          {new Date(
+                                            formData.timestamp
+                                          ).toLocaleString("en-US", {
+                                            year: "numeric",
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                          })}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="text-center text-muted">
+                                {formData.Transport_type}
+                                </td>
+                                <td className="text-center text-muted">
+                                {formData.Total_expense}
+                                </td>
+                                <td className="text-muted">
+                                {formData.ImageName}
+                                </td>
+                               <td>
+                               {imageData ? (
+                          <img src={imageData} alt={`${formData.ImageName}`} />
+                        ) : (
+                          <p>No image available</p>
+                        )}
+                               </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>

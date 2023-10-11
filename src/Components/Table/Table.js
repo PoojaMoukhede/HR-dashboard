@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 
 export default function Table() {
   const [rows, setRows] = useState([]);
@@ -9,14 +9,13 @@ export default function Table() {
   useEffect(() => {
     // setRows(dummyData);
     axios
-    .get( 
-      "http://localhost:8080/Users")
-    .then((response) => {
-      setRows(response.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
+      .get("http://localhost:8080/Users")
+      .then((response) => {
+        setRows(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
 
   const filteredRows = rows.filter((row) =>
@@ -26,7 +25,7 @@ export default function Table() {
   );
 
   const makeStyle = (status) => {
-    if (status === "Pending") {
+    if (status === "On-site") {
       return {
         background: "rgb(145 254 159 / 47%)",
         color: "green",
@@ -48,9 +47,9 @@ export default function Table() {
     <>
       <div className="main-card mb-3 card">
         <div className="card-header">
-        <i className="header-icon lnr lnr-users icon-gradient bg-asteroid">
-                          {" "}
-                        </i>
+          <i className="header-icon lnr lnr-users icon-gradient bg-asteroid">
+            {" "}
+          </i>
           Active Users
           <div className="btn-actions-pane-right">
             <div className="search-wrapper">
@@ -63,7 +62,10 @@ export default function Table() {
             </div>
           </div>
         </div>
-        <div className="table-responsive" style={{ height: "440px", overflowY: "scroll" }}>
+        <div
+          className="table-responsive"
+          style={{ height: "440px", overflowY: "scroll" }}
+        >
           <table className="align-middle mb-0 table table-borderless table-striped table-hover">
             <thead>
               <tr>
@@ -77,7 +79,7 @@ export default function Table() {
             <tbody>
               {filteredRows.map((row) => (
                 <tr>
-                  <td className="text-center text-muted">{row.Emp_id}</td>
+                  <td className="text-center text-muted">{row.Emp_ID}</td>
                   <td>
                     <div className="widget-content p-0">
                       <div className="widget-content-wrapper">
@@ -114,9 +116,9 @@ export default function Table() {
                       type="button"
                       id="PopoverCustomT-1"
                       className="btn btn-primary btn-sm"
-                      onClick={(e)=>{
-                        console.log({row})
-                        navigate(`/details/${row?._id}`)
+                      onClick={(e) => {
+                        console.log({ row });
+                        navigate(`/details/${row?._id}`);
                       }}
                     >
                       Details

@@ -1,6 +1,5 @@
 import React, { useContext, useState, createContext } from "react";
 import axios from "axios";
-
 import { useNavigate } from "react-router-dom";
 const APIContext = createContext();
 
@@ -16,7 +15,7 @@ export function APIContextProvider({ children }) {
   const [employeeData , setEmployeedata]= useState([]);
   const [managerData , setManagerdata]= useState([]);
   const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] = useState(0);
-
+  const [data, setData] = useState([]);
 
 
   //Takes email password confirm_password and stores data
@@ -29,6 +28,7 @@ export function APIContextProvider({ children }) {
   const addManagerURL = `${URL}manager`;
   const CurrExpanseURL = `${URL}expanse/curr`
   const addHrURL = `${URL}register`
+
   
   //post user
   const signUpUser = (userData) => {
@@ -174,7 +174,6 @@ Users/${id}`,data)
       });
   };
   const fuelExpanseGet = () => {
-    console.log();
     try {
       axios
         .get(CurrExpanseURL)
@@ -215,7 +214,21 @@ Users/${id}`,data)
   };
 
 
-
+const attandanceData = (id) =>{
+  try {
+    axios
+      .get(`${URL}attandance/${id}`)
+      .then((res) => {
+        // console.log(res);
+        setData(res.data.message.Employee_attandance);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
 
 
   return (
@@ -230,7 +243,8 @@ Users/${id}`,data)
         onFormSubmit21,
         onFormSubmitEdit,
         fuelExpanseGet,
-        signUpHR
+        signUpHR,
+        attandanceData
       }}
     >
       {children}
