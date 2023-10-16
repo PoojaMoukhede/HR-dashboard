@@ -10,6 +10,8 @@ export default function AttandanceTable() {
   // const UserAttandance =()=>{
   //   attandanceData(data)
   // }
+
+
   useEffect(() => {
     // UserAttandance(id)
     try {
@@ -32,7 +34,7 @@ export default function AttandanceTable() {
 
   return (
     <>
-      <div className="table-responsive" style={{ overflowY: "scroll" }}>
+      <div className="table-responsive" style={{ height: "370px", overflowY: "scroll" }}>
         <table className="align-middle mb-0 table table-borderless table-striped table-hover">
           <thead>
             <tr>
@@ -53,11 +55,6 @@ export default function AttandanceTable() {
                   hour12: false, // after removing this or changing to false gives nan so keep it
                 }
               );
-              // const timerForPunchout = new Date(datas.timer)
-              //   .toISOString()
-              //   .slice(11, 19);
-              // const punchOut = punchIn + timerForPunchout;
-              // console.log(`punch Out ${punchOut}`);
 
               const timerForPunchout = new Date(datas.timer)
                 .toISOString()
@@ -77,9 +74,7 @@ export default function AttandanceTable() {
               var minutes = Math.floor((totalMs % 3600000) / 60000);
               var seconds = Math.floor((totalMs % 60000) / 1000);
 
-              // const AM_PM = hours >=12 ? 'PM':"AM";
-              // hours=hours%12;
-              // hours = hours?hours:12;
+        
               function formatAMPM() {
                 var AM_PM = hours >= 12 ? 'PM' : 'AM';
                 hours = hours % 12;
@@ -90,6 +85,7 @@ export default function AttandanceTable() {
                 return strTime;
               }
               // console.log(formatAMPM(new Date()));
+              
               
               return (
                 <tr>
@@ -102,7 +98,8 @@ export default function AttandanceTable() {
                               year: "numeric",
                               month: "2-digit",
                               day: "2-digit",
-                            })}
+                            })}    
+                            {/* mm/dd/yyyy */}
                           </div>
                         </div>
                       </div>
@@ -122,6 +119,7 @@ export default function AttandanceTable() {
                   <td className="text-center text-muted">
                     {new Date(datas.timer).toISOString().slice(11, 19)}
                   </td>
+                  
                 </tr>
               );
             })}

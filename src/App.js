@@ -4,7 +4,7 @@ import Main from './Components/Main/Main';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from './Pages/LandingPage'
 import Login from './Pages/Login';
-import Register from './Pages/Register';
+// import Register from './Pages/Register';
 import Member from './Pages/Member/Member';
 import Managers from './Pages/Member/Managers'
 import Attandance from './Pages/Attandance'
@@ -18,6 +18,7 @@ import FullCalendarComponent from './Components/Updates/FullCalendarComponent';
 import Profile from './Components/Header/Profile';
 import CanteenFacility from './Pages/CanteenFacility';
 import HRadmins from './HRadmins';
+
 
 
 
@@ -60,15 +61,3 @@ function App() {
 }
 
 export default App;
-
-{/* <Route
-exact
-path="/main"
-element={
-  localStorage.getItem('token') ? (
-    isSuperAdmin() ? <Managers /> : <Main />
-  ) : (
-    <Login />
-  )
-}
-/> */}

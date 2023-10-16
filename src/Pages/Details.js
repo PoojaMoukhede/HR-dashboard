@@ -5,7 +5,7 @@ import Attandance from "../Components/Charts/Attandance";
 import AttandanceTable from "../Components/Charts/AttandanceTable";
 import BarChart from "../Components/Charts/BarChart";
 import { ToastContainer, toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { useActionData, useParams } from "react-router-dom";
 import axios from "axios";
 // import TripDetail from "../Components/Table/TripDetail";
 
@@ -14,6 +14,11 @@ export default function Details() {
   const [employeeData, setEmployeedata] = useState();
   const [attandance, setAttandance] = useState([]);
   const [data_location, setData_location] = useState([]);
+  const [clearanceData, setClearanceData] = useState(null);
+  const [imageData, setImageData] = useState(null);
+  const [distance, setDistance] = useState(null);
+  const [totalDistance, setTotalDistance] = useState(null);
+  const [totalExpanse,setTotalExpanse] = useState(null)
 
   const fetchData = async (id) => {
     try {
@@ -29,13 +34,37 @@ export default function Details() {
     }
   };
 
+  const [overtimeHours, setOvertimeHours] = useState(0);
+  const [belowTimeHours, setBelowTimeHours] = useState(0);
+
+  // useEffect(() => {
+  //   fetch(`http://localhost:8080/attendance`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ userId: '651e4de3b38144033cf2fae2', isPunchIn:false, timer: 1848232}),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       if (data.overtimeHours !== undefined && data.belowTimeHours !== undefined) {
+  //         setOvertimeHours(data.overtimeHours);
+  //         setBelowTimeHours(data.belowTimeHours);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error:', error);
+  //     });
+  // }, []);
+
+
   useEffect(() => {
     fetchData(id);
     try {
       axios
         .get(`http://localhost:8080/attandance/${id}`)
         .then((response) => {
-          // console.log(response)
+          console.log(response.data.message.Employee_attandance)
           setAttandance(response.data);
         })
         .catch((error) => {
@@ -44,7 +73,7 @@ export default function Details() {
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  }, [id]);
 
   const toastSuccess = () => toast.success("Leave Approved");
   const toastError = () => toast.error("Leave Rejected");
@@ -85,10 +114,10 @@ export default function Details() {
     // Add more workHoursData for different days
   ];
 
-  const [distance, setDistance] = useState(null);
-  const [totalDistance, setTotalDistance] = useState(null);
+
 
   useEffect(() => {
+   
     try {
       axios
         .get(`http://localhost:8080/location/${id}`)
@@ -107,37 +136,35 @@ export default function Details() {
   }, []);
 
   useEffect(() => {
+   
     if (distance !== null) {
-      const total = distance.reduce(
-        (acc, current) => acc + parseFloat(current),
-        0
-      );
-      setTotalDistance(total.toFixed(2));
-      // console.log(`total distancce type :${typeof total}`);
+      const total = distance.reduce((acc, current) => acc + parseFloat(current),0);
+      setTotalDistance(total.toFixed(2));;
     }
-    // console.log("Total Distance:", totalDistance);
   }, [distance]);
-  const [clearanceData, setClearanceData] = useState(null);
-  const [imageData, setImageData] = useState(null);
+
 
   useEffect(() => {
     axios
       .get(`http://localhost:8080/form/${id}`)
       .then((response) => {
+        // console.log(`response : ${response.data.message.FormData}`)
         setClearanceData(response.data.message.FormData);
         const binaryData = response.data.message.FormData;
-        binaryData.forEach((formData) => {
+        const totalExpanse = response.data.totalExpenses
+        setTotalExpanse(totalExpanse)
+        // console.log(`binaryData : ${binaryData}`)
+        const imageUrls = binaryData.map((formData) => {
+          // console.log(`formData : ${formData}`)
           const imageBuffer = formData.images.data.data;
-          // console.log(`imageBuffer: ${imageBuffer}`);
           const blob = new Blob([imageBuffer], {
             type: formData.images.contentType,
           });
-          const imageUrl = URL.createObjectURL(blob);
-
-          // Display or use the image URL as needed
-          setImageData(imageUrl);
-          console.log(`imageUrl ${imageUrl}`);
+          return URL.createObjectURL(blob);
         });
+        
+        setImageData(imageUrls);
+        // console.log(imageUrls)
       })
       .catch((error) => {
         console.error("Error fetching clearance data:", error);
@@ -152,6 +179,15 @@ export default function Details() {
           <Sidebar />
           <div className="app-main__outer">
             <div className="app-main__inner">
+              {/* <p>
+                Overtime:{" "}
+              {overtimeHours}
+              </p>
+              <p>
+                Below Time:{" "}
+                {belowTimeHours}
+              </p> */}
+
               <div className="row">
                 <div className="col-lg-4">
                   <div className="card mb-4">
@@ -302,6 +338,58 @@ export default function Details() {
               </div>
 
               <div className="row">
+                <div className="col-md-6 col-xl-4">
+                  <div className="card11 mb-3 widget-content ">
+                    <div className="widget-content-wrapper text-black">
+                      <div className="widget-content-left">
+                        <div className="widget-heading">
+                          Total Distance Covered
+                        </div>
+                        <div className="widget-subheading">Till this month</div>
+                      </div>
+                      <div className="widget-content-right">
+                        <div className="widget-numbers text-black">
+                          {/* <span>{totalDistance} KM</span> */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-xl-4">
+                  <div className="card11 mb-3 widget-content">
+                    <div className="widget-content-wrapper text-black">
+                      <div className="widget-content-left">
+                        <div className="widget-heading">
+                          Total Fuel Consumption
+                        </div>
+                        <div className="widget-subheading">Till this month</div>
+                      </div>
+                      <div className="widget-content-right">
+                        <div className="widget-numbers text-black">
+                          {/* <span>{cumulativeFuelConsumption} Liters</span> */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-xl-4">
+                  <div className="card11 mb-3 widget-content ">
+                    <div className="widget-content-wrapper text-black">
+                      <div className="widget-content-left">
+                        <div className="widget-heading">Total Expenses</div>
+                        <div className="widget-subheading">Till this month</div>
+                      </div>
+                      <div className="widget-content-right">
+                        <div className="widget-numbers text-black">
+                          <span>{totalExpanse} &#8377;</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
                 <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
@@ -340,10 +428,7 @@ export default function Details() {
                           className="tab-pane fade show active"
                           id="tabs-eg-77"
                         >
-                          <div
-                            className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
-                            style={{ height: "370px", overflowY: "scroll" }}
-                          >
+                          <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
                             <AttandanceTable />
                           </div>
                         </div>
@@ -584,25 +669,6 @@ export default function Details() {
                   </div>
                 </div>
               </div>
-              {/* 
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="mb-3 card cardp">
-                    {clearanceData?.map((formData, index) => (
-                      <div key={index}>
-                        <p>Transport Type: {formData.Transport_type}</p>
-                        <p>Total Expense: {formData.Total_expense}</p>
-                        
-                        {imageData ? (
-                          <img src={imageData} alt={`${formData.ImageName}`} />
-                        ) : (
-                          <p>No image available</p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div> */}
 
               <div className="row">
                 <div className="col-md-12">
@@ -651,21 +717,25 @@ export default function Details() {
                                   </div>
                                 </td>
                                 <td className="text-center text-muted">
-                                {formData.Transport_type}
+                                  {formData.Transport_type}
                                 </td>
                                 <td className="text-center text-muted">
-                                {formData.Total_expense}
+                                  {formData.Total_expense}
                                 </td>
                                 <td className="text-muted">
-                                {formData.ImageName}
+                                  {formData.ImageName}
                                 </td>
-                               <td>
-                               {imageData ? (
-                          <img src={imageData} alt={`${formData.ImageName}`} />
-                        ) : (
-                          <p>No image available</p>
-                        )}
-                               </td>
+                                <td>
+                                  {imageData[index] ? (
+                                    // <img src={imageData[index]} alt={`${console.log(imageData[index])}`} />
+                                    <img
+                                      src={imageData[index]}
+                                      alt={formData.ImageName}
+                                    />
+                                  ) : (
+                                    <p>No image available</p>
+                                  )}
+                                </td>
                               </tr>
                             );
                           })}

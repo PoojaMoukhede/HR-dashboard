@@ -1,45 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import Sidebar from "../Sidebar/Sidebar";
-import { chartData } from "../Data";
 import ReactApexChart from "react-apexcharts";
 import Table from "../Table/Table";
 import MapC from "../Map/MapC";
 import Updates from "../Updates/Updates";
 import { ThemeContext } from "../Header/ThemeProvider";
-import Canteen from "../../Pages/Canteen";
 import axios from "axios";
 
 export default function Dashboard() {
   const [fuelData, setFuelData] = useState([]);
-  const [expData, setExpData] = useState([]);
-  const [cumulativeFuelConsumption, setCumulativeFuelConsumption] = useState(
-    []
-  );
-  const [currentMonthFuelExpense, setCurrentMonthFuelExpense] = useState(0);
+  const [cumulativeFuelConsumption, setCumulativeFuelConsumption] = useState([]);
+  const [currentMonthFuelExpense, setCurrentMonthFuelExpense] = useState(0)
   const [currentMonthFuel, setCurrentMonthFuel] = useState(0);
-  const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] =
-    useState(0);
-    const [currentMonthFuelExpensetotal2, setCurrentMonthFuelExpensetotal2] =
-    useState(0);
   const [lastMonthFuelExpense, setLastMonthFuelExpense] = useState(0);
-  const [
-    cumulativeTotalPrevMonthExpanse,
-    setCumulativeFuelConsumptionPrevMonthExpanse,
-  ] = useState(0);
-  const [
-    cumulativeTotalThisMonthExpanse,
-    setCumulativeFuelConsumptionThisMonthExpanse,
-  ] = useState(0);
-
-
-  // const monthlyLiters = new Array(12).fill(0);
-  // fuelData.forEach((entry) => {
-  //   const date = new Date(entry.month);
-  //   const month = date.getMonth();
-  //   console.log(month)
-  //   monthlyLiters[month] += entry.Liters;
-  // });
-  
+  const [totalDistance, setTotalDistance] = useState(null)
+  const [totalExpanse,setTotalExpanse] = useState(0)
+  const [currentMonthTotalExpense, setCurrentMonthTotalExpense] = useState(0);
 
   const chartData2 = {
     options: {
@@ -92,27 +68,14 @@ export default function Dashboard() {
     ],
   };
 
-  const chartData = {
+
+  const [chartData, setChartData] = useState({
     options: {
       chart: {
         id: "basic-bar",
       },
       xaxis: {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sept",
-          "Oct",
-          "Nov",
-          "Dec",
-          // expData.map((entry) => entry.month)
-        ],
+        categories: [],
         labels: {
           style: {
             colors: "black",
@@ -128,26 +91,77 @@ export default function Dashboard() {
       },
       colors: ["#2b5161"],
       dataLabels: {
-        // Add this section to hide data labels on bars
         enabled: false,
       },
     },
-
     series: [
       {
         name: "Expenses in INR",
-        data: expData.map((entry) => entry.money),
+        data: [],
       },
     ],
-  };
+  });
 
+  useEffect(() => {
+    axios
+      .get('http://localhost:8080/totalMonthlyExpenses')
+      .then(response => {
+        const data = response.data;
+
+          const monthOrder = {
+          January: 1,
+          February: 2,
+          March: 3,
+          April: 4,
+          May: 5,
+          June: 6,
+          July: 7,
+          August: 8,
+          September: 9,
+          October: 10,
+          November: 11,
+          December: 12,
+        };
+  
+        data.sort((a, b) => monthOrder[a.month] - monthOrder[b.month]);
+  
+        const months = data.map(entry => entry.month);
+        const expenses = data.map(entry => entry.expenses);
+        const currentMonth = new Date().getMonth() + 1; //current month (1-12)
+
+        const currentMonthData = data.find(entry => monthOrder[entry.month] === currentMonth);
+        setCurrentMonthTotalExpense(currentMonthData.expenses);
+    
+        setChartData({
+          ...chartData,
+          options: {
+            ...chartData.options,
+            xaxis: {
+              ...chartData.options.xaxis,
+              categories: months,
+            },
+          },
+          series: [
+            {
+              name: "Expenses in INR",
+              data: expenses,
+            },
+          ],
+        });
+  
+      
+      })
+      .catch(error => console.error(error));
+  }, []);
+  
+  
   const { theme, toggleTheme } = useContext(ThemeContext);
   useEffect(() => {
     axios
       .get("http://localhost:8080/fuel")
       .then((response) => {
         setFuelData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
   
         // Calculate the cumulative fuel consumption, current month's expense, and last month's expense
         let cumulativeTotal = 0;
@@ -155,7 +169,7 @@ export default function Dashboard() {
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
         const lastMonth = (currentMonth - 1 + 12) % 12; // Calculate the previous month
-        console.log(`lastMonth ${lastMonth}`);
+        // console.log(`lastMonth ${lastMonth}`);
         response.data.forEach((entry) => {
           cumulativeTotal += entry.Liters;
           const entryDate = new Date(entry.Date);
@@ -181,18 +195,6 @@ export default function Dashboard() {
         console.error("Error fetching data:", error);
       });
 
-
-      axios
-      .get("http://localhost:8080/expanse/curr")
-      .then((response) => {
-        const moneyFromAPI = response.data[0].money;
-        setCurrentMonthFuelExpensetotal2(moneyFromAPI);
-        console.log("Money from API:", moneyFromAPI);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-
       axios
       .get("http://localhost:8080/fuel/curr")
       .then((response) => {
@@ -206,95 +208,34 @@ export default function Dashboard() {
      
   }, []);
   
-  // useEffect(() => {
-  //   axios
-  //     .get('http://localhost:8080/fuel')
-  //     .then((response) => {
-  //       setFuelData(response.data);
-  //       console.log(response.data);
 
-  //       // Calculate the cumulative fuel consumption up to the previous month
-  //       // and the cumulative fuel consumption up to the current month
-  //       const currentDate = new Date();
-  //       const currentMonth = currentDate.getMonth();
+useEffect(()=>{
+  axios
+  .get("http://localhost:8080/total-distance")
+  .then((response) => {
+    setTotalDistance(response.data.totalDistance);
+    // console.log(`total-distance : ${response.data.totalDistance}`);
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
 
-  //       let cumulativeTotalPrevMonth = 0;
-  //       let cumulativeTotalThisMonth = 0;
+  axios
+  .get("http://localhost:8080/totalExpenses")
+  .then((response) => {
+    setTotalExpanse(response.data.totalExpenses);
+    
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
 
-  //       response.data.forEach((entry) => {
-  //         const entryDate = new Date(entry.Date);
-  //         const entryMonth = entryDate.getMonth();
+},[])
 
-  //         if (entryMonth < currentMonth) {
-  //           cumulativeTotalPrevMonth += entry.Liters;
-  //         }
 
-  //         if (entryMonth <= currentMonth) {
-  //           cumulativeTotalThisMonth += entry.Liters;
-  //         }
-  //       });
 
-  //       setCumulativeFuelConsumptionPrevMonth(cumulativeTotalPrevMonth);
-  //       setCumulativeFuelConsumptionThisMonth(cumulativeTotalThisMonth);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching data:', error);
-  //     });
-  // }, []);
 
-  //-----------
-  // useEffect(() => {
-  //   axios
-  //   .get('http://localhost:8080/expanse')
-  //   .then((response) => {
-  //     setExpData(response.data);
-  //     console.log(response.data);
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error fetching data:', error);
-  //   });
-  // }, []);
 
-  // useEffect(() => {
-  //   chartData.series[0].data = expData;
-  // }, [expData])
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/expanse")
-      .then((response) => {
-        
-        setExpData(response.data);
-        console.log(response.data);
-
-        let cumulativeTotalExpanse = 0;
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth();
-        const lastMonth = (currentMonth - 1 + 12) % 12;
-
-        response.data.forEach((entry) => {
-          cumulativeTotalExpanse += entry.money;
-          const entryDate = new Date(entry.Date);
-          const entryMonth = entryDate.getMonth();
-
-          if (entryMonth === currentMonth) {
-            setCumulativeFuelConsumptionThisMonthExpanse(
-              (prevExpense) => prevExpense + entry.money
-            );
-          }
-
-          if (entryMonth === lastMonth) {
-            setCumulativeFuelConsumptionPrevMonthExpanse(
-              (prevExpense) => prevExpense + entry.money
-            );
-          }
-        });
-
-        setCurrentMonthFuelExpensetotal(cumulativeTotalExpanse);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
 
   return (
     <>
@@ -303,9 +244,6 @@ export default function Dashboard() {
           <Sidebar />
           <div className="app-main__outer">
             <div className="app-main__inner">
-              {/* <div className="header-toggle-buttons">
-            <button onClick={() => toggleTheme()}>{theme}</button>
-          </div> */}
               <div className="row">
                 <div className="col-md-6 col-xl-4">
                   <div className="mb-3 widget-content bg-plum-plate">
@@ -335,7 +273,6 @@ export default function Dashboard() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          {/* <span> {lastMonthFuelExpense} Liters</span> */}
                           <span>{currentMonthFuel} Liters</span>
                         </div>
                       </div>
@@ -355,9 +292,8 @@ export default function Dashboard() {
                         <div className="widget-numbers text-white">
                           <span>
                             {" "}
-                            {currentMonthFuelExpensetotal2} &#8377;
+                            {currentMonthTotalExpense} &#8377;
                           </span>
-                          {/* <span>48752</span> &#8377; */}
                         </div>
                       </div>
                     </div>
@@ -377,7 +313,7 @@ export default function Dashboard() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-black">
-                          <span>1082 KM</span>
+                          <span>{totalDistance} KM</span>
                         </div>
                       </div>
                     </div>
@@ -409,9 +345,7 @@ export default function Dashboard() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-black">
-                          {/* <span>1,78072 &#8377;</span> */}
-                          <span>{currentMonthFuelExpensetotal} &#8377;</span>
-                          {/* cumulativeTotalExpanse */}
+                          <span>{totalExpanse} &#8377;</span>
                         </div>
                       </div>
                     </div>
@@ -435,10 +369,6 @@ export default function Dashboard() {
                         <div className="widget-chart p-3">
                           <div style={{ height: "370px" }}>
                             <ReactApexChart
-                              // options={chartData2.options}
-                              // series={chartData2.series}
-                              // type="bar"
-                              // height={350}
                               options={chartData2.options}
                               series={chartData2.series}
                               type="bar"
@@ -450,6 +380,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
+
                 <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header-tab-animation card-header">
@@ -468,8 +399,8 @@ export default function Dashboard() {
                         >
                           <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
                             <ReactApexChart
-                              options={chartData.options}
-                              series={chartData.series}
+                             options={chartData.options} 
+                             series={chartData.series}
                               type="bar"
                               height={350}
                             />
@@ -496,161 +427,7 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-              {/* <div className="row">
-              <div className="col-md-12 col-lg-12">
-                <div className="mb-3 card">
-                  <div className="card-header-tab card-header">
-                    <i className="header-icon lnr lnr-pie-chart icon-gradient bg-love-kiss">
-                      {" "}
-                    </i>
-                    <div className="card-header-title">Complaint Overview</div>
-                  </div>
-                  <div className="tab-content">
-                    <div className="tab-pane fade active show" id="tab-eg-55">
-                      <div className="widget-chart p-3 d-flex ">
-                        <div
-                          style={{ width: "50%" }}
-                          className="d-flex flex-column"
-                        >
-                          <ComplaintD />
-                        </div>
 
-                        <div className="col-md-12 col-xl-4">
-                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-              <div className="row">
-                {/* <div className="col-md-12 col-lg-6">
-                  <div className="mb-3 card">
-                    <div className="card-header-tab card-header">
-                      <div className="card-header-title">
-                        <i className="header-icon lnr lnr-chart-bars icon-gradient bg-night-sky">
-                          {" "}
-                        </i>
-                        Complaint Overview
-                      </div>
-                    </div>
-                    <div className="tab-content">
-                      <div className="tab-pane fade active show" id="tab-eg-55">
-                        <div className="widget-chart p-3">
-                          <div
-                            className="d-flex"
-                            style={{
-                              height: "80px",
-                              justifyContent: "space-around",
-                              textAlign: "center",
-                            }}
-                          >
-                            <div>
-                              <h5>Total</h5>
-                              <h4>12</h4>
-                            </div>
-
-                            <div>
-                              <h5>Pending</h5>
-                              <h4>02</h4>
-                              <div
-                                className="square"
-                                style={{ backgroundColor: "#27ceb8" }}
-                              ></div>
-                            </div>
-
-                            <div>
-                              <h5>In Progress</h5>
-                              <h4>04</h4>
-                              <div
-                                className="square"
-                                style={{ backgroundColor: "#63619b" }}
-                              ></div>
-                            </div>
-
-                            <div>
-                              <h5>Completed</h5>
-                              <h4>06</h4>
-                              <div
-                                className="square"
-                                style={{ backgroundColor: "#f8b146" }}
-                              ></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
-                {/* <div className="col-md-12 col-lg-6">
-                <div className="mb-3 card">
-                  <div className="card-header-tab card-header-tab-animation card-header">
-                    <div className="card-header-title">
-                      <i className="header-icon lnr lnr-chart-bars icon-gradient bg-asteroid">
-                        {" "}
-                      </i>
-                      Complaint Overview
-                    </div>
-                  </div>
-                  <div className="card-body">
-                    <div className="tab-content">
-                      <div
-                        className="tab-pane fade show active"
-                        id="tabs-eg-77"
-                      >
-                        <div
-                          style={{ height: "80px" }}
-                          className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
-                        >
-                          <div className="progress"  data-placement="top" title="Pending Complaints">
-                            <div
-                            
-                              className="progress-bar"
-                              role="progressbar"
-                              style={{width: "25%",backgroundColor: "#27ceb8" }}
-                              aria-valuenow="25"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                          </div>
-
-                          <div className="progress"   data-placement="top" title="In-Progress Complaints">
-                            <div
-                              className="progress-bar"
-                              role="progressbar"
-                              style={{width: "50%",backgroundColor: "#63619b" }}
-                              aria-valuenow="50"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                          </div>
-
-                          <div className="progress"   data-placement="top" title="Solved Complaints">
-                            <div
-                              className="progress-bar "
-                              role="progressbar"
-                              style={{width: "75%",backgroundColor: "#f8b146" }}
-                              aria-valuenow="75"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-              </div>
-
-              {/* <div className="row">
-              <div className="col-md-12">
-                <div className="mb-3 card">
-                 <Canteen/>
-                </div>
-              </div>
-            </div> */}
             </div>
           </div>
         </div>

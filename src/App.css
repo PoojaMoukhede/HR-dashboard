@@ -608,3 +608,8 @@ background-size: cover;
 .cardp::-webkit-scrollbar { 
   display: none; 
 }
+.bday{
+  background: linear-gradient(to right, #30b0d0 0%, #330867 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
