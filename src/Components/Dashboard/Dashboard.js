@@ -411,7 +411,9 @@ useEffect(()=>{
                   </div>
                 </div>
               </div>
+
               <Updates />
+              
               <div className="row">
                 <div className="col-md-12">
                   <div className="mb-3 card cardp">

@@ -14,40 +14,58 @@ export default function Expanse() {
     fuelExpanseGet(expanse);
     // console.log(expanse)
   };
-
-  const [expData, setExpData] = useState([]);
-  const [chartData,setChartData] = useState([]);
-  const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] = useState(0);
-  const [previousMonthExpenses, setPreviousMonthExpenses] = useState([])
-
-
+  const [currentMonthTotalExpense, setCurrentMonthTotalExpense] = useState(0);
+  const [clearanceData, setClearanceData] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     axios
-      .get("http://localhost:8080/expanse/curr")
+      .get("http://localhost:8080/totalMonthlyExpenses")
       .then((response) => {
-        const moneyFromAPI = response.data[0].money;
-        setCurrentMonthFuelExpensetotal(moneyFromAPI);
-        console.log("Money from API:", response);
+        const data = response.data;
+
+        const monthOrder = {
+          January: 1,
+          February: 2,
+          March: 3,
+          April: 4,
+          May: 5,
+          June: 6,
+          July: 7,
+          August: 8,
+          September: 9,
+          October: 10,
+          November: 11,
+          December: 12,
+        };
+        const currentMonth = new Date().getMonth() + 1; //current month (1-12)
+
+        const currentMonthData = data.find(
+          (entry) => monthOrder[entry.month] === currentMonth
+        );
+        setCurrentMonthTotalExpense(currentMonthData.expenses);
+        // console.log(`expanse of this month : ${currentMonthData.expenses}`);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
 
-      // axios
-      // .get("http://localhost:8080/expanse/prev")
-      // .then((response) => {
-      //   const previousMonthExpensesFromAPI = response.data[0].money;
-      //   setPreviousMonthExpenses(previousMonthExpensesFromAPI);
-      //   console.log("Previous Month Expenses:", previousMonthExpensesFromAPI);
-      // })
-      // .catch((error) => {
-      //   console.error("Error fetching previous month expenses:", error);
-      // });
-      // ExpanseGetData()
+      axios
+      .get("http://localhost:8080/current-month-totals")
+      .then((response) => {
+        const formData = response.data;
+        const clearanceData = Array.isArray(formData) ? formData : [formData];
+        setClearanceData(clearanceData);
+        console.log(`data: ${JSON.stringify(formData)}`);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error retrieving data: " + error);
+        setLoading(false);
+      });
   }, []);
 
   // currentMonthFuelExpensetotal for expense calculations just for now
-  const totalAmount = currentMonthFuelExpensetotal;
+  const totalAmount = currentMonthTotalExpense;
   const foodExpense = parseInt(totalAmount * 0.06);
   const waterExpense = parseInt(totalAmount * 0.005);
   const transportExpense = parseInt(totalAmount * 0.2);
@@ -55,16 +73,6 @@ export default function Expanse() {
   const fuelExpense =
     totalAmount -
     (foodExpense + waterExpense + transportExpense + hotelExpense);
-
-    // // currentMonthFuelExpensetotal for expense calculations just for now
-    // const totalAmountPrev = previousMonthExpenses;
-    // const foodExpensePrev = parseInt(totalAmountPrev * 0.06);
-    // const waterExpensePrev = parseInt(totalAmountPrev * 0.005);
-    // const transportExpensePrev = parseInt(totalAmountPrev * 0.2);
-    // const hotelExpensePrev = parseInt(totalAmountPrev * 0.15);
-    // const fuelExpensePrev =
-    // totalAmountPrev -
-    //   (foodExpensePrev + waterExpensePrev + transportExpensePrev + hotelExpensePrev);  
 
   return (
     <>
@@ -91,7 +99,6 @@ export default function Expanse() {
                         alt="..."
                       />
                       <div className="card-body">
-
                         <div className="row">
                           <div className="col-sm-6">
                             <h5 className="card-title">Food</h5>
@@ -100,7 +107,6 @@ export default function Expanse() {
                             <p className="card-text big">
                               {/* {foodExpense} &#8377; */}
                               {foodExpense} &#8377;
-
                             </p>
                           </div>
                         </div>
@@ -146,7 +152,6 @@ export default function Expanse() {
                             <p className="card-text big">
                               {/* {fuelExpense} &#8377; */}
                               {fuelExpense} &#8377;
-
                             </p>
                           </div>
                         </div>
@@ -170,7 +175,6 @@ export default function Expanse() {
                             <p className="card-text big">
                               {/* {hotelExpense} &#8377; */}
                               {hotelExpense} &#8377;
-
                             </p>
                           </div>
                         </div>
@@ -194,7 +198,6 @@ export default function Expanse() {
                             <p className="card-text big">
                               {/* {transportExpense} &#8377; */}
                               {transportExpense} &#8377;
-
                             </p>
                           </div>
                         </div>
@@ -220,7 +223,13 @@ export default function Expanse() {
                         <div className="widget-chart p-3">
                           <div style={{ height: "370px" }}>
                             <PolorChart
-                              series={[foodExpense,waterExpense,fuelExpense,hotelExpense,transportExpense]}
+                              series={[
+                                foodExpense,
+                                waterExpense,
+                                fuelExpense,
+                                hotelExpense,
+                                transportExpense,
+                              ]}
                               labels={chart1Labels}
                             />
                             {/* <PolorChart
@@ -233,6 +242,7 @@ export default function Expanse() {
                     </div>
                   </div>
                 </div>
+
                 <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header-tab-animation card-header">
@@ -269,85 +279,90 @@ export default function Expanse() {
                                     className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
                                     style={{ height: "300px" }}
                                   >
-                                    <div className="col-md-12 col-xl-12">
-                                      <div className="card-body">
-                                        <div className="row">
-                                          <div className="col-sm-6">
-                                            <p className="mb-0">Total Amount</p>
+                                    {clearanceData?.map((data, index) => (
+                                      <div className="col-md-12 col-xl-12">
+                                        <div className="card-body">
+                                          <div className="row">
+                                            <div className="col-sm-6">
+                                              <p className="mb-0">
+                                                Total Amount
+                                              </p>
+                                            </div>
+                                            <div className="col-sm-6">
+                                              <p className="text-muted mb-0">
+                                                {data.Total_expense} &#8377;
+                                              </p>
+                                            </div>
                                           </div>
-                                          <div className="col-sm-6">
-                                            <p className="text-muted mb-0">
-                                              {currentMonthFuelExpensetotal}{" "}
-                                              &#8377;
-                                            </p>
+                                          <hr />
+                                          <div className="row">
+                                            <div className="col-sm-6">
+                                              <p className="mb-0">
+                                                Expanse On Food
+                                              </p>
+                                            </div>
+                                            <div className="col-sm-6">
+                                              <p className="text-muted mb-0">
+                                                {data.Food} &#8377;
+                                              </p>
+                                            </div>
                                           </div>
+                                          <hr />
+                                          <div className="row">
+                                            <div className="col-sm-6">
+                                              <p className="mb-0">
+                                                Expanse On Water Bottle
+                                              </p>
+                                            </div>
+                                            <div className="col-sm-6">
+                                              <p className="text-muted mb-0">
+                                                {data.Water} &#8377;
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <hr />
+                                          <div className="row">
+                                            <div className="col-sm-6">
+                                              <p className="mb-0">
+                                                Expanse On Fuel
+                                              </p>
+                                            </div>
+                                            <div className="col-sm-6">
+                                              <p className="text-muted mb-0">
+                                                {data.Fuel_in_liters} &#8377;
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <hr />
+                                          <div className="row">
+                                            <div className="col-sm-6">
+                                              <p className="mb-0">
+                                                Hotel Bills
+                                              </p>
+                                            </div>
+                                            <div className="col-sm-6">
+                                              <p className="text-muted mb-0">
+                                                {data.Hotel} &#8377;
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <hr />
+                                          <div className="row">
+                                            <div className="col-sm-6">
+                                              <p className="mb-0">
+                                                Transportation (Other Vehical)
+                                              </p>
+                                            </div>
+                                            <div className="col-sm-6">
+                                              <p className="text-muted mb-0">
+                                                {data.Other_Transport} &#8377;
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <hr />
                                         </div>
-                                        <hr />
-                                        <div className="row">
-                                          <div className="col-sm-6">
-                                            <p className="mb-0">
-                                              Expanse On Food
-                                            </p>
-                                          </div>
-                                          <div className="col-sm-6">
-                                            <p className="text-muted mb-0">
-                                              {foodExpense} &#8377;
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <hr />
-                                        <div className="row">
-                                          <div className="col-sm-6">
-                                            <p className="mb-0">
-                                              Expanse On Water Bottle
-                                            </p>
-                                          </div>
-                                          <div className="col-sm-6">
-                                            <p className="text-muted mb-0">
-                                              {waterExpense} &#8377;
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <hr />
-                                        <div className="row">
-                                          <div className="col-sm-6">
-                                            <p className="mb-0">
-                                              Expanse On Fuel
-                                            </p>
-                                          </div>
-                                          <div className="col-sm-6">
-                                            <p className="text-muted mb-0">
-                                              {fuelExpense} &#8377;
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <hr />
-                                        <div className="row">
-                                          <div className="col-sm-6">
-                                            <p className="mb-0">Hotel Bills</p>
-                                          </div>
-                                          <div className="col-sm-6">
-                                            <p className="text-muted mb-0">
-                                              {hotelExpense} &#8377;
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <hr />
-                                        <div className="row">
-                                          <div className="col-sm-6">
-                                            <p className="mb-0">
-                                              Transportation (Other Vehical)
-                                            </p>
-                                          </div>
-                                          <div className="col-sm-6">
-                                            <p className="text-muted mb-0">
-                                              {transportExpense} &#8377;
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <hr />
                                       </div>
-                                    </div>
+                                    ))}
                                   </div>
                                 </div>
                               </div>

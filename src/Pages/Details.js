@@ -5,7 +5,7 @@ import Attandance from "../Components/Charts/Attandance";
 import AttandanceTable from "../Components/Charts/AttandanceTable";
 import BarChart from "../Components/Charts/BarChart";
 import { ToastContainer, toast } from "react-toastify";
-import { useActionData, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 // import TripDetail from "../Components/Table/TripDetail";
 
@@ -34,8 +34,7 @@ export default function Details() {
     }
   };
 
-  const [overtimeHours, setOvertimeHours] = useState(0);
-  const [belowTimeHours, setBelowTimeHours] = useState(0);
+
 
   // useEffect(() => {
   //   fetch(`http://localhost:8080/attendance`, {
@@ -130,6 +129,20 @@ export default function Details() {
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
+
+
+        axios
+        .get(`http://localhost:8080/location/${id}`)
+        .then((response) => {
+          const locationInfo = response.data.message.Location_info;
+          const distances = locationInfo.map((location) => location.distance);
+          setData_location(locationInfo);
+          setDistance(distances);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+
     } catch (e) {
       console.error("Error:", e);
     }
@@ -143,6 +156,21 @@ export default function Details() {
     }
   }, [distance]);
 
+
+  const [status, setStatus] = useState('pending'); 
+
+  const handleApproveLeave = async (leaveId) => {
+    try {
+      const response = await axios.put(`http://localhost:8080/leave/${leaveId}`, { status: 'approved' });
+      if (response.data) {
+        setStatus('approved');
+        // toastSuccess()
+        toast.success("Leave Approved");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   useEffect(() => {
     axios
@@ -497,7 +525,8 @@ export default function Details() {
                                 <div className="col-sm-6">
                                   <button
                                     className="btn_app approve"
-                                    onClick={toastSuccess}
+                                    // onClick={toastSuccess}
+                                    onClick={handleApproveLeave}
                                   >
                                     Approve
                                   </button>

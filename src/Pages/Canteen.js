@@ -22,6 +22,7 @@ export default function Canteen() {
       .get("http://localhost:8080/coupon-count-by-menu")
       .then((response) => {
         setCouponCounts(response.data);
+        console.log(`coupon count : ${response.data}`)
       })
       .catch((error) => {
         console.error("Error fetching coupon counts:", error);
