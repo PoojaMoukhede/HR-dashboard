@@ -15,11 +15,17 @@ export default function Details() {
   const [attandance, setAttandance] = useState([]);
   const [data_location, setData_location] = useState([]);
   const [clearanceData, setClearanceData] = useState(null);
-  const [imageData, setImageData] = useState(null);
+  const [imageData, setImageData] = useState([]);
   const [distance, setDistance] = useState(null);
   const [totalDistance, setTotalDistance] = useState(null);
-  const [totalExpanse,setTotalExpanse] = useState(null)
-
+  const [totalExpanse, setTotalExpanse] = useState(null);
+  const [couponCount, setCouponCount] = useState(null);
+  const [leaveData, setLeaveData] = useState({
+    totalNumberOfDays: 0,
+    leaveApplications: [],
+  });
+  const totalLeaveDays = 21;
+  const remainingLeaveDays = totalLeaveDays - leaveData.totalNumberOfDays;
   const fetchData = async (id) => {
     try {
       const emp = await axios
@@ -33,8 +39,6 @@ export default function Details() {
       console.log("err", error);
     }
   };
-
-
 
   // useEffect(() => {
   //   fetch(`http://localhost:8080/attendance`, {
@@ -56,14 +60,13 @@ export default function Details() {
   //     });
   // }, []);
 
-
   useEffect(() => {
     fetchData(id);
     try {
       axios
         .get(`http://localhost:8080/attandance/${id}`)
         .then((response) => {
-          console.log(response.data.message.Employee_attandance)
+          // console.log(response.data.message.Employee_attandance)
           setAttandance(response.data);
         })
         .catch((error) => {
@@ -113,10 +116,7 @@ export default function Details() {
     // Add more workHoursData for different days
   ];
 
-
-
   useEffect(() => {
-   
     try {
       axios
         .get(`http://localhost:8080/location/${id}`)
@@ -130,69 +130,113 @@ export default function Details() {
           console.error("Error fetching data:", error);
         });
 
-
-        axios
-        .get(`http://localhost:8080/location/${id}`)
+      axios
+        .get(`http://localhost:8080/leave/${id}`)
         .then((response) => {
-          const locationInfo = response.data.message.Location_info;
-          const distances = locationInfo.map((location) => location.distance);
-          setData_location(locationInfo);
-          setDistance(distances);
+          const leaveInfo = response.data;
+          setLeaveData(leaveInfo);
+          // console.log(`loooooog : ${leaveInfo}`);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
 
+      axios
+        .get(`http://localhost:8080/coupon/${id}`)
+        .then((response) => {
+          const coupon_Count = response.data.totalCoupons;
+          setCouponCount(coupon_Count);
+          // console.log(`loooooog : ${leaveInfo}`);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
     } catch (e) {
       console.error("Error:", e);
     }
   }, []);
 
   useEffect(() => {
-   
     if (distance !== null) {
-      const total = distance.reduce((acc, current) => acc + parseFloat(current),0);
-      setTotalDistance(total.toFixed(2));;
+      const total = distance.reduce(
+        (acc, current) => acc + parseFloat(current),
+        0
+      );
+      setTotalDistance(total.toFixed(2));
     }
   }, [distance]);
 
-
-  const [status, setStatus] = useState('pending'); 
+  const [status, setStatus] = useState("pending");
 
   const handleApproveLeave = async (leaveId) => {
     try {
-      const response = await axios.put(`http://localhost:8080/leave/${leaveId}`, { status: 'approved' });
+      const response = await axios.put(
+        `http://localhost:8080/leave/${leaveId}`,
+        { status: "approved" }
+      );
       if (response.data) {
-        setStatus('approved');
-        // toastSuccess()
-        toast.success("Leave Approved");
+        setStatus("approved");
+        toastSuccess();
+        // toast.success("Leave Approved");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:8080/form/${id}`)
+  //     .then((response) => {
+  //       // console.log(`response : ${response.data.message.FormData}`)
+  //       setClearanceData(response.data.message.FormData);
+  //       const binaryData = response.data.message.FormData;
+  //       const totalExpanse = response.data.totalExpenses
+  //       setTotalExpanse(totalExpanse)
+  //       // console.log(`binaryData : ${binaryData}`)
+  //       const imageUrls = binaryData.map((formData) => {
+  //         // console.log(`formData : ${formData}`)
+  //         const imageBuffer = formData.images.data.data;
+  //         const blob = new Blob([imageBuffer], {
+  //           type: formData.images.contentType,
+  //         });
+  //         return URL.createObjectURL(blob);
+  //         // console.log(`ttttttttttttttt : ${URL.createObjectURL(blob)}`)
+  //       });
+
+  //       setImageData(imageUrls);
+
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching clearance data:", error);
+  //     });
+  // }, [id]);
 
   useEffect(() => {
     axios
       .get(`http://localhost:8080/form/${id}`)
       .then((response) => {
-        // console.log(`response : ${response.data.message.FormData}`)
-        setClearanceData(response.data.message.FormData);
         const binaryData = response.data.message.FormData;
-        const totalExpanse = response.data.totalExpenses
-        setTotalExpanse(totalExpanse)
-        // console.log(`binaryData : ${binaryData}`)
-        const imageUrls = binaryData.map((formData) => {
-          // console.log(`formData : ${formData}`)
+        const totalExpanse = response.data.totalExpenses;
+        setTotalExpanse(totalExpanse);
+        setClearanceData(response.data.message.FormData);
+        // Create an array to store image URLs and Promises
+        const imagePromises = binaryData.map((formData) => {
           const imageBuffer = formData.images.data.data;
           const blob = new Blob([imageBuffer], {
             type: formData.images.contentType,
           });
           return URL.createObjectURL(blob);
         });
-        
-        setImageData(imageUrls);
-        // console.log(imageUrls)
+
+        // Use Promise.all to wait for all images to load
+        Promise.all(imagePromises)
+          .then((imageUrls) => {
+            setImageData(imageUrls);
+          })
+          .catch((error) => {
+            console.error("Error loading images:", error);
+          });
       })
       .catch((error) => {
         console.error("Error fetching clearance data:", error);
@@ -371,13 +415,13 @@ export default function Details() {
                     <div className="widget-content-wrapper text-black">
                       <div className="widget-content-left">
                         <div className="widget-heading">
-                          Total Distance Covered
+                          Total Coupon Purchased
                         </div>
                         <div className="widget-subheading">Till this month</div>
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-black">
-                          {/* <span>{totalDistance} KM</span> */}
+                          {couponCount ? <span>{couponCount}</span> : 0}
                         </div>
                       </div>
                     </div>
@@ -481,15 +525,16 @@ export default function Details() {
                       <div className="tab-pane fade active show" id="tab-eg-55">
                         <div className="widget-chart p-3 d-flex ">
                           <div
-                            style={{ height: "300px", width: "50%" }}
+                            style={{ height: "250px", width: "50%" }}
                             className="d-flex flex-column"
                           >
                             <BarChart />
-                            <span className="d-flex justify-content-center">
-                              <h2>16/20</h2>
+                            {/* <span className="d-flex justify-content-center">
+                              <h2>{remainingLeaveDays}</h2>
                               <p className="ms-1">Days</p>
-                            </span>
+                            </span> */}
                           </div>
+
                           <div className="col-md-12 col-xl-6">
                             <div className="card-body">
                               <div className="row">
@@ -497,7 +542,9 @@ export default function Details() {
                                   <p className="mb-0">Total Leave</p>
                                 </div>
                                 <div className="col-sm-6">
-                                  <p className="text-muted mb-0">20</p>
+                                  <p className="text-muted mb-0">
+                                    {totalLeaveDays}
+                                  </p>
                                 </div>
                               </div>
                               <hr />
@@ -506,11 +553,13 @@ export default function Details() {
                                   <p className="mb-0">Leave Used</p>
                                 </div>
                                 <div className="col-sm-6">
-                                  <p className="text-muted mb-0">04</p>
+                                  <p className="text-muted mb-0">
+                                    {leaveData.totalNumberOfDays}
+                                  </p>
                                 </div>
                               </div>
-                              <hr />
-                              <div className="row">
+                              {/* <hr /> */}
+                              {/* <div className="row">
                                 <div className="col-sm-6">
                                   <p className="mb-0">Status</p>
                                 </div>
@@ -519,7 +568,7 @@ export default function Details() {
                                     Applied for 01 days
                                   </p>
                                 </div>
-                              </div>
+                              </div> */}
                               <hr />
                               <div className="row mt-5">
                                 <div className="col-sm-6">
@@ -565,7 +614,7 @@ export default function Details() {
                         >
                           <div
                             className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
-                            style={{ height: "300px" }}
+                            style={{ height: "250px" }}
                           >
                             <div className="col-md-12 col-xl-12">
                               <div className="card-body">
@@ -755,15 +804,18 @@ export default function Details() {
                                   {formData.ImageName}
                                 </td>
                                 <td>
-                                  {imageData[index] ? (
-                                    // <img src={imageData[index]} alt={`${console.log(imageData[index])}`} />
-                                    <img
-                                      src={imageData[index]}
-                                      alt={formData.ImageName}
-                                    />
-                                  ) : (
-                                    <p>No image available</p>
-                                  )}
+                                  {imageData.map((imageUrl, index) => (
+                                    <div key={index}>
+                                      {imageUrl ? (
+                                        <img
+                                          src={imageUrl}
+                                          alt={`Imae ${index} - ${console.log(imageUrl)}`}
+                                        />
+                                      ) : (
+                                        <p>No image available</p>
+                                      )}
+                                    </div>
+                                  ))}
                                 </td>
                               </tr>
                             );
