@@ -15,16 +15,11 @@ import PageNotFound from './Components/PageNotFound';
 import Expanse from './Pages/Expanse'
 import ToastNotification from './Components/ToastNotification';
 import FullCalendarComponent from './Components/Updates/FullCalendarComponent';
-import Profile from './Components/Header/Profile';
+// import Profile from './Components/Header/Profile';
 import CanteenFacility from './Pages/CanteenFacility';
 import HRadmins from './HRadmins';
 
-
-
-
 function App() {
-
-
 
   return (
     <>
@@ -51,7 +46,7 @@ function App() {
         <Route exact path='*' element={<PageNotFound/>}/>
         <Route exact path='/canteen' element={<CanteenFacility/>}/>
         <Route exact path='/calender' element={<FullCalendarComponent/>}/>
-        <Route exact path='/profile' element={<Profile/>}/>
+        {/* <Route exact path='/profile' element={<Profile/>}/> */}
         <Route exact path='/hradmins' element={<HRadmins/>}/>
         </Routes>
         </APIContextProvider>

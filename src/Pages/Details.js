@@ -15,7 +15,6 @@ export default function Details() {
   const [attandance, setAttandance] = useState([]);
   const [data_location, setData_location] = useState([]);
   const [clearanceData, setClearanceData] = useState(null);
-  const [imageData, setImageData] = useState([]);
   const [distance, setDistance] = useState(null);
   const [totalDistance, setTotalDistance] = useState(null);
   const [totalExpanse, setTotalExpanse] = useState(null);
@@ -81,40 +80,6 @@ export default function Details() {
   const toastError = () => toast.error("Leave Rejected");
   const toastSuccess2 = () => toast.success("Advance Payment Request Approved");
   const toastError2 = () => toast.error("Advance Payment Request Rejected");
-
-  const workHoursData = [
-    { date: "2023-09-01", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-02", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-03", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-04", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-05", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-06", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-07", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-08", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-09", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-10", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-11", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-12", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-13", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-14", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-15", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-16", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-17", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-18", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-19", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-20", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-21", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-22", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-23", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-24", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-25", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-26", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-27", regularHours: 8, overtimeHours: 2, belowHours: 0 },
-    { date: "2023-09-28", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-29", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    { date: "2023-09-30", regularHours: 6, overtimeHours: 0, belowHours: 2 },
-    // Add more workHoursData for different days
-  ];
 
   useEffect(() => {
     try {
@@ -184,64 +149,28 @@ export default function Details() {
     }
   };
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:8080/form/${id}`)
-  //     .then((response) => {
-  //       // console.log(`response : ${response.data.message.FormData}`)
-  //       setClearanceData(response.data.message.FormData);
-  //       const binaryData = response.data.message.FormData;
-  //       const totalExpanse = response.data.totalExpenses
-  //       setTotalExpanse(totalExpanse)
-  //       // console.log(`binaryData : ${binaryData}`)
-  //       const imageUrls = binaryData.map((formData) => {
-  //         // console.log(`formData : ${formData}`)
-  //         const imageBuffer = formData.images.data.data;
-  //         const blob = new Blob([imageBuffer], {
-  //           type: formData.images.contentType,
-  //         });
-  //         return URL.createObjectURL(blob);
-  //         // console.log(`ttttttttttttttt : ${URL.createObjectURL(blob)}`)
-  //       });
-
-  //       setImageData(imageUrls);
-
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching clearance data:", error);
-  //     });
-  // }, [id]);
-
   useEffect(() => {
     axios
       .get(`http://localhost:8080/form/${id}`)
       .then((response) => {
-        const binaryData = response.data.message.FormData;
         const totalExpanse = response.data.totalExpenses;
         setTotalExpanse(totalExpanse);
         setClearanceData(response.data.message.FormData);
-        // Create an array to store image URLs and Promises
-        const imagePromises = binaryData.map((formData) => {
-          const imageBuffer = formData.images.data.data;
-          const blob = new Blob([imageBuffer], {
-            type: formData.images.contentType,
-          });
-          return URL.createObjectURL(blob);
-        });
-
-        // Use Promise.all to wait for all images to load
-        Promise.all(imagePromises)
-          .then((imageUrls) => {
-            setImageData(imageUrls);
-          })
-          .catch((error) => {
-            console.error("Error loading images:", error);
-          });
+        // console.log(`images : ${response.data.message.FormData}`)
       })
       .catch((error) => {
         console.error("Error fetching clearance data:", error);
       });
   }, [id]);
+  const [enlarged, setEnlarged] = useState(false);
+
+  const handleImageClick = () => {
+    setEnlarged(true);
+  };
+
+  const closeEnlargedView = () => {
+    setEnlarged(false);
+  };
 
   return (
     <>
@@ -251,15 +180,6 @@ export default function Details() {
           <Sidebar />
           <div className="app-main__outer">
             <div className="app-main__inner">
-              {/* <p>
-                Overtime:{" "}
-              {overtimeHours}
-              </p>
-              <p>
-                Below Time:{" "}
-                {belowTimeHours}
-              </p> */}
-
               <div className="row">
                 <div className="col-lg-4">
                   <div className="card mb-4">
@@ -477,7 +397,7 @@ export default function Details() {
                         <div className="widget-chart p-3">
                           <div style={{ height: "370px" }}>
                             {/* <Attandance/> */}
-                            <Attandance data={workHoursData} />
+                            <Attandance />
                           </div>
                         </div>
                       </div>
@@ -775,6 +695,11 @@ export default function Details() {
                         </thead>
                         <tbody>
                           {clearanceData?.map((formData, index) => {
+                            const base64String = btoa(
+                              String.fromCharCode(
+                                ...new Uint8Array(formData.images.data.data)
+                              )
+                            );
                             return (
                               <tr>
                                 <td>
@@ -804,18 +729,49 @@ export default function Details() {
                                   {formData.ImageName}
                                 </td>
                                 <td>
-                                  {imageData.map((imageUrl, index) => (
-                                    <div key={index}>
-                                      {imageUrl ? (
-                                        <img
-                                          src={imageUrl}
-                                          alt={`Imae ${index} - ${console.log(imageUrl)}`}
-                                        />
-                                      ) : (
-                                        <p>No image available</p>
-                                      )}
+                                  {/* {formData.images && (
+                                    
+                                    <div>
+                                      <img
+                                        src={`data:image/${formData?.images?.contentType};base64,${base64String}`}
+                                        alt={`${
+                                          formData.ImageName
+                                        }`}
+                                        style={{width:"3rem"}}
+                                      />
                                     </div>
-                                  ))}
+                                  )} */}
+
+                                  {formData.images && (
+                                    <div>
+                                      <img
+                                        src={`data:image/${formData?.images?.contentType};base64,${base64String}`}
+                                        alt={formData.ImageName}
+                                        style={{
+                                          width: "3rem",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={handleImageClick}
+                                      />
+                                    </div>
+                                  )}
+
+                                  {enlarged && (
+                                    <div
+                                      style={{
+                                        background: `rgba(0, 0, 0, 0.5) url(data:image/${formData?.images?.contentType};base64,${base64String}) no-repeat center`,
+                                        backgroundSize: "contain",
+                                        width: "50%",
+                                        height: "50%",
+                                        position: "fixed",
+                                        zIndex: "10000",
+                                        top: "30%",
+                                        left: "30%",
+                                        cursor: "zoom-out",
+                                      }}
+                                      onClick={closeEnlargedView}
+                                    />
+                                  )}
                                 </td>
                               </tr>
                             );

@@ -1,143 +1,85 @@
-// import React, { useEffect, useState } from 'react';
-// import Chart from 'react-apexcharts';
-// import axios from 'axios';
-// import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import Chart from "react-apexcharts";
 
-// function EmployeeWorkHoursChart() {
-//   const [attendanceData, setAttendanceData] = useState(null);
-//   const { id } = useParams();
+export default function AttandanceTable() {
+  const [data, setData] = useState([]);
+  const { id } = useParams();
 
-//   useEffect(() => {
-//     axios
-//       .get(`http://localhost:8080/attandance/${id}`)
-//       .then((response) => {
-//         const data = response.data.message.Employee_attandance;
-//         console.log(`hethbhd :${data}`)
-//         setAttendanceData(data);
-//       })
-//       .catch((error) => {
-//         console.error("Error fetching data:", error);
-//       });
-//   }, [id]);
+  useEffect(() => {
+    try {
+      axios
+        .get(`http://localhost:8080/attandance/${id}`)
+        .then((response) => {
+          setData(response.data.message.Employee_attandance);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
 
-//   if (attendanceData === null) {
-//     return <div>Loading...</div>;
-//   }
+  const regularHours = 9;
 
-//   const employeeAttendance = attendanceData.Employee_attandance || [];
-//   console.log(`eeeeeeee :${employeeAttendance}`)
-//   let totalWorkedHours = 32400000;
+  const attendanceData = data.map((datas) => {
+    const totalWorkingHours = parseInt(datas.timer / 3600000);
+    const overtimeHours = Math.max(totalWorkingHours - regularHours, 0);
+    const belowTimeHours = Math.max(regularHours - totalWorkingHours, 0);
+    
+    // console.log(`below time : ${belowTimeHours} totalworking : ${totalWorkingHours} overtime : ${overtimeHours}`)
 
-//   for (const entry of employeeAttendance) {
-//     if (entry.action === 'Punch Out') {
-//       totalWorkedHours += entry.timer ; 
-//     }
-//   }
-
-//   // Calculate overtime and below-time hours
-//   let overtimeHours = 0;
-//   let belowTimeHours = 0;
-//   if (totalWorkedHours > 32400000) {
-//     overtimeHours = totalWorkedHours - 32400000;
-//   } else if (totalWorkedHours < 32400000) {
-//     belowTimeHours = 32400000 - totalWorkedHours;
-//   }
-
-// console.log(`below : ${belowTimeHours} ---- over : ${overtimeHours} ----- total : ${totalWorkedHours}`)
-
-//   const chartData = {
-//     options: {
-//       chart: {
-//         type: 'bar',
-//         stacked: true,
-//       },
-//       // ... other options
-//     },
-//     series: [
-//       {
-//         name: 'Regular Hours',
-//         data: [10], // Total worked hours
-//       },
-//       {
-//         name: 'Overtime Hours',
-//         data: [overtimeHours],
-//       },
-//       {
-//         name: 'Below Hours',
-//         data: [belowTimeHours],
-//       },
-//     ],
-//   };
-
-//   return (
-//     <div>
-//       <Chart options={chartData.options} series={chartData.series} type="bar" width="100%" height={350} />
-//     </div>
-//   );
-// }
-
-// export default EmployeeWorkHoursChart;
-
-
-
-import React from 'react';
-import Chart from 'react-apexcharts';
-
-function EmployeeWorkHoursChart({data}) {
-  // Function to format the workHoursData for the chart
-  
-
-  const formatChartdata = (data) => {
     return {
-      options: {
-        chart: {
-          type: 'bar',
-          stacked: true,
-        },
-        xaxis: {
-          type: 'datetime', // Set the X-axis type to datetime
-          categories: data.map((entry) => new Date(entry.date).getTime()), // Convert date strings to timestamps
-          labels: {
-            formatter: function (value) {
-              // Format the date label as needed (e.g., 'Sep 01')
-              const date = new Date(value);
-              return `${date.toLocaleString('default', { month: 'short' })} ${date.getDate()}`;
-            },
-          },
-        },
-        yaxis: {
-          title: {
-            text: 'Hours',
-          },
-        },
-        legend: {
-          position: 'top',
+      timestamp: datas.timestamp,
+      overtimeHours: overtimeHours,
+      belowTimeHours: belowTimeHours,
+    };
+  });
+
+  const chartData = {
+    options: {
+      chart: {
+        type: "bar",
+      },
+      xaxis: {
+        categories: attendanceData.map((datas) => {
+          const date = new Date(datas.timestamp);
+          const month = date.toLocaleString("default", { month: "short" });
+          const day = date.getDate();
+          return `${day} ${month}`;
+        }),
+      },
+      yaxis: {
+        title: {
+          text: "Hours",
         },
       },
-      series: [
-        {
-          name: 'Regular Hours',
-          data: data.map((entry) => entry.regularHours),
-        },
-        {
-          name: 'Overtime Hours',
-          data: data.map((entry) => entry.overtimeHours),
-        },
-        {
-          name: 'Below Hours',
-          data: data.map((entry) => entry.belowHours),
-        },
-      ],
-    };
+    },
+    series: [
+      {
+        name: "Overtime Hours",
+        data: attendanceData.map((datas) => datas.overtimeHours),
+      },
+      {
+        name: "Below Time Hours",
+        data: attendanceData.map((datas) => datas.belowTimeHours),
+      },
+      {
+        name: "Regular Time Hours",
+        data: attendanceData.map((datas) => datas.regularHours),
+      }
+    ],
   };
 
-  const chartdata = formatChartdata(data);
-
   return (
-    <div>
-      <Chart options={chartdata.options} series={chartdata.series} type="bar" width="100%" height={350} />
-    </div>
+    <Chart
+      options={chartData.options}
+      series={chartData.series}
+      type="bar"
+      width="100%"
+      height={350}
+    />
   );
 }
-
-export default EmployeeWorkHoursChart;
