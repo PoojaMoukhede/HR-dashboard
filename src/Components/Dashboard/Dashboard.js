@@ -9,34 +9,70 @@ import axios from "axios";
 
 export default function Dashboard() {
   const [fuelData, setFuelData] = useState([]);
-  const [cumulativeFuelConsumption, setCumulativeFuelConsumption] = useState([]);
-  const [currentMonthFuelExpense, setCurrentMonthFuelExpense] = useState(0)
   const [currentMonthFuel, setCurrentMonthFuel] = useState(0);
-  const [lastMonthFuelExpense, setLastMonthFuelExpense] = useState(0);
   const [totalDistance, setTotalDistance] = useState(null)
   const [totalExpanse,setTotalExpanse] = useState(0)
   const [currentMonthTotalExpense, setCurrentMonthTotalExpense] = useState(0);
+  const [fuel,setFuel] = useState(null)
 
-  const chartData2 = {
+  // const chartData2 = {
+  //   options: {
+  //     chart: {
+  //       id: "basic-bar2",
+  //     },
+  //     xaxis: {
+  //       categories: [
+  //         "Jan",
+  //         "Feb",
+  //         "Mar",
+  //         "Apr",
+  //         "May",
+  //         "Jun",
+  //         "Jul",
+  //         "Aug",
+  //         "Sept",
+  //         "Oct",
+  //         "Nov",
+  //         "Dec",
+  //       ],
+  //       labels: {
+  //         style: {
+  //           colors: "black",
+  //         },
+  //       },
+  //     },
+  //     yaxis: {
+  //       labels: {
+  //         style: {
+  //           colors: "black",
+  //         },
+  //       },
+  //     },
+  //     colors: ["#22437e"],
+  //     tooltip: {
+  //       style: {
+  //         colors: "#fd929d",
+  //       },
+  //     },
+  //     dataLabels: {
+  //       enabled: false,
+  //     },
+  //   },
+  //   series: [
+  //     {
+  //       name: "Fuel Consumption in liters",
+  //       data: fuelData.map((entry) => entry.Liters),
+  //     },
+  //   ],
+  // };
+
+  const [chartData2, setChartData2] = useState({
     options: {
       chart: {
-        id: "basic-bar2",
+        id: "basic-bar",
       },
       xaxis: {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sept",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
+        categories: [],
         labels: {
           style: {
             colors: "black",
@@ -50,25 +86,18 @@ export default function Dashboard() {
           },
         },
       },
-      colors: ["#22437e"],
-      tooltip: {
-        style: {
-          colors: "#fd929d",
-        },
-      },
+      colors: ["#2b5161"],
       dataLabels: {
         enabled: false,
       },
     },
     series: [
       {
-        name: "Fuel Consumption in liters",
-        data: fuelData.map((entry) => entry.Liters),
+        name: "Fuel in Liters",
+        data: [],
       },
     ],
-  };
-
-
+  });
   const [chartData, setChartData] = useState({
     options: {
       chart: {
@@ -156,83 +185,89 @@ export default function Dashboard() {
   
   
   const { theme, toggleTheme } = useContext(ThemeContext);
+
   useEffect(() => {
     axios
-      .get("http://localhost:8080/fuel")
+      .get("http://localhost:8080/total-distance")
       .then((response) => {
-        setFuelData(response.data);
-        // console.log(response.data);
+        setTotalDistance(response.data.totalDistance);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   
-        // Calculate the cumulative fuel consumption, current month's expense, and last month's expense
-        let cumulativeTotal = 0;
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth();
-        const currentYear = currentDate.getFullYear();
-        const lastMonth = (currentMonth - 1 + 12) % 12; // Calculate the previous month
-        // console.log(`lastMonth ${lastMonth}`);
-        response.data.forEach((entry) => {
-          cumulativeTotal += entry.Liters;
-          const entryDate = new Date(entry.Date);
-          const entryMonth = entryDate.getMonth();
-          const entryYear = entryDate.getFullYear();
+    axios
+      .get("http://localhost:8080/totalExpenses")
+      .then((response) => {
+        setTotalExpanse(response.data.totalExpenses);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   
-          if (entryMonth === currentMonth && entryYear === currentYear) {
-            setCurrentMonthFuelExpense(
-              (prevExpense) => prevExpense + entry.Liters
-            );
-          }
+    axios
+      .get(`http://localhost:8080/totalFuel`)
+      .then((response) => {
+        const fuelCount = response.data.totalAllFuel;
+        setFuel(fuelCount);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   
-          if (entryMonth === lastMonth && entryYear === currentYear) {
-            setLastMonthFuelExpense(
-              (prevExpense) => prevExpense + entry.Liters
-            );
-          }
+    axios
+      .get(`http://localhost:8080/totalFuelByMonth`)
+      .then((response) => {
+        const data = response.data;
+  
+        const monthOrder = {
+          January: 1,
+          February: 2,
+          March: 3,
+          April: 4,
+          May: 5,
+          June: 6,
+          July: 7,
+          August: 8,
+          September: 9,
+          October: 10,
+          November: 11,
+          December: 12,
+        };
+  
+        data.sort((a, b) => monthOrder[a.month] - monthOrder[b.month]);
+  
+        const months = data.map((entry) => entry.month);
+        const expenses = data.map((entry) => entry.liters);
+        const currentMonth = new Date().getMonth() + 1; // current month (1-12)
+  
+        const currentMonthData = data.find(
+          (entry) => monthOrder[entry.month] === currentMonth
+        );
+        setFuelData(currentMonthData.liters);
+  
+        setChartData2({
+          ...chartData2,
+          options: {
+            ...chartData2.options,
+            xaxis: {
+              ...chartData2.options.xaxis,
+              categories: months,
+            },
+          },
+          series: [
+            {
+              name: "Expenses in INR",
+              data: expenses,
+            },
+          ],
         });
-  
-        setCumulativeFuelConsumption(cumulativeTotal);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-
-      axios
-      .get("http://localhost:8080/fuel/curr")
-      .then((response) => {
-        const Liters = response.data[0].Liters;
-        setCurrentMonthFuel(Liters);
-        console.log("Liters from API:", Liters);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-     
   }, []);
   
-
-useEffect(()=>{
-  axios
-  .get("http://localhost:8080/total-distance")
-  .then((response) => {
-    setTotalDistance(response.data.totalDistance);
-    // console.log(`total-distance : ${response.data.totalDistance}`);
-  })
-  .catch((error) => {
-    console.error("Error fetching data:", error);
-  });
-
-  axios
-  .get("http://localhost:8080/totalExpenses")
-  .then((response) => {
-    setTotalExpanse(response.data.totalExpenses);
-    
-  })
-  .catch((error) => {
-    console.error("Error fetching data:", error);
-  });
-
-},[])
-
-
 
 
 
@@ -268,12 +303,12 @@ useEffect(()=>{
                       <div className="widget-content-left">
                         <div className="widget-heading">Fuel Consumption</div>
                         <div className="widget-subheading">
-                         Last month fuel consumption
+                         This month fuel consumption
                         </div>
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          <span>{currentMonthFuel} Liters</span>
+                          <span>{fuel} Liters</span>
                         </div>
                       </div>
                     </div>
@@ -330,7 +365,7 @@ useEffect(()=>{
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-black">
-                          <span>{cumulativeFuelConsumption} Liters</span>
+                          <span>{fuel} Liters</span>
                         </div>
                       </div>
                     </div>

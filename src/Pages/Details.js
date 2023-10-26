@@ -118,6 +118,9 @@ export default function Details() {
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
+
+       
+
     } catch (e) {
       console.error("Error:", e);
     }
@@ -132,24 +135,6 @@ export default function Details() {
       setTotalDistance(total.toFixed(2));
     }
   }, [distance]);
-
-  const [status, setStatus] = useState("pending");
-
-  const handleApproveLeave = async (leaveId) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:8080/leave/${leaveId}`,
-        { status: "approved" }
-      );
-      if (response.data) {
-        setStatus("approved");
-        toastSuccess();
-        // toast.success("Leave Approved");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   useEffect(() => {
     axios
@@ -200,52 +185,53 @@ export default function Details() {
     setLeaveStatus(initialStatus);
   }, [leaveData]);
 
-  const statusToApprove = "approved";
   const handleLeaveAction = async (id, status) => {
     try {
+      const leave = leaveData.find((leave) => leave._id === id);
+      
+      if (!leave) {
+        console.error("Leave not found for ID:", id);
+        return;
+      }
+  
+      // Check if the start date is expired
+      const startDate = new Date(leave.startDate);
+      const currentDate = new Date();
+  
+      if (startDate <= currentDate) {
+        // Start date is expired, so disable both buttons
+        toast.error("Leave date has already passed.");
+        return;
+      
+      }
+  
       // Send a PUT request to update the leave status
       const response = await axios.put(`http://localhost:8080/leave/${id}`, {
         status,
       });
       console.log(`console :${id}`);
+      
       // Update the leaveData state with the updated status
       setLeaveData((prevState) =>
         prevState.map((leave) =>
           leave._id === id ? { ...leave, status } : leave
         )
       );
-
-      // Update the leaveStatus state with the new status
+  
       setLeaveStatus((prevStatus) => ({
         ...prevStatus,
         [id]: status,
       }));
+      
+      if (status === "approved") {
+        toast.success("Leave Approved");
+      } else if (status === "rejected") {
+        toast.error("Leave Rejected");
+      }
     } catch (error) {
       console.error("Error updating leave status:", error);
     }
   };
-  // const handleLeaveAction = async (leaveId, status) => {
-  //   try {
-  //     const response = await axios.put(`http://localhost:8080/leave/${leaveId}`, { status });
-  
-  //     // Assuming you have a state variable `leaveData` to keep track of the leave requests
-  //     // Update the leaveData state with the updated status
-  //     setLeaveData((prevLeaveData) =>
-  //       prevLeaveData.map((leave) =>
-  //         leave._id === leaveId ? { ...leave, status } : leave
-  //       )
-  //     );
-  
-  //     // Assuming you have a state variable `leaveStatus` to keep track of the status of each leave request
-  //     // Update the leaveStatus state with the new status for the user
-  //     setLeaveStatus((prevLeaveStatus) => ({
-  //       ...prevLeaveStatus,
-  //       [leaveId]: status,
-  //     }));
-  //   } catch (error) {
-  //     console.error("Error updating leave status:", error);
-  //   }
-  // };
   
 
   return (
@@ -573,8 +559,8 @@ export default function Details() {
                                 <div className="col-sm-6">
                                   <button
                                     className="btn_app approve"
-                                    // onClick={toastSuccess}
-                                    onClick={handleApproveLeave}
+                                    onClick={toastSuccess}
+                                    // onClick={handleApproveLeave}
                                   >
                                     Approve
                                   </button>
@@ -673,7 +659,7 @@ export default function Details() {
 
               {/* leave details */}
               <div className="row">
-              <div className="col-md-12 col-lg-6">
+                <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
@@ -746,7 +732,12 @@ export default function Details() {
                                     }
                                   >
                                     <button
-                                     onClick={() => handleLeaveAction(leaves._id, "approved")}
+                                      onClick={() =>
+                                        handleLeaveAction(
+                                          leaves._id,
+                                          "approved"
+                                        )
+                                      }
                                       style={{
                                         color: "white",
                                         backgroundColor: "rgb(7, 116, 7)",
@@ -885,12 +876,6 @@ export default function Details() {
                 </div>
               </div>
               {/* leave details */}
-
-              {/* <TripDetail /> */}
-              <div className="row">
-
-              </div>
-              {/* <TripDetail /> */}
 
               {/* bills  */}
               <div className="row">
