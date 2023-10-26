@@ -4,30 +4,30 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const ApexChart = () => {
-  const {id} = useParams();
-  console.log();
-  const [leaveData, setLeaveData] = useState({
-    totalNumberOfDays: 0,
-    leaveApplications: [],
-  });
+  const { id } = useParams();
+  const [remdays, setRemDays] = useState(null);
   const totalLeaveDays = 21;
 
   useEffect(() => {
     // Fetch leave data from your API
     axios
-      .get(`http://localhost:8080/leave/${id}`)
+      .get(`http://localhost:8080/leave-balance/${id}`)
       .then((response) => {
-        const leaveInfo = response.data;
-        setLeaveData(leaveInfo);
+        setRemDays(response.data.message.availableLeave);
+        console.log(`totalLeave : ${response.data.message.availableLeave}`);
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching clearance data:", error);
       });
   }, [id]);
 
-  const remainingLeaveDays = totalLeaveDays - leaveData.totalNumberOfDays;
-  const usedLeaveRatio = (leaveData.totalNumberOfDays / totalLeaveDays) * 360;
-  const remainingLeaveRatio = (remainingLeaveDays / totalLeaveDays) * 360;
+  if (remdays === null) {
+    return <div>Loading...</div>;
+  }
+
+  const remainingLeaveDays =  remdays;
+  // const usedLeaveRatio = (remdays / totalLeaveDays) * 360;
+  // const remainingLeaveRatio = (remainingLeaveDays / totalLeaveDays) * 360;
   // console.log(`used ${usedLeaveRatio} --- remaining :${remainingLeaveDays}`)
 
   const chartOptions = {
@@ -40,8 +40,8 @@ const ApexChart = () => {
     },
     plotOptions: {
       radialBar: {
-        startAngle: -135 + usedLeaveRatio, 
-        endAngle: 135 + remainingLeaveRatio, 
+        startAngle: -135 , 
+        endAngle: 215 , 
         hollow: {
           margin: 0,
           size: "50%",
@@ -118,7 +118,7 @@ const ApexChart = () => {
           height={280}
         />
       </div>
-    </div>
+  </div>
   );
 };
 

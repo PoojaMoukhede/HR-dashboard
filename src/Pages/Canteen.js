@@ -92,7 +92,7 @@ export default function Canteen() {
 
                 <div class="col-xl-12 col-md-12">
                   {menuItems.tomorrow && (
-                    <div class="card overflow-hidden">
+                    <div class="card overflow-hidden mt-2">
                       <div class="card-content">
                         <div class="card-body cleartfix">
                           <div
@@ -133,7 +133,7 @@ export default function Canteen() {
               </div>
 
               <button
-                className="btn btn-primary float-right"
+                className="btn btn-primary float-right mt-4"
                 style={{ width: "8rem" }}
                 onClick={() => {
                   navigate("/canteen");

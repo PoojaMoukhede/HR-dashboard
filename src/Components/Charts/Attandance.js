@@ -28,13 +28,15 @@ export default function AttandanceTable() {
     const totalWorkingHours = parseInt(datas.timer / 3600000);
     const overtimeHours = Math.max(totalWorkingHours - regularHours, 0);
     const belowTimeHours = Math.max(regularHours - totalWorkingHours, 0);
-    
-    // console.log(`below time : ${belowTimeHours} totalworking : ${totalWorkingHours} overtime : ${overtimeHours}`)
+  
 
+    const isRegularTime = totalWorkingHours === regularHours;
+  
     return {
       timestamp: datas.timestamp,
       overtimeHours: overtimeHours,
       belowTimeHours: belowTimeHours,
+      regularHours: isRegularTime ? regularHours : 0, 
     };
   });
 

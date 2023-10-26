@@ -6,7 +6,10 @@ import AttandanceTable from "../Components/Charts/AttandanceTable";
 import BarChart from "../Components/Charts/BarChart";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import { Icon } from "@iconify/react";
 import axios from "axios";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 // import TripDetail from "../Components/Table/TripDetail";
 
 export default function Details() {
@@ -19,12 +22,10 @@ export default function Details() {
   const [totalDistance, setTotalDistance] = useState(null);
   const [totalExpanse, setTotalExpanse] = useState(null);
   const [couponCount, setCouponCount] = useState(null);
-  const [leaveData, setLeaveData] = useState({
-    totalNumberOfDays: 0,
-    leaveApplications: [],
-  });
+  const [remdays, setRemDays] = useState(null);
+  const [leaveData, setLeaveData] = useState([]);
   const totalLeaveDays = 21;
-  const remainingLeaveDays = totalLeaveDays - leaveData.totalNumberOfDays;
+  const remainingLeaveDays = totalLeaveDays - remdays;
   const fetchData = async (id) => {
     try {
       const emp = await axios
@@ -98,9 +99,10 @@ export default function Details() {
       axios
         .get(`http://localhost:8080/leave/${id}`)
         .then((response) => {
-          const leaveInfo = response.data;
-          setLeaveData(leaveInfo);
-          // console.log(`loooooog : ${leaveInfo}`);
+          const leaveInfo = response.data.leaveApplications;
+          console.log("Response data:", response.data.leaveApplications);
+          console.log(`loooooog : ${leaveInfo}`);
+          setLeaveData(response.data.leaveApplications);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -161,16 +163,90 @@ export default function Details() {
       .catch((error) => {
         console.error("Error fetching clearance data:", error);
       });
-  }, [id]);
-  const [enlarged, setEnlarged] = useState(false);
 
-  const handleImageClick = () => {
-    setEnlarged(true);
+    axios
+      .get(`http://localhost:8080/leave-balance/${id}`)
+      .then((response) => {
+        setRemDays(response.data.message.availableLeave);
+        console.log(`totalLeave : ${response.data.message.availableLeave}`);
+      })
+      .catch((error) => {
+        console.error("Error fetching clearance data:", error);
+      });
+  }, [id]);
+
+  const [enlarged, setEnlarged] = useState(null);
+
+  const handleImageClick = (index) => {
+    if (enlarged === index) {
+      setEnlarged(null);
+    } else {
+      setEnlarged(index);
+    }
   };
 
   const closeEnlargedView = () => {
     setEnlarged(false);
   };
+
+  const [leaveStatus, setLeaveStatus] = useState({});
+
+  // Initialize leaveStatus with default "Pending" for all leave requests
+  useEffect(() => {
+    const initialStatus = {};
+    leaveData.forEach((leave) => {
+      initialStatus[leave._id] = "Pending";
+    });
+    setLeaveStatus(initialStatus);
+  }, [leaveData]);
+
+  const statusToApprove = "approved";
+  const handleLeaveAction = async (id, status) => {
+    try {
+      // Send a PUT request to update the leave status
+      const response = await axios.put(`http://localhost:8080/leave/${id}`, {
+        status,
+      });
+      console.log(`console :${id}`);
+      // Update the leaveData state with the updated status
+      setLeaveData((prevState) =>
+        prevState.map((leave) =>
+          leave._id === id ? { ...leave, status } : leave
+        )
+      );
+
+      // Update the leaveStatus state with the new status
+      setLeaveStatus((prevStatus) => ({
+        ...prevStatus,
+        [id]: status,
+      }));
+    } catch (error) {
+      console.error("Error updating leave status:", error);
+    }
+  };
+  // const handleLeaveAction = async (leaveId, status) => {
+  //   try {
+  //     const response = await axios.put(`http://localhost:8080/leave/${leaveId}`, { status });
+  
+  //     // Assuming you have a state variable `leaveData` to keep track of the leave requests
+  //     // Update the leaveData state with the updated status
+  //     setLeaveData((prevLeaveData) =>
+  //       prevLeaveData.map((leave) =>
+  //         leave._id === leaveId ? { ...leave, status } : leave
+  //       )
+  //     );
+  
+  //     // Assuming you have a state variable `leaveStatus` to keep track of the status of each leave request
+  //     // Update the leaveStatus state with the new status for the user
+  //     setLeaveStatus((prevLeaveStatus) => ({
+  //       ...prevLeaveStatus,
+  //       [leaveId]: status,
+  //     }));
+  //   } catch (error) {
+  //     console.error("Error updating leave status:", error);
+  //   }
+  // };
+  
 
   return (
     <>
@@ -381,6 +457,7 @@ export default function Details() {
                 </div>
               </div>
 
+              {/* attandance details */}
               <div className="row">
                 <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
@@ -429,7 +506,9 @@ export default function Details() {
                   </div>
                 </div>
               </div>
+              {/* attandance details */}
 
+              {/* leave status / advance */}
               <div className="row">
                 <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
@@ -474,7 +553,7 @@ export default function Details() {
                                 </div>
                                 <div className="col-sm-6">
                                   <p className="text-muted mb-0">
-                                    {leaveData.totalNumberOfDays}
+                                    {remainingLeaveDays}
                                   </p>
                                 </div>
                               </div>
@@ -590,11 +669,149 @@ export default function Details() {
                   </div>
                 </div>
               </div>
+              {/* leave status / advance */}
 
-              {/* <TripDetail /> */}
-
+              {/* leave details */}
               <div className="row">
-                <div className="col-md-12">
+              <div className="col-md-12 col-lg-6">
+                  <div className="mb-3 card">
+                    <div className="card-header-tab card-header">
+                      <div className="card-header-title">
+                        <i className="header-icon  lnr lnr-rocket icon-gradient bg-night-sky">
+                          {" "}
+                        </i>
+                        Employees Leave Record
+                      </div>
+                    </div>
+                    <div
+                      className="table-responsive"
+                      style={{ height: "370px", overflowY: "scroll" }}
+                    >
+                      <table className="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>Days</th>
+                            <th className="text-center">Start Date</th>
+                            <th className="text-center">End Date</th>
+                            <th className="text-center">Status</th>
+                            <th className="text-center">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {leaveData.map((leaves, index) => (
+                            <tr key={leaves._id}>
+                              <td>
+                                <div className="widget-content p-0">
+                                  <div className="widget-content-wrapper">
+                                    <div className="widget-content-left flex2">
+                                      <div className="widget-heading">
+                                        {leaves.numberOfDays}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="text-center text-muted">
+                                {new Date(leaves.startDate).toLocaleString(
+                                  "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                  }
+                                )}
+                              </td>
+                              <td className="text-center text-muted">
+                                {new Date(leaves.endDate).toLocaleString(
+                                  "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                  }
+                                )}
+                              </td>
+                              <td className="text-center text-muted">
+                                {leaves.status}
+                              </td>
+                              <td className="text-center text-muted">
+                                <span>
+                                  <OverlayTrigger
+                                    key="tooltip4"
+                                    placement="top"
+                                    overlay={
+                                      <Tooltip id="tooltip">
+                                        Approve Leave
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <button
+                                     onClick={() => handleLeaveAction(leaves._id, "approved")}
+                                      style={{
+                                        color: "white",
+                                        backgroundColor: "rgb(7, 116, 7)",
+                                        fontSize: "1rem",
+                                        border: "none",
+                                        marginRight: "4px",
+                                      }}
+                                    >
+                                      <Icon
+                                        icon="icon-park-solid:correct"
+                                        color="white"
+                                      />
+                                    </button>
+                                  </OverlayTrigger>
+                                  <OverlayTrigger
+                                    key="tooltip4"
+                                    placement="top"
+                                    overlay={
+                                      <Tooltip id="tooltip">
+                                        Reject Leave
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <button
+                                      onClick={() =>
+                                        handleLeaveAction(
+                                          leaves._id,
+                                          "rejected"
+                                        )
+                                      }
+                                      style={{
+                                        color: "white",
+                                        backgroundColor: "rgb(165, 15, 15)",
+                                        fontSize: "1rem",
+                                        border: "none",
+                                        marginRight: "4px",
+                                      }}
+                                    >
+                                      <Icon
+                                        icon="raphael:cross"
+                                        color="white"
+                                        width="22"
+                                        hFlip={true}
+                                        vFlip={true}
+                                      />
+                                    </button>
+                                  </OverlayTrigger>
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                          {/* {leaveData.map((leave) => (
+  <div key={leave._id}>
+    <p>Leave ID: {leave._id}</p>
+    <p>Status: {leave.status}</p>
+    <button onClick={() => handleLeaveAction(leave._id, "approved")}>Approve</button>
+    <button onClick={() => handleLeaveAction(leave._id, "rejected")}>Reject</button>
+  </div>
+))} */}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
@@ -606,7 +823,7 @@ export default function Details() {
                     </div>
                     <div
                       className="table-responsive"
-                      style={{ overflowY: "scroll" }}
+                      style={{ height: "370px", overflowY: "scroll" }}
                     >
                       <table className="align-middle mb-0 table table-borderless table-striped table-hover">
                         <thead>
@@ -667,7 +884,15 @@ export default function Details() {
                   </div>
                 </div>
               </div>
+              {/* leave details */}
 
+              {/* <TripDetail /> */}
+              <div className="row">
+
+              </div>
+              {/* <TripDetail /> */}
+
+              {/* bills  */}
               <div className="row">
                 <div className="col-md-12">
                   <div className="mb-3 card">
@@ -701,7 +926,7 @@ export default function Details() {
                               )
                             );
                             return (
-                              <tr>
+                              <tr key={index}>
                                 <td>
                                   <div className="widget-content p-0">
                                     <div className="widget-content-wrapper">
@@ -729,34 +954,22 @@ export default function Details() {
                                   {formData.ImageName}
                                 </td>
                                 <td>
-                                  {/* {formData.images && (
-                                    
-                                    <div>
-                                      <img
-                                        src={`data:image/${formData?.images?.contentType};base64,${base64String}`}
-                                        alt={`${
-                                          formData.ImageName
-                                        }`}
-                                        style={{width:"3rem"}}
-                                      />
-                                    </div>
-                                  )} */}
-
                                   {formData.images && (
                                     <div>
                                       <img
                                         src={`data:image/${formData?.images?.contentType};base64,${base64String}`}
                                         alt={formData.ImageName}
+                                        key={index}
                                         style={{
                                           width: "3rem",
                                           cursor: "pointer",
                                         }}
-                                        onClick={handleImageClick}
+                                        onClick={() => handleImageClick(index)}
                                       />
                                     </div>
                                   )}
 
-                                  {enlarged && (
+                                  {enlarged === index && (
                                     <div
                                       style={{
                                         background: `rgba(0, 0, 0, 0.5) url(data:image/${formData?.images?.contentType};base64,${base64String}) no-repeat center`,
@@ -782,6 +995,7 @@ export default function Details() {
                   </div>
                 </div>
               </div>
+              {/* bills  */}
 
               <ToastContainer
                 position="bottom-right"
