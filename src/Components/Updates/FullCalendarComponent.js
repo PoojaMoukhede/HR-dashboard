@@ -10,8 +10,8 @@ import CustomModal from "./CustomModal";
 import { FormGroup, Label, Input } from "reactstrap";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 
-// const Event_get  = "http://localhost:8080/getevent";
-// const Event_post  = "http://localhost:8080/postevent";
+// const Event_get  = "http://192.168.1.211:8080/getevent";
+// const Event_post  = "http://192.168.1.211:8080/postevent";
 export default function FullCalendarComponent() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [currentEvents, setCurrentEvents] = useState([]);
@@ -28,9 +28,6 @@ export default function FullCalendarComponent() {
     setModal(false);
   };
 
-  // function handleWeekendsToggle() {
-  //   setWeekendsVisible(!weekendsVisible);
-  // }
   function handleDateSelect(selectInfo) {
     // console.log(selectInfo.view.type);
     if (selectInfo.view.type === "timeGridDay") {
@@ -120,7 +117,7 @@ export default function FullCalendarComponent() {
     const eventId = state.clickInfo.event.id; // Use the event's unique identifier
   
     axios
-      .delete(`http://localhost:8080/event/${eventId}`)
+      .delete(`http://192.168.1.211:8080/event/${eventId}`)
       // .delete(`http://192.168.1.211:8000/events/${eventId}`)
 
       .then((response) => {
@@ -144,7 +141,7 @@ export default function FullCalendarComponent() {
     };
   
     axios
-      .put(`http://localhost:8080/event/${updatedEvent.id}`, updatedEvent)
+      .put(`http://192.168.1.211:8080/event/${updatedEvent.id}`, updatedEvent)
       // .put(`http://192.168.1.211:8000/events/${updatedEvent.id}`, updatedEvent)
 
       .then((response) => {
@@ -181,7 +178,7 @@ export default function FullCalendarComponent() {
 
   const handleAddEvent = () => {
     if (!formData.title || !formData.date || !formData.time) {
-      toast.error("Please fill in all fields.");
+      toast.error("Please fill in all fields.");   
       return;
     }
 
@@ -191,7 +188,7 @@ export default function FullCalendarComponent() {
     };
 
     axios
-      .post("http://localhost:8080/event", newEvent)
+      .post("http://192.168.1.211:8080/event", newEvent)
       // .post("http://192.168.1.211:8000/events", newEvent)
 
       .then((response) => {
@@ -206,6 +203,7 @@ export default function FullCalendarComponent() {
         });
 
         toast.success("Event added successfully");
+        window.location.reload()
       })
       .catch((error) => {
         console.error("Error adding event:", error);
@@ -216,7 +214,7 @@ export default function FullCalendarComponent() {
 
   useEffect((e) => {
     axios
-      .get("http://localhost:8080/event")
+      .get("http://192.168.1.211:8080/event")
       .then((response) => {
         setEvents(response.data);
       })
@@ -322,6 +320,8 @@ export default function FullCalendarComponent() {
                       day: "day",
                       list: "list",
                     }}
+                    hiddenDays={[0]} // this will not show sunday in calender
+                    daysOfWeek={(0, 1)} // with help of this 
                     editable={true}
                     selectable={true}
                     selectMirror={true}

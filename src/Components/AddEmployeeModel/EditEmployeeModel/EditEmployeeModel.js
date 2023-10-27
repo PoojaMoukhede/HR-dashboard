@@ -816,15 +816,64 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
     Puducherry: ["Karaikal", "Mahe", "Puducherry", "Yanam"],
   };
 
+  // const handleStateChange = (event) => {
+  //   const stateValue = event.target.value;
+  //   setSelectedState(stateValue);
+  //   setSelectedcity("");
+
+  //   setNewEmployee((prevEmployee) => ({
+  //     ...prevEmployee,
+  //     Emp_state: stateValue,
+  //   }));
+  // };
+
+  // const handlecityChange = (event) => {
+  //   const cityValue = event.target.value;
+  //   setSelectedcity(cityValue);
+
+  //   setNewEmployee((prevEmployee) => ({
+  //     ...prevEmployee,
+  //     Emp_city: cityValue,
+  //   }));
+  // };
+
+  // const cityOptions = selectedState
+  //   ? statesData[selectedState].map((Emp_city) => (
+  //       <MenuItem key={Emp_city} value={Emp_city}>
+  //         {Emp_city}
+  //       </MenuItem>
+  //     ))
+  //   : null;
   const handleStateChange = (event) => {
     const stateValue = event.target.value;
     setSelectedState(stateValue);
-    setSelectedcity("");
 
-    setNewEmployee((prevEmployee) => ({
-      ...prevEmployee,
-      Emp_state: stateValue,
-    }));
+    // Check if the selected state exists in the statesData object
+    if (statesData[stateValue]) {
+      const stateCities = statesData[stateValue];
+      if (stateCities.length > 0) {
+        setSelectedcity(stateCities[0]);
+        setNewEmployee((prevEmployee) => ({
+          ...prevEmployee,
+          Emp_state: stateValue,
+          Emp_city: stateCities[0], // Update Emp_city with the first city
+        }));
+      } else {
+        setSelectedcity(''); // No cities available
+        setNewEmployee((prevEmployee) => ({
+          ...prevEmployee,
+          Emp_state: stateValue,
+          Emp_city: '', // Reset Emp_city when no cities are available
+        }));
+      }
+    } else {
+      setSelectedcity(''); // Selected state doesn't exist
+      setNewEmployee((prevEmployee) => ({
+        ...prevEmployee,
+        Emp_state: stateValue,
+        Emp_city: '', // Reset Emp_city
+      }));
+    }
   };
 
   const handlecityChange = (event) => {
@@ -835,12 +884,12 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
       ...prevEmployee,
       Emp_city: cityValue,
     }));
-  };
+  }
 
   const cityOptions = selectedState
-    ? statesData[selectedState].map((Emp_city) => (
-        <MenuItem key={Emp_city} value={Emp_city}>
-          {Emp_city}
+    ? statesData[selectedState].map((city) => (
+        <MenuItem key={city} value={city}>
+          {city}
         </MenuItem>
       ))
     : null;
@@ -866,7 +915,13 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
     return emailRegex.test(email);
   };
 
-  
+  function getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  } 
 
 
   useEffect(() => {
@@ -1064,6 +1119,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                     value={newEmployee.Emp_DOB}
                     onChange={handleInputChange}
                     required
+                    max={getCurrentDate()}
                     style={{
                       width: "23.25rem",
                       height: "3.3rem",
@@ -1089,6 +1145,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                       maxWidth: "100%",
                     }}
                     min="2010-01-01"
+                    max={getCurrentDate()}
                   />
                 </div>
               </div>

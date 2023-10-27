@@ -31,7 +31,7 @@ export default function Member() {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8080/Users"
+        "http://192.168.1.211:8080/Users"
       )
       .then((response) => {
         setRows(response.data);
@@ -62,7 +62,7 @@ export default function Member() {
       if (willDelete) {
         console.log(`id in delete ${id}`);
         axios
-          .delete(`http://localhost:8080/Users/${id}`)
+          .delete(`http://192.168.1.211:8080/Users/${id}`)
 
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
@@ -91,8 +91,8 @@ export default function Member() {
         formData.append("file", selected_file);
 
         axios
-          .post("http://localhost:8080/importdata", formData)
-
+          .post("http://192.168.1.211:8080/importdata", formData)
+ 
           .then((response) => {
             console.log("Import response:", response);
           })

@@ -9,7 +9,7 @@ export default function Table() {
   useEffect(() => {
     // setRows(dummyData);
     axios
-      .get("http://localhost:8080/Users")
+      .get("http://192.168.1.211:8080/Users")
       .then((response) => {
         setRows(response.data);
       })

@@ -1,22 +1,25 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./header.css";
 import Header from "./Header";
 import Sidebar from "../Sidebar/Sidebar";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export default function Profile() {
-  const [user, setUser] = useState([]);
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/empdata")
-      .then((response) => {
-        setUser(response.data);
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+  const { id } = useParams();
+  console.log(`id : ${id}`);
+  // const [user, setUser] = useState([]);
+  // useEffect((id) => {
+  //   axios
+  //     .get(`http://192.168.1.211:8080/get/${id}`)
+  //     .then((response) => {
+  //       setUser(response.data);
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, []);
 
   return (
     <>
@@ -26,58 +29,29 @@ export default function Profile() {
           <Sidebar />
           <div className="app-main__outer">
             <div className="app-main__inner">
-              <div className="row">
-                {/* <ul>
-                  {user.map((employee) => {
-                    <li>{employee.email}</li>
-                    // <li>{employee.name}</li>
-                    // <li>{employee.email}</li>
-
-                  })}
-                </ul> */}
-                        <div className="table-responsive"  style={{overflowY: "scroll" }}>
-          <table className="align-middle mb-0 table table-borderless table-striped table-hover">
-            <thead>
-              <tr>
-                <th className="text-center">ID</th>
-                <th>Name</th>
-                <th className="text-center">Email</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              {user.map((row) => (
-                <tr>
-                  <td className="text-center text-muted">{row.Emp_ID}</td>
-                  <td>
-                    <div className="widget-content p-0">
-                      <div className="widget-content-wrapper">
-                        <div className="widget-content-left mr-3">
-                          <div className="widget-content-left">
-                            <img
-                              width="40"
-                              className="rounded-circle"
-                              src="assets/images/avatars/4.jpg"
-                              alt=""
-                            />
-                          </div>
-                        </div>
-                        <div className="widget-content-left flex2">
-                          <div className="widget-heading">{row.name}</div>
-                          <div className="widget-subheading opacity-7">
-                            {row.Emp_department}
-                          </div>
-                        </div>
-                      </div>
+              <div className="d-flex justify-content-center align-item-center">
+                {/* {user?.map((data)=>{ */}
+                  <div class="profile-card">
+                  <div class="top-section bg-asteroid">
+                    <i class="message fa fa-envelope"></i>
+                    <i class="notif fa fa-bell"></i>
+                    <div class="pic">
+                      <img
+                        src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjxivAs4UknzmDfLBXGMxQkayiZDhR2ftB4jcIV7LEnIEStiUyMygioZnbLXCAND-I_xWQpVp0jv-dv9NVNbuKn4sNpXYtLIJk2-IOdWQNpC2Ldapnljifu0pnQqAWU848Ja4lT9ugQex-nwECEh3a96GXwiRXlnGEE6FFF_tKm66IGe3fzmLaVIoNL/s1600/img_avatar.png"
+                        alt="profile pictur"
+                      />
                     </div>
-                  </td>
-                  <td className="text-center">{row.email}</td>
-                  
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    <div class="name">Your Name</div>
+                    <div class="tag">@Admin Email</div>
+                  </div>
+                  <div class="bottom-section">
+                    <span>Contact Number</span>
+                    <span>Address</span>
+                    <span>Contact Number</span>
+                  </div>
+                </div>
+                {/* })} */}
+                
               </div>
             </div>
           </div>

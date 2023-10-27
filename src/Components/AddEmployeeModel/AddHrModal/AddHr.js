@@ -23,12 +23,13 @@ export default function Register() {
     signUpHR(login);
     handleCloseModal(); 
     window.location.reload()
+    // window.top.location = window.top.location
   };
 
   return (
     <>
       <Button variant="primary" onClick={handleShowModal} style={{marginLeft:'0.5rem', marginBottom:"0.5rem"}}>
-        Register
+       Create New Account
       </Button>
 
       <Modal show={showModal} onHide={handleCloseModal}>

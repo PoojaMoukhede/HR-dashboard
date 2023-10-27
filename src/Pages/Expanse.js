@@ -23,7 +23,7 @@ export default function Expanse() {
   });
   useEffect(() => {
     axios
-      .get("http://localhost:8080/totalMonthlyExpenses")
+      .get("http://192.168.1.211:8080/totalMonthlyExpenses")
       .then((response) => {
         const data = response.data;
 
@@ -54,7 +54,7 @@ export default function Expanse() {
       });
 
     axios
-      .get("http://localhost:8080/current-month-totals")
+      .get("http://192.168.1.211:8080/current-month-totals")
       .then((response) => {
         const formData = response.data;
         const clearanceData = Array.isArray(formData) ? formData : [formData];

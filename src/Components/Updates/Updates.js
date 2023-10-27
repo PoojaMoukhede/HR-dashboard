@@ -8,7 +8,7 @@ export default function Updates() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/updates")
+      .get("http://192.168.1.211:8080/updates")
       .then((response) => {
         setRows(response.data);
         // console.log(`update : ${response.data}`);

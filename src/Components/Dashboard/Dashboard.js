@@ -9,62 +9,11 @@ import axios from "axios";
 
 export default function Dashboard() {
   const [fuelData, setFuelData] = useState([]);
-  const [currentMonthFuel, setCurrentMonthFuel] = useState(0);
   const [totalDistance, setTotalDistance] = useState(null)
   const [totalExpanse,setTotalExpanse] = useState(0)
   const [currentMonthTotalExpense, setCurrentMonthTotalExpense] = useState(0);
   const [fuel,setFuel] = useState(null)
 
-  // const chartData2 = {
-  //   options: {
-  //     chart: {
-  //       id: "basic-bar2",
-  //     },
-  //     xaxis: {
-  //       categories: [
-  //         "Jan",
-  //         "Feb",
-  //         "Mar",
-  //         "Apr",
-  //         "May",
-  //         "Jun",
-  //         "Jul",
-  //         "Aug",
-  //         "Sept",
-  //         "Oct",
-  //         "Nov",
-  //         "Dec",
-  //       ],
-  //       labels: {
-  //         style: {
-  //           colors: "black",
-  //         },
-  //       },
-  //     },
-  //     yaxis: {
-  //       labels: {
-  //         style: {
-  //           colors: "black",
-  //         },
-  //       },
-  //     },
-  //     colors: ["#22437e"],
-  //     tooltip: {
-  //       style: {
-  //         colors: "#fd929d",
-  //       },
-  //     },
-  //     dataLabels: {
-  //       enabled: false,
-  //     },
-  //   },
-  //   series: [
-  //     {
-  //       name: "Fuel Consumption in liters",
-  //       data: fuelData.map((entry) => entry.Liters),
-  //     },
-  //   ],
-  // };
 
   const [chartData2, setChartData2] = useState({
     options: {
@@ -133,7 +82,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/totalMonthlyExpenses')
+      .get('http://192.168.1.211:8080/totalMonthlyExpenses')
       .then(response => {
         const data = response.data;
 
@@ -188,7 +137,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/total-distance")
+      .get("http://192.168.1.211:8080/total-distance")
       .then((response) => {
         setTotalDistance(response.data.totalDistance);
       })
@@ -197,7 +146,7 @@ export default function Dashboard() {
       });
   
     axios
-      .get("http://localhost:8080/totalExpenses")
+      .get("http://192.168.1.211:8080/totalExpenses")
       .then((response) => {
         setTotalExpanse(response.data.totalExpenses);
       })
@@ -206,7 +155,7 @@ export default function Dashboard() {
       });
   
     axios
-      .get(`http://localhost:8080/totalFuel`)
+      .get(`http://192.168.1.211:8080/totalFuel`)
       .then((response) => {
         const fuelCount = response.data.totalAllFuel;
         setFuel(fuelCount);
@@ -216,7 +165,7 @@ export default function Dashboard() {
       });
   
     axios
-      .get(`http://localhost:8080/totalFuelByMonth`)
+      .get(`http://192.168.1.211:8080/totalFuelByMonth`)
       .then((response) => {
         const data = response.data;
   
@@ -238,7 +187,7 @@ export default function Dashboard() {
         data.sort((a, b) => monthOrder[a.month] - monthOrder[b.month]);
   
         const months = data.map((entry) => entry.month);
-        const expenses = data.map((entry) => entry.liters);
+        const Liters = data.map((entry) => entry.liters);
         const currentMonth = new Date().getMonth() + 1; // current month (1-12)
   
         const currentMonthData = data.find(
@@ -257,8 +206,8 @@ export default function Dashboard() {
           },
           series: [
             {
-              name: "Expenses in INR",
-              data: expenses,
+              name: "Fuel in Liters",
+              data: Liters,
             },
           ],
         });
@@ -268,10 +217,6 @@ export default function Dashboard() {
       });
   }, []);
   
-
-
-
-
   return (
     <>
       <div className={`App ${theme}`}>
@@ -365,7 +310,7 @@ export default function Dashboard() {
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-black">
-                          <span>{fuel} Liters</span>
+                          <span>{fuelData} Liters</span>
                         </div>
                       </div>
                     </div>

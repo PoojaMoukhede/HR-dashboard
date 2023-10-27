@@ -9,7 +9,7 @@ export default function AttandanceTable() {
   useEffect(() => {
     try {
       axios
-        .get(`http://localhost:8080/attandance/${id}`)
+        .get(`http://192.168.1.211:8080/attandance/${id}`)
         .then((response) => {
           setData(response.data.message.Employee_attandance);
         })

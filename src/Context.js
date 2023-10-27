@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 const APIContext = createContext();
 
 export function APIContextProvider({ children }) {
-  // const URL = "http://localhost:8080/";
-  // const URL = "http://localhost:8080/
+  // const URL = "http://192.168.1.211:8080/";
+  // const URL = "http://192.168.1.211:8080/
 
 
-  const URL = "http://localhost:8080/"
+  const URL = "http://192.168.1.211:8080/"
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [userEmail, setUserEmail] = useState("");
@@ -41,7 +41,7 @@ export function APIContextProvider({ children }) {
           setEmployeedata(userData)
           window.alert(`Registeration Completed`);
           // navigate("/login");
-          
+          window.location.reload()
         })
         .catch((err) => {
           console.log(err);
@@ -147,7 +147,7 @@ export function APIContextProvider({ children }) {
 
         console.log(name,email,contact_no, city,state,blood_group);
         setManagerdata(data)
-      
+        window.location.reload()
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -157,8 +157,7 @@ export function APIContextProvider({ children }) {
   const onFormSubmitEdit = async(id, data) => { //emplopyee `${URL}putEmployee/${id}`
     console.log(" onformsubmitedit inside")
    await axios           
-      .put(`http://localhost:8080/
-Users/${id}`,data)
+      .put(`http://192.168.1.211:8080/Users/${id}`,data)
       // .put(`http://192.168.1.211:8000/employees/${id}`,data)
 
       // console.log("-------------")
@@ -200,7 +199,7 @@ Users/${id}`,data)
         .then((res) => {
           console.log(res);
           window.alert(`Registeration Completed`);
-
+          window.location.reload()
           // navigate("/login");
           
         })

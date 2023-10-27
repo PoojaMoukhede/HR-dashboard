@@ -14,7 +14,7 @@ export default function HRadmins() {
   const [searchValue, setSearchValue] = useState("");
   useEffect(() => {
     axios
-      .get("http://localhost:8080/getAdmin")
+      .get("http://192.168.1.211:8080/getAdmin")
       .then((response) => {
         setRows(response.data);
         console.log(response.data);
@@ -47,8 +47,8 @@ export default function HRadmins() {
         // User confirmed deletion, proceed with the delete request
         console.log(`id in delete ${id}`);
         axios
-          // .delete(`http://localhost:8080/deleteEmployee/${id}`)
-          .delete(`http://localhost:8080/admin/${id}`)
+          // .delete(`http://192.168.1.211:8080/deleteEmployee/${id}`)
+          .delete(`http://192.168.1.211:8080/admin/${id}`)
 
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);

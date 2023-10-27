@@ -9,7 +9,7 @@ export default function Complaint() {
   const [users, setUsers] = useState({});
   useEffect(() => {
     axios
-      .get("http://localhost:8080/empdata")
+      .get("http://192.168.1.211:8080/empdata")
       .then((response) => {
         console.log(`userlookup :`, response.data);
         const userLookup = {};
@@ -29,7 +29,7 @@ export default function Complaint() {
 
   const fetchComplaints = () => {
     axios
-      .get("http://localhost:8080/complaint")
+      .get("http://192.168.1.211:8080/complaint")
       .then((response) => {
         setComplaints(response.data.message);
         console.log(response.data.message);
@@ -62,7 +62,7 @@ export default function Complaint() {
     try {
       if (processCount > 0) {
         await axios.delete(
-          `http://localhost:8080/complaint/${complaintId}/message/${messageId}`
+          `http://192.168.1.211:8080/complaint/${complaintId}/message/${messageId}`
         );
 
         const updatedComplaints = complaints.filter(

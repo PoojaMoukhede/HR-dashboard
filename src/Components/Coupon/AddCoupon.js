@@ -22,7 +22,7 @@ const AddCoupon = ({ open, onClose }) => {
     const data = { ...newMenu };
 
     axios
-      .post('http://localhost:8080/menu', data)
+      .post('http://192.168.1.211:8080/menu', data)
       .then((res) => {
         const { date, menu } = res.data;
         console.log('Response:', res );
@@ -36,6 +36,7 @@ const AddCoupon = ({ open, onClose }) => {
           console.error('Unexpected response:', res.data); // Add this line for debugging
         }
         setNewMenu({ date: "", menu: "" });
+        window.location.reload()
         console.log(date, menu);
       })
       .catch((error) => {

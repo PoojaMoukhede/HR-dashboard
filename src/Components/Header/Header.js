@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import DropDown from "../DropDown";
 import { ThemeContext } from "../Header/ThemeProvider";
+import Button from "react-bootstrap/Button";
+
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -122,7 +124,15 @@ export default function Header() {
               </ul> */}
             </div>
 
-            <DropDown />
+            <Button style={{backgroundColor:"#fafbfc",border:"none",color:"black",paddingTop:'0'}} href="/profile">
+        
+        <Icon
+          icon="healthicons:ui-user-profile"
+          color="#24a1e9"
+          style={{ fontSize: "2rem", marginRight: "0.5rem" }}
+        />
+        {localStorage.getItem("email").split("@")[0]}
+      </Button>
           </div>
         </div>
         <div className="app-header__mobile-menu">

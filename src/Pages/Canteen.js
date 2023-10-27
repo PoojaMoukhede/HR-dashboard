@@ -10,7 +10,7 @@ export default function Canteen() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/menu")
+      .get("http://192.168.1.211:8080/menu")
       .then((response) => {
         setMenuItems(response.data);
       })
@@ -19,7 +19,7 @@ export default function Canteen() {
       });
 
     axios
-      .get("http://localhost:8080/coupon-count-by-menu")
+      .get("http://192.168.1.211:8080/coupon-count-by-menu")
       .then((response) => {
         setCouponCounts(response.data);
         console.log(`coupon count : ${response.data}`)

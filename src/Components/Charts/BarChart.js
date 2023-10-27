@@ -11,7 +11,7 @@ const ApexChart = () => {
   useEffect(() => {
     // Fetch leave data from your API
     axios
-      .get(`http://localhost:8080/leave-balance/${id}`)
+      .get(`http://192.168.1.211:8080/leave-balance/${id}`)
       .then((response) => {
         setRemDays(response.data.message.availableLeave);
         console.log(`totalLeave : ${response.data.message.availableLeave}`);

@@ -9,14 +9,10 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { useAPI } from "../../Context";
 
-
-const AddEmployeeModal = ({
-  open,
-  onClose,
-}) => {
+const AddEmployeeModal = ({ open, onClose }) => {
   const [newEmployee, setNewEmployee] = useState({
     // id: Date.now(),
-    Emp_ID:'',
+    Emp_ID: false,
     Emp_name: "",
     email: "",
     Emp_contact_No: "",
@@ -25,29 +21,35 @@ const AddEmployeeModal = ({
     Emp_state: "",
     Emp_DOB: "",
     Emp_joining_date: "",
-    Emp_blood_group:"",
-    Emp_qualification:"",
-    Emp_expertise:"",
-    password:"",
+    Emp_blood_group: "",
+    Emp_qualification: "",
+    Emp_expertise: "",
+    password: "",
     confirm_password: "",
   });
 
+  const [enteredIDs, setEnteredIDs] = useState([]);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewEmployee((prevEmployee) => ({
       ...prevEmployee,
       [name]: value,
     }));
-    if (name === 'Emp_contact_No' && value.length === 10) {
+    if (name === "Emp_contact_No" && value.length === 10) {
       setNewEmployee({ ...newEmployee, [name]: value });
-    } else if (name === 'Emp_contact_No' && value.length < 10) {
-      console.error('Contact number must be 10 characters long.');
+    } else if (name === "Emp_contact_No" && value.length < 10) {
+      console.error("Contact number must be 10 characters long.");
+      // alert('Contact number must be 10 characters long.')
     }
+
     if (value.trim() === "") {
       setEmptyFields({
         ...emptyFields,
         [name]: true,
       });
+    }
+    if (name === "Emp_ID" && enteredIDs.includes(value)) {
+      alert("Employee ID is not unique!");
     } else {
       setEmptyFields({
         ...emptyFields,
@@ -835,35 +837,38 @@ const AddEmployeeModal = ({
     Puducherry: ["Karaikal", "Mahe", "Puducherry", "Yanam"],
   };
 
-  // const handleStateChange = (event) => {
-  //   const stateValue = event.target.value;
-  //   setSelectedState(stateValue);
-  //   setSelectedcity("");
-
-  //   setNewEmployee((prevEmployee) => ({
-  //     ...prevEmployee,
-  //     Emp_state: stateValue,
-  //   }));
-  // };
   const handleStateChange = (event) => {
     const stateValue = event.target.value;
     setSelectedState(stateValue);
-  
+
     // Check if the selected state exists in the statesData object
     if (statesData[stateValue]) {
       const stateCities = statesData[stateValue];
       if (stateCities.length > 0) {
         setSelectedcity(stateCities[0]);
+        setNewEmployee((prevEmployee) => ({
+          ...prevEmployee,
+          Emp_state: stateValue,
+          Emp_city: stateCities[0], // Update Emp_city with the first city
+        }));
+      } else {
+        setSelectedcity(""); // No cities available
+        setNewEmployee((prevEmployee) => ({
+          ...prevEmployee,
+          Emp_state: stateValue,
+          Emp_city: "", // Reset Emp_city when no cities are available
+        }));
       }
     } else {
-      setSelectedcity('');
+      setSelectedcity(""); // Selected state doesn't exist
+      setNewEmployee((prevEmployee) => ({
+        ...prevEmployee,
+        Emp_state: stateValue,
+        Emp_city: "", // Reset Emp_city
+      }));
     }
-  
-    setNewEmployee((prevEmployee) => ({
-      ...prevEmployee,
-      Emp_state: stateValue,
-    }));
   };
+
   const handlecityChange = (event) => {
     const cityValue = event.target.value;
     setSelectedcity(cityValue);
@@ -875,9 +880,9 @@ const AddEmployeeModal = ({
   };
 
   const cityOptions = selectedState
-    ? statesData[selectedState].map((Emp_city) => (
-        <MenuItem key={Emp_city} value={Emp_city}>
-          {Emp_city}
+    ? statesData[selectedState].map((city) => (
+        <MenuItem key={city} value={city}>
+          {city}
         </MenuItem>
       ))
     : null;
@@ -890,7 +895,6 @@ const AddEmployeeModal = ({
   const { signUpUser } = useAPI();
   const [emptyFields, setEmptyFields] = useState({});
   const onFormSubmit1 = (e) => {
-
     const emptyFieldNames = [];
 
     if (!isEmailValid(newEmployee.email)) {
@@ -911,316 +915,431 @@ const AddEmployeeModal = ({
     if (!newEmployee.Emp_contact_No) {
       emptyFieldNames.push("Employee Contact Number");
     }
-    if(!newEmployee.Emp_qualification){
+    if (!newEmployee.Emp_qualification) {
       emptyFieldNames.push("Employee Qualification");
     }
-    if(!newEmployee.Emp_department){
+    if (!newEmployee.Emp_department) {
       emptyFieldNames.push("Employee Department");
     }
-  
-    if(!newEmployee.Emp_expertise){
+
+    if (!newEmployee.Emp_expertise) {
       emptyFieldNames.push("Employee Expertise");
     }
-  
-    if(!newEmployee.Emp_blood_group){
+
+    if (!newEmployee.Emp_blood_group) {
       emptyFieldNames.push("Employee Blood Group");
     }
-  
-    if(!newEmployee.password){
+
+    if (!newEmployee.password) {
       emptyFieldNames.push("Employee Password");
     }
-    if(!newEmployee.confirm_password){
+    if (!newEmployee.confirm_password) {
       emptyFieldNames.push("Employee Confirm Passwordr");
     }
-    if(!newEmployee.Emp_state){
+    if (!newEmployee.Emp_state) {
       emptyFieldNames.push("Employee State");
     }
-    if(!newEmployee.Emp_city){
+    if (!newEmployee.Emp_city) {
       emptyFieldNames.push("Employee City");
     }
-    if(!newEmployee.Emp_DOB){
+    if (!newEmployee.Emp_DOB) {
       emptyFieldNames.push("Employee Date of Birth");
     }
-    if(!newEmployee.Emp_joining_date){
+    if (!newEmployee.Emp_joining_date) {
       emptyFieldNames.push("Employee Joining Date");
     }
+    if (enteredIDs.includes(newEmployee.Emp_ID)) {
+      emptyFieldNames.push("Employee ID is not unique!");
+      alert("Employee ID is not unique!");
+      // You can prevent the form submission or display an error message here
+      return;
+    }
     if (emptyFieldNames.length > 0) {
-      alert(`Please fill in the following required field(s): ${emptyFieldNames.join(", ")}`);
-      return; 
+      alert(
+        `Please fill in the following required field(s): ${emptyFieldNames.join(
+          ", "
+        )}`
+      );
+      return;
     }
     signUpUser(newEmployee);
     window.location.reload();
   };
-  
+
   const isEmailValid = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   const validateContactNumber = (tel) => {
-    const pattern = /^[0-9]{10}$/; 
+    const pattern = /^[0-9]{10}$/;
     return pattern.test(tel);
   };
+
+  function getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+  //  if(!getCurrentDate()){
+  //   alert
+  //  }
+
   return (
-    <> 
-    <Modal
-      open={open}
-      onClose={onClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
-    >
-      <Fade in={open}>
-        <div className="modal-container">
-          <h2>Add New Employee</h2>
-          <div className="grid-container">
-            <div className="grid-row">
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_name"
-                  label="Employee Name"
-                  value={newEmployee.Emp_name}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  className={emptyFields.Emp_name ? "input-field-error" : "input-field"}
-                />
+    <>
+      <Modal
+        open={open}
+        onClose={onClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className="modal-container">
+            <h2>Add New Employee</h2>
+            <div className="grid-container">
+              <div className="grid-row">
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="Emp_name"
+                    label="Employee Name"
+                    value={newEmployee.Emp_name}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    className={
+                      emptyFields.Emp_name ? "input-field-error" : "input-field"
+                    }
+                  />
+                </div>
+                <div className="grid-item">
+                  <TextField
+                    type="number"
+                    name="Emp_ID"
+                    label="Employee ID"
+                    value={newEmployee.Emp_ID}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    className={
+                      emptyFields.Emp_ID ? "input-field-error" : "input-field"
+                    }
+                  />
+                </div>
               </div>
-              <div className="grid-item">
-                <TextField
-                  type="number"
-                  name="Emp_ID"
-                  label="Employee ID"
-                  value={newEmployee.Emp_ID}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  className={emptyFields.Emp_ID ? "input-field-error" : "input-field"}
-                />
+              <div className="grid-row">
+                <div className="grid-item">
+                  <TextField
+                    type="email"
+                    name="email"
+                    label="Employee E-mail"
+                    value={newEmployee.email}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                    className={
+                      emptyFields.email ? "input-field-error" : "input-field"
+                    }
+                  />
+                </div>
+                <div className="grid-item">
+                  <TextField
+                    type="tel"
+                    name="Emp_contact_No"
+                    label="Employee Contact Number"
+                    value={newEmployee.Emp_contact_No}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                    inputProps={{
+                      inputMode: "numeric",
+                      pattern: "[0-9]{10}",
+                      maxLength: 10,
+                      minLength: 10,
+                    }}
+                    className={
+                      emptyFields.Emp_contact_No
+                        ? "input-field-error"
+                        : "input-field"
+                    }
+                  />
+                </div>
               </div>
-            </div>
-            <div className="grid-row">
-              <div className="grid-item">
-                <TextField
-                  type="email"
-                  name="email"
-                  label="Employee E-mail"
-                  value={newEmployee.email}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                  className={emptyFields.email ? "input-field-error" : "input-field"}
-                />
-              </div>
-              <div className="grid-item">
-                <TextField
-                  type="tel"
-                  name="Emp_contact_No"
-                  label="Employee Contact Number"
-                  value={newEmployee.Emp_contact_No}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                  inputProps={{
-                    inputMode: 'numeric', 
-                    pattern: '[0-9]{10}', 
-                    maxLength: 10, 
-                    minLength:10
-                  }}
-                  className={emptyFields.Emp_contact_No ? "input-field-error" : "input-field"}
-                />
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_qualification"
-                  label="Qualification"
-                  value={newEmployee.Emp_qualification}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                  className={emptyFields.Emp_qualification ? "input-field-error" : "input-field"}
-                />
-              </div>
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_department"
-                  label="Department"
-                  value={newEmployee.Emp_department}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                  className={emptyFields.Emp_department ? "input-field-error" : "input-field"}
-                />
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_expertise"
-                  label="Expertise"
-                  value={newEmployee.Emp_expertise}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                  className={emptyFields.Emp_expertise ? "input-field-error" : "input-field"}
-                />
-              </div>
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_blood_group"
-                  label="Blood Group"
-                  value={newEmployee.Emp_blood_group}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                  className={emptyFields.Emp_blood_group ? "input-field-error" : "input-field"}
-                />
-              </div>
-            </div>
-
-            <div className="grid-row">
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="password"
-                  label="password"
-                  value={newEmployee.password}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                  className={emptyFields.password ? "input-field-error" : "input-field"}
-                />
-              </div>
-              <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="confirm_password"
-                  label="confirm_password"
-                  value={newEmployee.confirm_password}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                  required
-                  className={emptyFields.confirm_password ? "input-field-error" : "input-field"}
-                />
-              </div>
-            </div>
-
-
-
-            <div className="grid-row">
-              <div className="grid-item">
-                <Select
-                  name="Emp_state"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  // value={newEmployee.state}
-                  label="State"
-                  style={{ color: "black", marginTop: "15px" }}
-                  fullWidth
-                  value={selectedState}
-                  onChange={handleStateChange}
-
-                  // onChange={handleInputChange}
-                >
-                  <MenuItem>Select</MenuItem>
-                  {Object.keys(statesData).map((state) => (
-                    <MenuItem value={state} key={state}>
-                      {state}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </div>
-              <div className="grid-item">
-                <Select
-                  name="Emp_city"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  // value={newEmployee.city}
-                  label="City"
-                  style={{ color: "black", marginTop: "15px" }}
-                  fullWidth
-                  // onChange={handleInputChange}
-                  value={selectedcity}
-                  onChange={handlecityChange}
-                >
-                  <MenuItem value="">Select</MenuItem>
-                  {cityOptions}
-                </Select>
-              </div>
-            </div>
-            <div className="grid-row mt-3">
-              <div className="grid-item ">
-                <label>Date of Birth</label>
-                <input
-                  type="date"
-                  placeholder="DD/MM/YYYY"
-                  name="Emp_DOB"
-                  value={newEmployee.Emp_DOB}
-                  onChange={handleInputChange}
-                  required
-                  style={{
-                    width: "23.25rem",
-                    height: "3.3rem",
-                    marginTop: "5px",
-                    maxWidth: "100%",
-                  }}
-                  className={emptyFields.Emp_DOB ? "input-field-error" : "input-field"}
-                />
+              <div className="grid-row">
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="Emp_qualification"
+                    label="Qualification"
+                    value={newEmployee.Emp_qualification}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                    className={
+                      emptyFields.Emp_qualification
+                        ? "input-field-error"
+                        : "input-field"
+                    }
+                  />
+                </div>
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="Emp_expertise"
+                    label="Expertise"
+                    value={newEmployee.Emp_expertise}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                    className={
+                      emptyFields.Emp_expertise
+                        ? "input-field-error"
+                        : "input-field"
+                    }
+                  />
+                </div>
               </div>
 
-              <div className="grid-item">
-                <label>Date of Joining</label>
-                <input
-                  type="date"
-                  placeholder="DD/MM/YYYY"
-                  name="Emp_joining_date"
-                  required
-                  value={newEmployee.Emp_joining_date}
-                  onChange={handleInputChange}
-                  style={{
-                    width: "23.25rem",
-                    height: "3.3rem",
-                    marginTop: "5px",
-                    maxWidth: "100%",
-                  }}
-                  min="2010-01-01"
-                  className={emptyFields.Emp_joining_date ? "input-field-error" : "input-field"}
-                />
+              <div className="grid-row">
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="password"
+                    label="password"
+                    value={newEmployee.password}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                    className={
+                      emptyFields.password ? "input-field-error" : "input-field"
+                    }
+                  />
+                </div>
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="confirm_password"
+                    label="confirm_password"
+                    value={newEmployee.confirm_password}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                    className={
+                      emptyFields.confirm_password
+                        ? "input-field-error"
+                        : "input-field"
+                    }
+                  />
+                </div>
               </div>
+
+              <div className="grid-row">
+                <div className="grid-item">
+                  {/* <TextField
+                    type="text"
+                    name="Emp_department"
+                    label="Department"
+                    value={newEmployee.Emp_department}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                    className={
+                      emptyFields.Emp_department
+                        ? "input-field-error"
+                        : "input-field"
+                    }
+                  /> */}
+                  <label>Department</label>
+                  <Select
+                    type="text"
+                    name="Emp_department"
+                    label="Department"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    style={{ color: "black" }}
+                    fullWidth
+                    value={newEmployee.Emp_department}
+                    onChange={handleStateChange}
+                    className={
+                      emptyFields.Emp_department
+                        ? "input-field-error"
+                        : "input-field"
+                    }
+                    // onChange={handleInputChange}
+                  >
+                    <MenuItem>Select</MenuItem>
+                    <MenuItem value="Software">Software</MenuItem>
+                    <MenuItem value="Software">Sales & Marketing</MenuItem>
+                    <MenuItem value="Software">Service</MenuItem>
+                    <MenuItem value="Software">Accounting</MenuItem>
+                    <MenuItem value="Software">Human Resources</MenuItem>
+                    <MenuItem value="Software">Research & Development</MenuItem>
+                  </Select>
+                </div>
+                <div className="grid-item">
+                  {/* <TextField
+                    type="text"
+                    name="Emp_blood_group"
+                    label="Blood Group"
+                    value={newEmployee.Emp_blood_group}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                    className={
+                      emptyFields.Emp_blood_group
+                        ? "input-field-error"
+                        : "input-field"
+                    }
+                  /> */}
+                   <label>Blood Group</label>
+                  <Select
+                    type="text"
+                    name="Emp_blood_group"
+                    label="Blood Group"
+                    value={newEmployee.Emp_blood_group}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    style={{ color: "black" }}
+                    fullWidth
+                    onChange={handleStateChange}
+                    className={
+                      emptyFields.Emp_blood_group
+                        ? "input-field-error"
+                        : "input-field"
+                    }
+                    // onChange={handleInputChange}
+                  >
+                    <MenuItem>Select</MenuItem>
+                    <MenuItem value="Software">O+</MenuItem>
+                    <MenuItem value="Software">O-</MenuItem>
+                    <MenuItem value="Software">AB+</MenuItem>
+                    <MenuItem value="Software">AB-</MenuItem>
+                    <MenuItem value="Software">A-</MenuItem>
+                    <MenuItem value="Software">A+</MenuItem>
+                    <MenuItem value="Software">B-</MenuItem>
+                    <MenuItem value="Software">B+</MenuItem>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid-row">
+                <div className="grid-item">
+                  <label>State</label>
+                  <Select
+                    name="Emp_state"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={newEmployee.state}
+                    label="State"
+                    style={{ color: "black" }}
+                    fullWidth
+                    value={selectedState}
+                    onChange={handleStateChange}
+
+                    // onChange={handleInputChange}
+                  >
+                    <MenuItem>Select</MenuItem>
+                    {Object.keys(statesData).map((state) => (
+                      <MenuItem value={state} key={state}>
+                        {state}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div className="grid-item">
+                  <label>City</label>
+                  <Select
+                    name="Emp_city"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={newEmployee.city}
+                    label="City"
+                    style={{ color: "black" }}
+                    fullWidth
+                    // onChange={handleInputChange}
+                    value={selectedcity}
+                    onChange={handlecityChange}
+                  >
+                    <MenuItem value="">Select</MenuItem>
+                    {cityOptions}
+                  </Select>
+                </div>
+              </div>
+              <div className="grid-row mt-3">
+                <div className="grid-item ">
+                  <label>Date of Birth</label>
+                  <input
+                    type="date"
+                    placeholder="DD/MM/YYYY"
+                    name="Emp_DOB"
+                    value={newEmployee.Emp_DOB}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: "23.25rem",
+                      height: "3.3rem",
+                      marginTop: "5px",
+                      maxWidth: "100%",
+                    }}
+                    max={getCurrentDate()}
+                    className={
+                      emptyFields.Emp_DOB ? "input-field-error" : "input-field"
+                    }
+                  />
+                </div>
+
+                <div className="grid-item">
+                  <label>Date of Joining</label>
+                  <input
+                    type="date"
+                    placeholder="DD/MM/YYYY"
+                    name="Emp_joining_date"
+                    required
+                    value={newEmployee.Emp_joining_date}
+                    onChange={handleInputChange}
+                    style={{
+                      width: "23.25rem",
+                      height: "3.3rem",
+                      marginTop: "5px",
+                      maxWidth: "100%",
+                    }}
+                    min="2010-01-01"
+                    max={getCurrentDate()}
+                    className={
+                      emptyFields.Emp_joining_date
+                        ? "input-field-error"
+                        : "input-field"
+                    }
+                  />
+                </div>
+              </div>
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onFormSubmit1}
+              >
+                Add Employee
+              </Button>
             </div>
-          
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={onFormSubmit1}
-            >
-             Add Employee
-            </Button>
           </div>
-        </div>
-      </Fade>
-      
-    </Modal>
+        </Fade>
+      </Modal>
     </>
   );
 };
 
 export default AddEmployeeModal;
-

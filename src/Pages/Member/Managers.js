@@ -29,8 +29,8 @@ export default function Managers() {
 
   useEffect(() => {
     axios
-      // .get("http://localhost:8080/getmanager")
-      .get("http://localhost:8080/manager")
+      // .get("http://192.168.1.211:8080/getmanager")
+      .get("http://192.168.1.211:8080/manager")
 
       .then((response) => {
         setRows(response.data);
@@ -50,8 +50,8 @@ export default function Managers() {
 
         axios
           .post(
-            // "http://localhost:8080/importmanager",
-            "http://localhost:8080/importmanager",
+            // "http://192.168.1.211:8080/importmanager",
+            "http://192.168.1.211:8080/importmanager",
             formData
           )
           .then((response) => {
@@ -86,8 +86,8 @@ export default function Managers() {
         console.log(`id in delete ${id}`);
         axios
           .delete(
-            // `http://localhost:8080/delete/${id}`
-            `http://localhost:8080/manager/${id}`
+            // `http://192.168.1.211:8080/delete/${id}`
+            `http://192.168.1.211:8080/manager/${id}`
           )
           .then((res) => {
             const updatedRows = rows.filter((row) => row._id !== id);
@@ -124,7 +124,7 @@ export default function Managers() {
   };
   const handleDeleteRows = () => {
     console.log("delete All requested");
-    axios.delete("http://localhost:8080/manager").then((res) => {
+    axios.delete("http://192.168.1.211:8080/manager").then((res) => {
       const newData = rows.filter((row) => !selectedRows.includes(row.email));
       setRows(newData);
 
@@ -237,10 +237,10 @@ export default function Managers() {
                           <tr>
                             <th className="select-header">
                               {/* <p>Select</p> */}
-                              <input
+                              {/* <input
                                 type="checkbox"
                                 style={{ height: "1rem", width: "2rem" }}
-                              />
+                              /> */}
                             </th>
                             <th>Name</th>
                             {/* <th>ID</th> */}
@@ -257,13 +257,13 @@ export default function Managers() {
                           {filteredRows.map((row) => (
                             <tr key={row.id}>
                               <td>
-                                <input
+                                {/* <input
                                   type="checkbox"
                                   style={{ height: "1rem", width: "2rem" }}
                                   checked={selectedRows.includes(row.email)}
                                   onChange={() => handleRowSelection(row.email)}
                                   // onClick={()=>handleChange()}
-                                />
+                                /> */}
                               </td>
                               <td>
                                 <div className="widget-content p-0">

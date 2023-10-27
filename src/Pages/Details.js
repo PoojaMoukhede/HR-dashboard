@@ -10,6 +10,8 @@ import { Icon } from "@iconify/react";
 import axios from "axios";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 // import TripDetail from "../Components/Table/TripDetail";
 
 export default function Details() {
@@ -22,14 +24,14 @@ export default function Details() {
   const [totalDistance, setTotalDistance] = useState(null);
   const [totalExpanse, setTotalExpanse] = useState(null);
   const [couponCount, setCouponCount] = useState(null);
-  const [remdays, setRemDays] = useState(null);
   const [leaveData, setLeaveData] = useState([]);
-  const totalLeaveDays = 21;
-  const remainingLeaveDays = totalLeaveDays - remdays;
+  const [totalLeaveDays, setTotalLeaveDays] = useState(21);
+  const [remdays, setRemDays] = useState(null);
+
   const fetchData = async (id) => {
     try {
       const emp = await axios
-        .get(`http://localhost:8080/Users/${id}`)
+        .get(`http://192.168.1.211:8080/Users/${id}`)
         .then((response) => {
           // console.log({response});
           return response.data;
@@ -40,8 +42,26 @@ export default function Details() {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get(`http://192.168.1.211:8080/leave-balance/${id}`)
+      .then((response) => {
+        const availableLeave = response.data.message.availableLeave;
+
+        // Calculate remaining leave days
+        const remainingLeaveDays = totalLeaveDays - availableLeave;
+        setRemDays(remainingLeaveDays);
+        // console.log(`totalLeave: ${totalLeaveDays}`);
+        // console.log(`availableLeave: ${availableLeave}`);
+        // console.log(`remainingLeaveDays: ${remainingLeaveDays}`);
+      })
+      .catch((error) => {
+        console.error("Error fetching leave balance:", error);
+      });
+  }, [id, totalLeaveDays]);
+
   // useEffect(() => {
-  //   fetch(`http://localhost:8080/attendance`, {
+  //   fetch(`http://192.168.1.211:8080/attendance`, {
   //     method: 'POST',
   //     headers: {
   //       'Content-Type': 'application/json',
@@ -64,7 +84,7 @@ export default function Details() {
     fetchData(id);
     try {
       axios
-        .get(`http://localhost:8080/attandance/${id}`)
+        .get(`http://192.168.1.211:8080/attandance/${id}`)
         .then((response) => {
           // console.log(response.data.message.Employee_attandance)
           setAttandance(response.data);
@@ -77,15 +97,13 @@ export default function Details() {
     }
   }, [id]);
 
-  const toastSuccess = () => toast.success("Leave Approved");
-  const toastError = () => toast.error("Leave Rejected");
   const toastSuccess2 = () => toast.success("Advance Payment Request Approved");
   const toastError2 = () => toast.error("Advance Payment Request Rejected");
 
   useEffect(() => {
     try {
       axios
-        .get(`http://localhost:8080/location/${id}`)
+        .get(`http://192.168.1.211:8080/location/${id}`)
         .then((response) => {
           const locationInfo = response.data.message.Location_info;
           const distances = locationInfo.map((location) => location.distance);
@@ -97,7 +115,7 @@ export default function Details() {
         });
 
       axios
-        .get(`http://localhost:8080/leave/${id}`)
+        .get(`http://192.168.1.211:8080/leave/${id}`)
         .then((response) => {
           const leaveInfo = response.data.leaveApplications;
           console.log("Response data:", response.data.leaveApplications);
@@ -109,7 +127,7 @@ export default function Details() {
         });
 
       axios
-        .get(`http://localhost:8080/coupon/${id}`)
+        .get(`http://192.168.1.211:8080/coupon/${id}`)
         .then((response) => {
           const coupon_Count = response.data.totalCoupons;
           setCouponCount(coupon_Count);
@@ -118,9 +136,6 @@ export default function Details() {
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
-
-       
-
     } catch (e) {
       console.error("Error:", e);
     }
@@ -138,22 +153,12 @@ export default function Details() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/form/${id}`)
+      .get(`http://192.168.1.211:8080/form/${id}`)
       .then((response) => {
         const totalExpanse = response.data.totalExpenses;
         setTotalExpanse(totalExpanse);
         setClearanceData(response.data.message.FormData);
         // console.log(`images : ${response.data.message.FormData}`)
-      })
-      .catch((error) => {
-        console.error("Error fetching clearance data:", error);
-      });
-
-    axios
-      .get(`http://localhost:8080/leave-balance/${id}`)
-      .then((response) => {
-        setRemDays(response.data.message.availableLeave);
-        console.log(`totalLeave : ${response.data.message.availableLeave}`);
       })
       .catch((error) => {
         console.error("Error fetching clearance data:", error);
@@ -188,41 +193,40 @@ export default function Details() {
   const handleLeaveAction = async (id, status) => {
     try {
       const leave = leaveData.find((leave) => leave._id === id);
-      
+
       if (!leave) {
         console.error("Leave not found for ID:", id);
         return;
       }
-  
+
       // Check if the start date is expired
       const startDate = new Date(leave.startDate);
       const currentDate = new Date();
-  
+
       if (startDate <= currentDate) {
         // Start date is expired, so disable both buttons
         toast.error("Leave date has already passed.");
         return;
-      
       }
-  
+
       // Send a PUT request to update the leave status
-      const response = await axios.put(`http://localhost:8080/leave/${id}`, {
+      const response = await axios.put(`http://192.168.1.211:8080/leave/${id}`, {
         status,
       });
       console.log(`console :${id}`);
-      
+
       // Update the leaveData state with the updated status
       setLeaveData((prevState) =>
         prevState.map((leave) =>
           leave._id === id ? { ...leave, status } : leave
         )
       );
-  
+
       setLeaveStatus((prevStatus) => ({
         ...prevStatus,
         [id]: status,
       }));
-      
+
       if (status === "approved") {
         toast.success("Leave Approved");
       } else if (status === "rejected") {
@@ -232,7 +236,11 @@ export default function Details() {
       console.error("Error updating leave status:", error);
     }
   };
-  
+
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
   return (
     <>
@@ -514,10 +522,6 @@ export default function Details() {
                             className="d-flex flex-column"
                           >
                             <BarChart />
-                            {/* <span className="d-flex justify-content-center">
-                              <h2>{remainingLeaveDays}</h2>
-                              <p className="ms-1">Days</p>
-                            </span> */}
                           </div>
 
                           <div className="col-md-12 col-xl-6">
@@ -538,41 +542,183 @@ export default function Details() {
                                   <p className="mb-0">Leave Used</p>
                                 </div>
                                 <div className="col-sm-6">
-                                  <p className="text-muted mb-0">
-                                    {remainingLeaveDays}
-                                  </p>
+                                  <p className="text-muted mb-0">{remdays}</p>
                                 </div>
                               </div>
-                              {/* <hr /> */}
-                              {/* <div className="row">
-                                <div className="col-sm-6">
-                                  <p className="mb-0">Status</p>
-                                </div>
-                                <div className="col-sm-6">
-                                  <p className="text-muted mb-0">
-                                    Applied for 01 days
-                                  </p>
-                                </div>
-                              </div> */}
+
                               <hr />
                               <div className="row mt-5">
-                                <div className="col-sm-6">
+                                <div className="col-sm-5"></div>
+                                <div className="col-sm-5">
                                   <button
-                                    className="btn_app approve"
-                                    onClick={toastSuccess}
-                                    // onClick={handleApproveLeave}
+                                    className="btn"
+                                    style={{
+                                      backgroundColor: "#129cf7",
+                                      color: "white",
+                                      width: "10rem",
+                                    }}
+                                    // onClick={toastError}
+                                    onClick={toggleModal}
                                   >
-                                    Approve
+                                    View Details
                                   </button>
                                 </div>
-                                <div className="col-sm-6">
-                                  <button
-                                    className="btn_app reject"
-                                    onClick={toastError}
-                                  >
-                                    Reject
-                                  </button>
-                                </div>
+
+                                <Modal
+                                  show={showModal}
+                                  onHide={toggleModal}
+                                  size="lg"
+                                >
+                                  <Modal.Header closeButton>
+                                    <Modal.Title>
+                                      Employees Leave Record
+                                    </Modal.Title>
+                                  </Modal.Header>
+                                  <Modal.Body>
+                                    <div
+                                      className="table-responsive"
+                                      style={{
+                                        height: "370px",
+                                        overflowY: "scroll",
+                                      }}
+                                    >
+                                      <table className="align-middle mb-0 table table-borderless table-striped table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th>Days</th>
+                                            <th className="text-center">
+                                              Start Date
+                                            </th>
+                                            <th className="text-center">
+                                              End Date
+                                            </th>
+                                            <th className="text-center">
+                                              Status
+                                            </th>
+                                            <th className="text-center">
+                                              Action
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {leaveData.map((leaves, index) => (
+                                            <tr key={leaves._id}>
+                                              <td>
+                                                <div className="widget-content p-0">
+                                                  <div className="widget-content-wrapper">
+                                                    <div className="widget-content-left flex2">
+                                                      <div className="widget-heading">
+                                                        {leaves.numberOfDays}
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </td>
+                                              <td className="text-center text-muted">
+                                                {new Date(
+                                                  leaves.startDate
+                                                ).toLocaleString("en-US", {
+                                                  year: "numeric",
+                                                  month: "2-digit",
+                                                  day: "2-digit",
+                                                })}
+                                              </td>
+                                              <td className="text-center text-muted">
+                                                {new Date(
+                                                  leaves.endDate
+                                                ).toLocaleString("en-US", {
+                                                  year: "numeric",
+                                                  month: "2-digit",
+                                                  day: "2-digit",
+                                                })}
+                                              </td>
+                                              <td className="text-center text-muted">
+                                                {leaves.status}
+                                              </td>
+                                              <td className="text-center text-muted">
+                                                <span>
+                                                  <OverlayTrigger
+                                                    key="tooltip41"
+                                                    placement="top"
+                                                    overlay={
+                                                      <Tooltip id="tooltip">
+                                                        Approve Leave
+                                                      </Tooltip>
+                                                    }
+                                                  >
+                                                    <button
+                                                      onClick={() =>
+                                                        handleLeaveAction(
+                                                          leaves._id,
+                                                          "approved"
+                                                        )
+                                                      }
+                                                      style={{
+                                                        color: "white",
+                                                        backgroundColor:
+                                                          "rgb(7, 116, 7)",
+                                                        fontSize: "1rem",
+                                                        border: "none",
+                                                        marginRight: "4px",
+                                                      }}
+                                                    >
+                                                      <Icon
+                                                        icon="icon-park-solid:correct"
+                                                        color="white"
+                                                      />
+                                                    </button>
+                                                  </OverlayTrigger>
+                                                  <OverlayTrigger
+                                                    key="tooltip42"
+                                                    placement="top"
+                                                    overlay={
+                                                      <Tooltip id="tooltip">
+                                                        Reject Leave
+                                                      </Tooltip>
+                                                    }
+                                                  >
+                                                    <button
+                                                      onClick={() =>
+                                                        handleLeaveAction(
+                                                          leaves._id,
+                                                          "rejected"
+                                                        )
+                                                      }
+                                                      style={{
+                                                        color: "white",
+                                                        backgroundColor:
+                                                          "rgb(165, 15, 15)",
+                                                        fontSize: "1rem",
+                                                        border: "none",
+                                                        marginRight: "4px",
+                                                      }}
+                                                    >
+                                                      <Icon
+                                                        icon="raphael:cross"
+                                                        color="white"
+                                                        width="22"
+                                                        hFlip={true}
+                                                        vFlip={true}
+                                                      />
+                                                    </button>
+                                                  </OverlayTrigger>
+                                                </span>
+                                              </td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </Modal.Body>
+                                  <Modal.Footer>
+                                    <Button
+                                      variant="secondary"
+                                      onClick={toggleModal}
+                                    >
+                                      Close
+                                    </Button>
+                                  </Modal.Footer>
+                                </Modal>
                               </div>
                             </div>
                           </div>
@@ -655,154 +801,9 @@ export default function Details() {
                   </div>
                 </div>
               </div>
-              {/* leave status / advance */}
 
-              {/* leave details */}
               <div className="row">
-                <div className="col-md-12 col-lg-6">
-                  <div className="mb-3 card">
-                    <div className="card-header-tab card-header">
-                      <div className="card-header-title">
-                        <i className="header-icon  lnr lnr-rocket icon-gradient bg-night-sky">
-                          {" "}
-                        </i>
-                        Employees Leave Record
-                      </div>
-                    </div>
-                    <div
-                      className="table-responsive"
-                      style={{ height: "370px", overflowY: "scroll" }}
-                    >
-                      <table className="align-middle mb-0 table table-borderless table-striped table-hover">
-                        <thead>
-                          <tr>
-                            <th>Days</th>
-                            <th className="text-center">Start Date</th>
-                            <th className="text-center">End Date</th>
-                            <th className="text-center">Status</th>
-                            <th className="text-center">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {leaveData.map((leaves, index) => (
-                            <tr key={leaves._id}>
-                              <td>
-                                <div className="widget-content p-0">
-                                  <div className="widget-content-wrapper">
-                                    <div className="widget-content-left flex2">
-                                      <div className="widget-heading">
-                                        {leaves.numberOfDays}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="text-center text-muted">
-                                {new Date(leaves.startDate).toLocaleString(
-                                  "en-US",
-                                  {
-                                    year: "numeric",
-                                    month: "2-digit",
-                                    day: "2-digit",
-                                  }
-                                )}
-                              </td>
-                              <td className="text-center text-muted">
-                                {new Date(leaves.endDate).toLocaleString(
-                                  "en-US",
-                                  {
-                                    year: "numeric",
-                                    month: "2-digit",
-                                    day: "2-digit",
-                                  }
-                                )}
-                              </td>
-                              <td className="text-center text-muted">
-                                {leaves.status}
-                              </td>
-                              <td className="text-center text-muted">
-                                <span>
-                                  <OverlayTrigger
-                                    key="tooltip4"
-                                    placement="top"
-                                    overlay={
-                                      <Tooltip id="tooltip">
-                                        Approve Leave
-                                      </Tooltip>
-                                    }
-                                  >
-                                    <button
-                                      onClick={() =>
-                                        handleLeaveAction(
-                                          leaves._id,
-                                          "approved"
-                                        )
-                                      }
-                                      style={{
-                                        color: "white",
-                                        backgroundColor: "rgb(7, 116, 7)",
-                                        fontSize: "1rem",
-                                        border: "none",
-                                        marginRight: "4px",
-                                      }}
-                                    >
-                                      <Icon
-                                        icon="icon-park-solid:correct"
-                                        color="white"
-                                      />
-                                    </button>
-                                  </OverlayTrigger>
-                                  <OverlayTrigger
-                                    key="tooltip4"
-                                    placement="top"
-                                    overlay={
-                                      <Tooltip id="tooltip">
-                                        Reject Leave
-                                      </Tooltip>
-                                    }
-                                  >
-                                    <button
-                                      onClick={() =>
-                                        handleLeaveAction(
-                                          leaves._id,
-                                          "rejected"
-                                        )
-                                      }
-                                      style={{
-                                        color: "white",
-                                        backgroundColor: "rgb(165, 15, 15)",
-                                        fontSize: "1rem",
-                                        border: "none",
-                                        marginRight: "4px",
-                                      }}
-                                    >
-                                      <Icon
-                                        icon="raphael:cross"
-                                        color="white"
-                                        width="22"
-                                        hFlip={true}
-                                        vFlip={true}
-                                      />
-                                    </button>
-                                  </OverlayTrigger>
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                          {/* {leaveData.map((leave) => (
-  <div key={leave._id}>
-    <p>Leave ID: {leave._id}</p>
-    <p>Status: {leave.status}</p>
-    <button onClick={() => handleLeaveAction(leave._id, "approved")}>Approve</button>
-    <button onClick={() => handleLeaveAction(leave._id, "rejected")}>Reject</button>
-  </div>
-))} */}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-12 col-lg-6">
+                <div className="col-md-12">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
@@ -824,8 +825,6 @@ export default function Details() {
                             <th className="text-center">Start Point</th>
                             <th className="text-center">End Point</th>
                             <th>Distance</th>
-                            {/* <th className="" >Distance</th> */}
-                            {/* <th className="text-center">Expanse</th> */}
                           </tr>
                         </thead>
                         <tbody>
