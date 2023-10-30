@@ -107,6 +107,10 @@ export default function HRadmins() {
                           <tr>
                             <th>Name</th>
                             <th className="text-center">Email</th>
+                            <th className="text-center">Phone Number</th>
+                            <th className="text-center">State</th>
+                            <th className="text-center">City</th>
+                            <th className="text-center">Country</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -116,16 +120,6 @@ export default function HRadmins() {
                               <td>
                                 <div className="widget-content p-0">
                                   <div className="widget-content-wrapper">
-                                    <div className="widget-content-left mr-3">
-                                      <div className="widget-content-left">
-                                        <img
-                                          width="40"
-                                          className="rounded-circle"
-                                          src="assets/images/avatars/4.jpg"
-                                          alt=""
-                                        />
-                                      </div>
-                                    </div>
                                     <div className="widget-content-left flex2">
                                       <div className="widget-heading">
                                         {row.name}
@@ -135,6 +129,11 @@ export default function HRadmins() {
                                 </div>
                               </td>
                               <td className="text-center">{row.email}</td>
+                              <td className="text-center">{row.phone_no}</td>
+                              <td className="text-center">{row.admin_state}</td>
+                              <td className="text-center">{row.admin_city}</td>
+                              <td className="text-center">{row.admin_country}</td>
+
                               <td>
                                 {row.email === "superadmin@yopmail.com" ? (
                                   // If the email matches superadmin, show a message or a disabled button

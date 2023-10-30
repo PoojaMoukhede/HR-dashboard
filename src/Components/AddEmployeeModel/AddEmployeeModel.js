@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
@@ -6,10 +6,12 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import "./AddMember.css";
 import Select from "@mui/material/Select";
+import {CountryDropdown,} from "react-country-region-selector";
 import MenuItem from "@mui/material/MenuItem";
 import { useAPI } from "../../Context";
 
 const AddEmployeeModal = ({ open, onClose }) => {
+  const [country, setCountry] = useState("");
   const [newEmployee, setNewEmployee] = useState({
     // id: Date.now(),
     Emp_ID: false,
@@ -26,6 +28,8 @@ const AddEmployeeModal = ({ open, onClose }) => {
     Emp_expertise: "",
     password: "",
     confirm_password: "",
+    Emp_country: "",
+    Emp_designation: "",
   });
 
   const [enteredIDs, setEnteredIDs] = useState([]);
@@ -57,7 +61,6 @@ const AddEmployeeModal = ({ open, onClose }) => {
       });
     }
   };
-
   const [selectedState, setSelectedState] = useState("");
   const [selectedcity, setSelectedcity] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
@@ -983,9 +986,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   }
-  //  if(!getCurrentDate()){
-  //   alert
-  //  }
+
 
   return (
     <>
@@ -1146,21 +1147,6 @@ const AddEmployeeModal = ({ open, onClose }) => {
 
               <div className="grid-row">
                 <div className="grid-item">
-                  {/* <TextField
-                    type="text"
-                    name="Emp_department"
-                    label="Department"
-                    value={newEmployee.Emp_department}
-                    onChange={handleInputChange}
-                    fullWidth
-                    margin="normal"
-                    required
-                    className={
-                      emptyFields.Emp_department
-                        ? "input-field-error"
-                        : "input-field"
-                    }
-                  /> */}
                   <label>Department</label>
                   <Select
                     type="text"
@@ -1171,7 +1157,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
                     style={{ color: "black" }}
                     fullWidth
                     value={newEmployee.Emp_department}
-                    onChange={handleStateChange}
+                    onChange={handleInputChange}
                     className={
                       emptyFields.Emp_department
                         ? "input-field-error"
@@ -1181,40 +1167,25 @@ const AddEmployeeModal = ({ open, onClose }) => {
                   >
                     <MenuItem>Select</MenuItem>
                     <MenuItem value="Software">Software</MenuItem>
-                    <MenuItem value="Software">Sales & Marketing</MenuItem>
-                    <MenuItem value="Software">Service</MenuItem>
-                    <MenuItem value="Software">Accounting</MenuItem>
-                    <MenuItem value="Software">Human Resources</MenuItem>
-                    <MenuItem value="Software">Research & Development</MenuItem>
+                    <MenuItem value="Sales">Sales & Marketing</MenuItem>
+                    <MenuItem value="Service">Service</MenuItem>
+                    <MenuItem value="Accounting">Accounting</MenuItem>
+                    <MenuItem value="HR">Human Resources</MenuItem>
+                    <MenuItem value="RD">Research & Development</MenuItem>
                   </Select>
                 </div>
                 <div className="grid-item">
-                  {/* <TextField
+                  <label>Blood Group</label>
+                  <Select
                     type="text"
                     name="Emp_blood_group"
                     label="Blood Group"
                     value={newEmployee.Emp_blood_group}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    style={{ color: "black" }}
+                    fullWidth
                     onChange={handleInputChange}
-                    fullWidth
-                    margin="normal"
-                    required
-                    className={
-                      emptyFields.Emp_blood_group
-                        ? "input-field-error"
-                        : "input-field"
-                    }
-                  /> */}
-                   <label>Blood Group</label>
-                  <Select
-                    type="text"
-                    name="Emp_blood_group"
-                    label="Blood Group"
-                    value={newEmployee.Emp_blood_group}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    style={{ color: "black" }}
-                    fullWidth
-                    onChange={handleStateChange}
                     className={
                       emptyFields.Emp_blood_group
                         ? "input-field-error"
@@ -1223,61 +1194,18 @@ const AddEmployeeModal = ({ open, onClose }) => {
                     // onChange={handleInputChange}
                   >
                     <MenuItem>Select</MenuItem>
-                    <MenuItem value="Software">O+</MenuItem>
-                    <MenuItem value="Software">O-</MenuItem>
-                    <MenuItem value="Software">AB+</MenuItem>
-                    <MenuItem value="Software">AB-</MenuItem>
-                    <MenuItem value="Software">A-</MenuItem>
-                    <MenuItem value="Software">A+</MenuItem>
-                    <MenuItem value="Software">B-</MenuItem>
-                    <MenuItem value="Software">B+</MenuItem>
+                    <MenuItem value="O+">O+</MenuItem>
+                    <MenuItem value="O-">O-</MenuItem>
+                    <MenuItem value="AB+">AB+</MenuItem>
+                    <MenuItem value="AB-">AB-</MenuItem>
+                    <MenuItem value="A-">A-</MenuItem>
+                    <MenuItem value="A+">A+</MenuItem>
+                    <MenuItem value="B-">B-</MenuItem>
+                    <MenuItem value="B+">B+</MenuItem>
                   </Select>
                 </div>
               </div>
 
-              <div className="grid-row">
-                <div className="grid-item">
-                  <label>State</label>
-                  <Select
-                    name="Emp_state"
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    // value={newEmployee.state}
-                    label="State"
-                    style={{ color: "black" }}
-                    fullWidth
-                    value={selectedState}
-                    onChange={handleStateChange}
-
-                    // onChange={handleInputChange}
-                  >
-                    <MenuItem>Select</MenuItem>
-                    {Object.keys(statesData).map((state) => (
-                      <MenuItem value={state} key={state}>
-                        {state}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
-                <div className="grid-item">
-                  <label>City</label>
-                  <Select
-                    name="Emp_city"
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    // value={newEmployee.city}
-                    label="City"
-                    style={{ color: "black" }}
-                    fullWidth
-                    // onChange={handleInputChange}
-                    value={selectedcity}
-                    onChange={handlecityChange}
-                  >
-                    <MenuItem value="">Select</MenuItem>
-                    {cityOptions}
-                  </Select>
-                </div>
-              </div>
               <div className="grid-row mt-3">
                 <div className="grid-item ">
                   <label>Date of Birth</label>
@@ -1324,6 +1252,76 @@ const AddEmployeeModal = ({ open, onClose }) => {
                         : "input-field"
                     }
                   />
+                </div>
+              </div>
+
+              <div className="grid-row">
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="Emp_designation"
+                    label="Designation"
+                    value={newEmployee.Emp_designation}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                  />
+                </div>
+
+                <div className="grid-item">
+                  <div className="d-flex flex-column">
+                    <label>Country</label>
+                    <CountryDropdown
+                  name="Emp_country"
+                  value={country}
+                  onChange={(val) => setCountry(val)}
+                />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid-row">
+                <div className="grid-item">
+                  <label>State</label>
+                  <Select
+                    name="Emp_state"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={newEmployee.state}
+                    label="State"
+                    style={{ color: "black" }}
+                    fullWidth
+                    value={selectedState}
+                    onChange={handleStateChange}
+
+                    // onChange={handleInputChange}
+                  >
+                    <MenuItem>Select</MenuItem>
+                    {Object.keys(statesData).map((state) => (
+                      <MenuItem value={state} key={state}>
+                        {state}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div className="grid-item">
+                  <label>City</label>
+                  <Select
+                    name="Emp_city"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={newEmployee.city}
+                    label="City"
+                    style={{ color: "black" }}
+                    fullWidth
+                    // onChange={handleInputChange}
+                    value={selectedcity}
+                    onChange={handlecityChange}
+                  >
+                    <MenuItem value="">Select</MenuItem>
+                    {cityOptions}
+                  </Select>
                 </div>
               </div>
 

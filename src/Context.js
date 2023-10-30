@@ -166,7 +166,7 @@ export function APIContextProvider({ children }) {
         console.log(`info ${info}`);
         setEmployeedata(data)
         console.log(`id while fetching ${id}`)
-        window.location.reload()
+        // window.location.reload()
       })
       .catch((error) => {
         console.error("Error:", error);

@@ -205,6 +205,8 @@ export default function Member() {
                             <th className="text-center">Qualification</th>
                             <th className="text-center">City</th>
                             <th className="text-center">State</th>
+                            <th className="text-center">Country</th>
+                            <th className="text-center">Designation</th>
                             <th className="text-center">Date Of Birth</th>
                             <th className="text-center">Joining Date</th>
                             <th className="text-center">Action</th>
@@ -212,7 +214,7 @@ export default function Member() {
                         </thead>
                         <tbody>
                           {filteredRows.map((row) => (
-                            <tr key={row._id}>
+                            <tr key={row._id} style={{fontSize:"0.85rem"}}>
                               <td className="text-center">{row.Emp_ID}</td>
                               <td>
                                 <div className="widget-content p-0">
@@ -244,6 +246,8 @@ export default function Member() {
                               </td>
                               <td className="text-center">{row.Emp_city}</td>
                               <td className="text-center">{row.Emp_state}</td>
+                              <td className="text-center">{row.Emp_country}</td>
+                              <td className="text-center">{row.Emp_designation}</td>
                               <td className="text-center">{row.Emp_DOB}</td>
                               <td className="text-center">
                                 {row.Emp_joining_date}

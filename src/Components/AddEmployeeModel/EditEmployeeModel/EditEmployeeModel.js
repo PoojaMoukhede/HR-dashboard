@@ -9,12 +9,13 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { useAPI } from "../../../Context";
 import { useEffect } from "react";
-import axios from "axios";
+import {CountryDropdown,} from "react-country-region-selector";
+
 
 const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
   const [newEmployee, setNewEmployee] = useState({
     // id: Date.now(),
-    Emp_ID:'',
+    Emp_ID: "",
     Emp_name: "",
     email: "",
     Emp_contact_No: "",
@@ -23,10 +24,11 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
     Emp_state: "",
     Emp_DOB: "",
     Emp_joining_date: "",
-    Emp_blood_group:"",
-    Emp_qualification:"",
-    Emp_expertise:"",
-
+    Emp_blood_group: "",
+    Emp_qualification: "",
+    Emp_expertise: "",
+    Emp_country: "",
+    Emp_designation: "",
   });
   // console.log(`selectedEmployee ${selectedEmployee}`);
   const handleInputChange = (event) => {
@@ -36,10 +38,11 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
       [name]: value,
     }));
   };
-
+;
   const [selectedState, setSelectedState] = useState("");
   const [selectedcity, setSelectedcity] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
+  const [country, setCountry] = useState({});
 
   const statesData = {
     AndraPradesh: [
@@ -816,34 +819,6 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
     Puducherry: ["Karaikal", "Mahe", "Puducherry", "Yanam"],
   };
 
-  // const handleStateChange = (event) => {
-  //   const stateValue = event.target.value;
-  //   setSelectedState(stateValue);
-  //   setSelectedcity("");
-
-  //   setNewEmployee((prevEmployee) => ({
-  //     ...prevEmployee,
-  //     Emp_state: stateValue,
-  //   }));
-  // };
-
-  // const handlecityChange = (event) => {
-  //   const cityValue = event.target.value;
-  //   setSelectedcity(cityValue);
-
-  //   setNewEmployee((prevEmployee) => ({
-  //     ...prevEmployee,
-  //     Emp_city: cityValue,
-  //   }));
-  // };
-
-  // const cityOptions = selectedState
-  //   ? statesData[selectedState].map((Emp_city) => (
-  //       <MenuItem key={Emp_city} value={Emp_city}>
-  //         {Emp_city}
-  //       </MenuItem>
-  //     ))
-  //   : null;
   const handleStateChange = (event) => {
     const stateValue = event.target.value;
     setSelectedState(stateValue);
@@ -859,19 +834,19 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
           Emp_city: stateCities[0], // Update Emp_city with the first city
         }));
       } else {
-        setSelectedcity(''); // No cities available
+        setSelectedcity(""); // No cities available
         setNewEmployee((prevEmployee) => ({
           ...prevEmployee,
           Emp_state: stateValue,
-          Emp_city: '', // Reset Emp_city when no cities are available
+          Emp_city: "", // Reset Emp_city when no cities are available
         }));
       }
     } else {
-      setSelectedcity(''); // Selected state doesn't exist
+      setSelectedcity(""); // Selected state doesn't exist
       setNewEmployee((prevEmployee) => ({
         ...prevEmployee,
         Emp_state: stateValue,
-        Emp_city: '', // Reset Emp_city
+        Emp_city: "", // Reset Emp_city
       }));
     }
   };
@@ -884,7 +859,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
       ...prevEmployee,
       Emp_city: cityValue,
     }));
-  }
+  };
 
   const cityOptions = selectedState
     ? statesData[selectedState].map((city) => (
@@ -918,16 +893,15 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
   function getCurrentDate() {
     const today = new Date();
     const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
-  } 
-
+  }
 
   useEffect(() => {
     if (selectedEmployee) {
       const emp = {
-        Emp_ID:selectedEmployee.Emp_ID,
+        Emp_ID: selectedEmployee.Emp_ID,
         Emp_name: selectedEmployee.Emp_name,
         email: selectedEmployee.email,
         Emp_contact_No: selectedEmployee.Emp_contact_No,
@@ -939,12 +913,14 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
         Emp_blood_group: selectedEmployee.Emp_blood_group,
         Emp_qualification: selectedEmployee.Emp_qualification,
         Emp_expertise: selectedEmployee.Emp_expertise,
+        Emp_country:selectedEmployee.Emp_country,
+        Emp_designation:selectedEmployee.Emp_designation
       };
 
       setNewEmployee(emp);
     }
   }, [selectedEmployee]);
-
+  
   return (
     <>
       <Modal
@@ -973,16 +949,16 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                   />
                 </div>
                 <div className="grid-item">
-                <TextField
-                  type="text"
-                  name="Emp_ID"
-                  label="Employee ID"
-                  value={newEmployee.Emp_ID}
-                  onChange={handleInputChange}
-                  fullWidth
-                  margin="normal"
-                />
-              </div>
+                  <TextField
+                    type="text"
+                    name="Emp_ID"
+                    label="Employee ID"
+                    value={newEmployee.Emp_ID}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                  />
+                </div>
               </div>
               <div className="grid-row">
                 <div className="grid-item">
@@ -1008,10 +984,10 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                     margin="normal"
                     required
                     inputProps={{
-                      inputMode: 'numeric',
-                      pattern: '[0-9]{10}', 
-                      maxLength: 10, 
-                      minLength:10
+                      inputMode: "numeric",
+                      pattern: "[0-9]{10}",
+                      maxLength: 10,
+                      minLength: 10,
                     }}
                   />
                 </div>
@@ -1032,20 +1008,6 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                 <div className="grid-item">
                   <TextField
                     type="text"
-                    name="Emp_department"
-                    label="Department"
-                    value={newEmployee.Emp_department}
-                    onChange={handleInputChange}
-                    fullWidth
-                    margin="normal"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="grid-row">
-                <div className="grid-item">
-                  <TextField
-                    type="text"
                     name="Emp_expertise"
                     label="Expertise"
                     value={newEmployee.Emp_expertise}
@@ -1055,60 +1017,61 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                     required
                   />
                 </div>
-                <div className="grid-item">
-                  <TextField
-                    type="text"
-                    name="Emp_blood_group"
-                    label="Blood Group"
-                    value={newEmployee.Emp_blood_group}
-                    onChange={handleInputChange}
-                    fullWidth
-                    margin="normal"
-                    required
-                  />
-                </div>
               </div>
+
               <div className="grid-row">
                 <div className="grid-item">
+                  <label>Department</label>
                   <Select
-                    name="Emp_state"
+                    type="text"
+                    name="Emp_department"
+                    label="Department"
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    // value={newEmployee.state}
-                    label="State"
-                    style={{ color: "black", marginTop: "15px" }}
+                    style={{ color: "black" }}
                     fullWidth
-                    value={selectedState}
-                    onChange={handleStateChange}
+                    value={newEmployee.Emp_department}
+                    onChange={handleInputChange}
 
                     // onChange={handleInputChange}
                   >
                     <MenuItem>Select</MenuItem>
-                    {Object.keys(statesData).map((state) => (
-                      <MenuItem value={state} key={state}>
-                        {state}
-                      </MenuItem>
-                    ))}
+                    <MenuItem value="Software">Software</MenuItem>
+                    <MenuItem value="Sales">Sales & Marketing</MenuItem>
+                    <MenuItem value="Service">Service</MenuItem>
+                    <MenuItem value="Accounting">Accounting</MenuItem>
+                    <MenuItem value="HR">Human Resources</MenuItem>
+                    <MenuItem value="RD">Research & Development</MenuItem>
                   </Select>
                 </div>
                 <div className="grid-item">
+                  <label>Blood Group</label>
                   <Select
-                    name="Emp_city"
+                    type="text"
+                    name="Emp_blood_group"
+                    label="Blood Group"
+                    value={newEmployee.Emp_blood_group}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    // value={newEmployee.city}
-                    label="City"
-                    style={{ color: "black", marginTop: "15px" }}
+                    style={{ color: "black" }}
                     fullWidth
+                    onChange={handleInputChange}
+
                     // onChange={handleInputChange}
-                    value={selectedcity}
-                    onChange={handlecityChange}
                   >
-                    <MenuItem value="">Select</MenuItem>
-                    {cityOptions}
+                    <MenuItem>Select</MenuItem>
+                    <MenuItem value="O+">O+</MenuItem>
+                    <MenuItem value="O-">O-</MenuItem>
+                    <MenuItem value="AB+">AB+</MenuItem>
+                    <MenuItem value="AB-">AB-</MenuItem>
+                    <MenuItem value="A-">A-</MenuItem>
+                    <MenuItem value="A+">A+</MenuItem>
+                    <MenuItem value="B-">B-</MenuItem>
+                    <MenuItem value="B+">B+</MenuItem>
                   </Select>
                 </div>
               </div>
+
               <div className="grid-row mt-3">
                 <div className="grid-item ">
                   <label>Date of Birth</label>
@@ -1147,6 +1110,75 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                     min="2010-01-01"
                     max={getCurrentDate()}
                   />
+                </div>
+              </div>
+
+              <div className="grid-row">
+                <div className="grid-item">
+                  <TextField
+                    type="text"
+                    name="Emp_designation"
+                    label="Designation"
+                    value={newEmployee.Emp_designation}
+                    onChange={handleInputChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                  />
+                </div>
+                <div className="grid-item">
+                  <div className="d-flex flex-column">
+                    <label>Country</label>
+                    <CountryDropdown
+                  name="Emp_country"
+                  value={country}
+                  onChange={(val) => {setCountry(val)
+                     console.log(`val : ${val} `)}}
+                />
+                  </div>
+                </div>
+              </div>
+              <div className="grid-row">
+                <div className="grid-item">
+                  <label>State</label>
+                  <Select
+                    name="Emp_state"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={newEmployee.state}
+                    label="State"
+                    style={{ color: "black" }}
+                    fullWidth
+                    value={selectedState}
+                    onChange={handleStateChange}
+
+                    // onChange={handleInputChange}
+                  >
+                    <MenuItem>Select</MenuItem>
+                    {Object.keys(statesData).map((state) => (
+                      <MenuItem value={state} key={state}>
+                        {state}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div className="grid-item">
+                  <label>City</label>
+                  <Select
+                    name="Emp_city"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={newEmployee.city}
+                    label="City"
+                    style={{ color: "black" }}
+                    fullWidth
+                    // onChange={handleInputChange}
+                    value={selectedcity}
+                    onChange={handlecityChange}
+                  >
+                    <MenuItem value="">Select</MenuItem>
+                    {cityOptions}
+                  </Select>
                 </div>
               </div>
 
