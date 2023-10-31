@@ -35,7 +35,7 @@ export default function Dashboard() {
           },
         },
       },
-      colors: ["#2b5161"],
+      colors: ["#224480"],
       dataLabels: {
         enabled: false,
       },
@@ -67,7 +67,7 @@ export default function Dashboard() {
           },
         },
       },
-      colors: ["#2b5161"],
+      colors: ["#0f2128"],
       dataLabels: {
         enabled: false,
       },

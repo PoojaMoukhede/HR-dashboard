@@ -34,6 +34,7 @@
     "react-bootstrap-daterangepicker": "^8.0.0",
     "react-bootstrap-icons": "^1.10.3",
     "react-country-region-selector": "^3.6.1",
+    "react-country-state-city": "^1.1.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",

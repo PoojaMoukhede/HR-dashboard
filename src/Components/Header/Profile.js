@@ -4,12 +4,15 @@ import Header from "./Header";
 import Sidebar from "../Sidebar/Sidebar";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import profile from "../../Images/pngwing.com (6).png";
+import EditHRModel from "../AddEmployeeModel/EditEmployeeModel/EditHRModel";
 
 export default function Profile() {
   const token = localStorage.getItem("token");
   const { Admin: userId } = JSON.parse(atob(token.split(".")[1])); // Assuming your token contains the user's ID as "Admin"
 
   const [user, setUser] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   useEffect(() => {
     axios
@@ -32,6 +35,18 @@ export default function Profile() {
       });
   }, [userId]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleAddMember = (newEmployee) => {
+    console.log("model open");
+    setUser((prevRows) => [...prevRows, newEmployee]);
+    console.log("model close");
+  };
+
   return (
     <>
       <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -43,22 +58,63 @@ export default function Profile() {
               <div className="d-flex justify-content-center align-item-center">
                 {user ? (
                   <div class="profile-card">
-                    <div class="top-section bg-asteroid">
+                    <div class="top-section">
                       <i class="message fa fa-envelope"></i>
-                      <i class="notif fa fa-bell"></i>
+                      <i
+                        className="notif fa fa-pencil"
+                        onClick={(e) => {
+                          console.log("Clicked edit icon");
+                          setIsModalOpen(true);
+                          setSelectedEmployee(user);
+                        }}
+                      ></i>
+
+                      {isModalOpen && (
+                       <EditHRModel
+                       selectedEmployee={selectedEmployee}
+                       open={isModalOpen}
+                       onClose={() => setIsModalOpen(false)}
+                       onAdd={handleAddMember}
+                   />
+                      )}
                       <div class="pic">
-                        <img
-                          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjxivAs4UknzmDfLBXGMxQkayiZDhR2ftB4jcIV7LEnIEStiUyMygioZnbLXCAND-I_xWQpVp0jv-dv9NVNbuKn4sNpXYtLIJk2-IOdWQNpC2Ldapnljifu0pnQqAWU848Ja4lT9ugQex-nwECEh3a96GXwiRXlnGEE6FFF_tKm66IGe3fzmLaVIoNL/s1600/img_avatar.png"
-                          alt="profile pictur"
-                        />
+                        <img src={profile} alt="profile pictur" />
                       </div>
                       <div class="name">{user.name}</div>
                       <div class="tag">@Admin</div>
                     </div>
                     <div class="bottom-section">
-                      <span>{user.email}</span>
-                      <span>{user.admin_city}, {user.admin_state}</span>
-                      <span>{user.phone_no}</span>
+                      <div class="social-media">
+                        <a href="https://www.facebook.com/multispanindia">
+                          <i
+                            class="fa-brands fa-facebook-f"
+                            aria-hidden="true"
+                          ></i>
+                        </a>
+                        <a href="https://twitter.com/multispanindia">
+                          <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/multispanindia/">
+                          <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/company/multispancontrolinstruments/?originalSubdomain=in">
+                          <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+                      </div>
+                      <div className="lower-section ">
+                        <span>
+                          <i class="fa-sharp fa-solid fa-envelope"></i>
+                          {user.email}
+                        </span>
+                        <span>
+                          <i class="fa-solid fa-map-location-dot"></i>{" "}
+                          {user.admin_city}, {user.admin_state},{" "}
+                          {user.admin_country}
+                        </span>
+                        <span>
+                          <i class="fa-solid fa-phone"></i> {user.phone_no}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ) : (

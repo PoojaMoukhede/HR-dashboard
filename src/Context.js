@@ -14,6 +14,8 @@ export function APIContextProvider({ children }) {
   const [userEmail, setUserEmail] = useState("");
   const [employeeData , setEmployeedata]= useState([]);
   const [managerData , setManagerdata]= useState([]);
+  const [adminData , setAdmindata]= useState([]);
+
   const [currentMonthFuelExpensetotal, setCurrentMonthFuelExpensetotal] = useState(0);
   const [data, setData] = useState([]);
 
@@ -166,7 +168,21 @@ export function APIContextProvider({ children }) {
         console.log(`info ${info}`);
         setEmployeedata(data)
         console.log(`id while fetching ${id}`)
-        // window.location.reload()
+        window.location.reload()
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+  const onFormSubmitEditAdmin = async(id, data) => { //emplopyee `${URL}putEmployee/${id}`
+   await axios           
+      .put(`http://192.168.1.211:8080/admin/${id}`,data)
+      .then((res) => {
+        const info = res.data;
+        console.log(`info ${info}`);
+        setAdmindata(data)
+        console.log(`id while fetching ${id}`)
+        window.location.reload()
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -243,7 +259,8 @@ const attandanceData = (id) =>{
         onFormSubmitEdit,
         fuelExpanseGet,
         signUpHR,
-        attandanceData
+        attandanceData,
+        onFormSubmitEditAdmin
       }}
     >
       {children}

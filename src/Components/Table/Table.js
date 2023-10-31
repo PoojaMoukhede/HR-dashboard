@@ -117,7 +117,7 @@ export default function Table() {
                       id="PopoverCustomT-1"
                       className="btn btn-primary btn-sm"
                       onClick={(e) => {
-                        console.log({ row });
+                        // console.log({ row });
                         navigate(`/details/${row?._id}`);
                       }}
                     >

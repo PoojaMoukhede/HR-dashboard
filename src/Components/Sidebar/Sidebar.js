@@ -16,7 +16,7 @@ export default function Sidebar() {
     console.log("sidebar toggle");
     setIsSidebarOpen(!isSidebarOpen);
   }
- 
+
   function handleLogout() {
     localStorage.removeItem("token");
     sessionStorage.clear();
@@ -49,15 +49,8 @@ export default function Sidebar() {
     return user === superAdminCredentials.email;
     // console.log(superAdminCredentials.email ,"..."  , user)
   };
-  const [isDashboardClicked, setDashboardClicked] = useState(false);
+ console.log({currentPath});
 
-  const handleItemClick1 = (path) => {
-    if (path === "/main") {
-      setDashboardClicked(true);
-    }
-    // Handle other menu item clicks as needed.
-  };
-  // console.log({currentPath});
   return (
     <>
       <div
@@ -109,33 +102,28 @@ export default function Sidebar() {
         <div className="scrollbar-sidebar">
           <div className="app-sidebar__inner mt-3">
             <ul className="vertical-nav-menu ">
-            <Link to="/main">
-            <li
-              className={`item_s app-sidebar__heading ${
-                currentPath === "/main" ? "activate" : ""
-              }`}
-              onClick={() => handleItemClick("/main")}
-            >
-              <Icon icon="icon-park-outline:dashboard" style={style} />
-              Dashboards
-            </li>
-          </Link>
-
-          {currentPath === "/main" && (
-            <ul>
-              <Link to="/dashboard-subitem1">
+              <Link to="/main">
                 <li
-                  className={`item_s ${
-                    currentPath === "/dashboard-subitem1" ? "activate" : ""
+                  className={`item_s app-sidebar__heading ${
+                    currentPath === "/main" ? "activate" : ""
                   }`}
-                  onClick={() => handleItemClick("/dashboard-subitem1")}
+                  onClick={() => handleItemClick("/main")}
                 >
-                 Details
+                  <Icon icon="icon-park-outline:dashboard" style={style} />
+                  Dashboards
                 </li>
               </Link>
-            </ul>
-          )}
-              
+
+              {/* <Link to="/details">
+                <li
+                  className={`item_s ${
+                    currentPath === "/details" ? "activate" : ""
+                  } ${getActiveClass("Details")}`}
+                  onClick={(id) => handleItemClick(`/details/${id}`)}
+                >
+                  Details
+                </li>
+              </Link> */}
 
               {isSuperAdmin() ? (
                 <Link to="/hradmins">

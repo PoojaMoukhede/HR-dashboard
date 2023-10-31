@@ -210,9 +210,12 @@ export default function Details() {
       }
 
       // Send a PUT request to update the leave status
-      const response = await axios.put(`http://192.168.1.211:8080/leave/${id}`, {
-        status,
-      });
+      const response = await axios.put(
+        `http://192.168.1.211:8080/leave/${id}`,
+        {
+          status,
+        }
+      );
       console.log(`console :${id}`);
 
       // Update the leaveData state with the updated status
@@ -240,6 +243,52 @@ export default function Details() {
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => {
     setShowModal(!showModal);
+  };
+
+  const Departments = {
+    Software: [
+      "Web Application Developer",
+      "Web Intern",
+      "Front-End Developer",
+      "Back-End Developer",
+      "Full- Stack Developer",
+      "Software Engineer",
+      "Team Leader",
+      "Project Manager",
+      "Sr Embedded Software Engineer",
+      "jr Embedded Software Engineer",
+      "Intern Embedded Software Engineer",
+    ],
+    SalesMarketing: [
+      "Export Sales",
+      "Application Engineer",
+      "Business Development Engineer",
+      "Proposal Engineer",
+      "Inhouse Sales Engineer",
+      "Techincal Sales Engineer",
+      "Sales Manager",
+    ],
+    Service: ["Service Technician",
+     "Service Engineer", 
+     "Service Intern",
+     "Service Manager"
+    ],
+    HR:[
+      "Senior HR",
+      "Junior HR",
+      "HR Intern",
+      "Recruiter"
+    ],
+    Accounting:[
+
+    ],
+    ReserchAndDevelopment:[
+
+    ],
+    Billing:[
+
+    ]
+    
   };
 
   return (
@@ -325,7 +374,8 @@ export default function Details() {
                         </div>
                         <div className="col-sm-9">
                           <p className="text-muted mb-0">
-                            {employeeData?.Emp_city} , {employeeData?.Emp_state}
+                            {employeeData?.Emp_city} , {employeeData?.Emp_state}{" "}
+                            , ({employeeData?.Emp_country})
                           </p>
                         </div>
                       </div>
