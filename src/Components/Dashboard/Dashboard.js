@@ -85,8 +85,8 @@ export default function Dashboard() {
       .get('http://192.168.1.211:8080/totalMonthlyExpenses')
       .then(response => {
         const data = response.data;
-
-          const monthOrder = {
+  
+        const monthOrder = {
           January: 1,
           February: 2,
           March: 3,
@@ -106,10 +106,20 @@ export default function Dashboard() {
         const months = data.map(entry => entry.month);
         const expenses = data.map(entry => entry.expenses);
         const currentMonth = new Date().getMonth() + 1; //current month (1-12)
-
+  
         const currentMonthData = data.find(entry => monthOrder[entry.month] === currentMonth);
-        setCurrentMonthTotalExpense(currentMonthData.expenses);
-    
+  
+        if (currentMonthData) {
+          setCurrentMonthTotalExpense(currentMonthData.expenses);
+        } else {
+          // Handle the case when there's no data for the current month
+          setCurrentMonthTotalExpense(0);
+  
+      
+          const previousMonth = (currentMonth - 1) <= 0 ? 12 : (currentMonth - 1);
+          const previousMonthData = data.find(entry => monthOrder[entry.month] === previousMonth);
+        }
+  
         setChartData({
           ...chartData,
           options: {
@@ -126,14 +136,13 @@ export default function Dashboard() {
             },
           ],
         });
-  
-      
       })
       .catch(error => console.error(error));
   }, []);
   
   
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     axios
@@ -188,12 +197,19 @@ export default function Dashboard() {
   
         const months = data.map((entry) => entry.month);
         const Liters = data.map((entry) => entry.liters);
-        const currentMonth = new Date().getMonth() + 1; // current month (1-12)
+        const currentMonth = new Date().getMonth() + 1; 
   
         const currentMonthData = data.find(
           (entry) => monthOrder[entry.month] === currentMonth
         );
-        setFuelData(currentMonthData.liters);
+      
+        if (currentMonthData) {
+          setFuelData(currentMonthData.liters);
+        } else {
+          setFuelData(0);
+          const previousMonth = (currentMonth - 1) <= 0 ? 12 : (currentMonth - 1);
+          const previousMonthData = data.find(entry => monthOrder[entry.month] === previousMonth);
+        }
   
         setChartData2({
           ...chartData2,

@@ -224,7 +224,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
                 </div>
                 <div className="grid-item">
                   <TextField
-                    type="number"
+                    type="TEXT"
                     name="Emp_ID"
                     label="Employee ID"
                     value={newEmployee.Emp_ID}

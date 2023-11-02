@@ -6,7 +6,7 @@ import LandingPage from './Pages/LandingPage'
 import Login from './Pages/Login';
 // import Register from './Pages/Register';
 import Member from './Pages/Member/Member';
-import Managers from './Pages/Member/Managers'
+// import Managers from './Pages/Member/Managers'
 import Attandance from './Pages/Attandance'
 import Complaint from './Pages/Complaint'
 import { APIContextProvider } from "./Context";
@@ -18,6 +18,7 @@ import FullCalendarComponent from './Components/Updates/FullCalendarComponent';
 import Profile from './Components/Header/Profile';
 import CanteenFacility from './Pages/CanteenFacility';
 import HRadmins from './HRadmins';
+// import Notification from './Components/Header/Notification';
 
 function App() {
 
@@ -36,7 +37,6 @@ function App() {
         {/* <Route exact path="/managers" element={isSuperAdmin() ? <Managers /> : null} /> */}
         <Route exact path="/main" element={<Main />} />
         <Route exact path="/members" element={<Member />} />
-        <Route exact path="/managers" element={<Managers />} />
         <Route exact path="/attandance" element={<Attandance/>} />
         <Route exact path="/complaint" element={<Complaint/>} />
         <Route exact path="/details/:id" element={<Details/>} />

@@ -26,14 +26,14 @@ const AddCoupon = ({ open, onClose }) => {
       .then((res) => {
         const { date, menu } = res.data;
         console.log('Response:', res );
-        console.log('Response status:', res.status ); // Add this line for debugging
+        console.log('Response status:', res.status ); 
         if (res.status === 201) {
           toast.success('Menu added successfully');
-        } else if (res.status === 400) {
-          console.log('Menu already exists for this date'); // Add this line for debugging
+        } if (res.status === 400) {
+          console.log('Menu already exists for this date'); 
           toast.error('Menu already exists for this date');
         } else {
-          console.error('Unexpected response:', res.data); // Add this line for debugging
+          console.error('Unexpected response:', res.data); 
         }
         setNewMenu({ date: "", menu: "" });
         window.location.reload()

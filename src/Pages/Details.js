@@ -27,6 +27,7 @@ export default function Details() {
   const [leaveData, setLeaveData] = useState([]);
   const [totalLeaveDays, setTotalLeaveDays] = useState(21);
   const [remdays, setRemDays] = useState(null);
+  const [fuel, setFuel] = useState(null);
 
   const fetchData = async (id) => {
     try {
@@ -156,9 +157,11 @@ export default function Details() {
       .get(`http://192.168.1.211:8080/form/${id}`)
       .then((response) => {
         const totalExpanse = response.data.totalExpenses;
+        const totalFuel = response.data.totalFuelLiters;
         setTotalExpanse(totalExpanse);
+        setFuel(totalFuel);
         setClearanceData(response.data.message.FormData);
-        // console.log(`images : ${response.data.message.FormData}`)
+        console.log(`totalFuel : ${response.data.totalFuelLiters}`);
       })
       .catch((error) => {
         console.error("Error fetching clearance data:", error);
@@ -268,27 +271,16 @@ export default function Details() {
       "Techincal Sales Engineer",
       "Sales Manager",
     ],
-    Service: ["Service Technician",
-     "Service Engineer", 
-     "Service Intern",
-     "Service Manager"
+    Service: [
+      "Service Technician",
+      "Service Engineer",
+      "Service Intern",
+      "Service Manager",
     ],
-    HR:[
-      "Senior HR",
-      "Junior HR",
-      "HR Intern",
-      "Recruiter"
-    ],
-    Accounting:[
-
-    ],
-    ReserchAndDevelopment:[
-
-    ],
-    Billing:[
-
-    ]
-    
+    HR: ["Senior HR", "Junior HR", "HR Intern", "Recruiter"],
+    Accounting: [],
+    ReserchAndDevelopment: [],
+    Billing: [],
   };
 
   return (
@@ -474,11 +466,13 @@ export default function Details() {
                         <div className="widget-heading">
                           Total Fuel Consumption
                         </div>
-                        <div className="widget-subheading">Till this month</div>
+                        <div className="widget-subheading">
+                          Till this month (in leters)
+                        </div>
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-black">
-                          {/* <span>{cumulativeFuelConsumption} Liters</span> */}
+                          <span>{fuel}</span>
                         </div>
                       </div>
                     </div>
@@ -948,47 +942,53 @@ export default function Details() {
                             <th>DATE</th>
                             <th className="text-center">Transportation Type</th>
                             <th className="text-center">Expanse</th>
+                            <th className="text-center">Fuel in Liters</th>
                             <th>Imgae Name</th>
                             <th>Image</th>
                           </tr>
                         </thead>
                         <tbody>
                           {clearanceData?.map((formData, index) => {
-                            const base64String = btoa(
-                              String.fromCharCode(
-                                ...new Uint8Array(formData.images.data.data)
-                              )
-                            );
-                            return (
-                              <tr key={index}>
-                                <td>
-                                  <div className="widget-content p-0">
-                                    <div className="widget-content-wrapper">
-                                      <div className="widget-content-left flex2">
-                                        <div className="widget-heading">
-                                          {new Date(
-                                            formData.timestamp
-                                          ).toLocaleString("en-US", {
-                                            year: "numeric",
-                                            month: "2-digit",
-                                            day: "2-digit",
-                                          })}
+                            // Check if formData.images is defined
+                            if (formData.images && formData.images.data) {
+                              const base64String = btoa(
+                                String.fromCharCode(
+                                  ...new Uint8Array(formData.images.data.data)
+                                )
+                              );
+
+                              return (
+                                <tr key={index}>
+                                  <td>
+                                    <div className="widget-content p-0">
+                                      <div className="widget-content-wrapper">
+                                        <div className="widget-content-left flex2">
+                                          <div className="widget-heading">
+                                            {new Date(
+                                              formData.timestamp
+                                            ).toLocaleString("en-US", {
+                                              year: "numeric",
+                                              month: "2-digit",
+                                              day: "2-digit",
+                                            })}
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </td>
-                                <td className="text-center text-muted">
-                                  {formData.Transport_type}
-                                </td>
-                                <td className="text-center text-muted">
-                                  {formData.Total_expense}
-                                </td>
-                                <td className="text-muted">
-                                  {formData.ImageName}
-                                </td>
-                                <td>
-                                  {formData.images && (
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {formData.Transport_type}
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {formData.Total_expense}
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {formData.Fuel_in_liters}
+                                  </td>
+                                  <td className="text-muted">
+                                    {formData.ImageName}
+                                  </td>
+                                  <td>
                                     <div>
                                       <img
                                         src={`data:image/${formData?.images?.contentType};base64,${base64String}`}
@@ -1000,28 +1000,62 @@ export default function Details() {
                                         }}
                                         onClick={() => handleImageClick(index)}
                                       />
+                                      {enlarged === index && (
+                                        <div
+                                          style={{
+                                            background: `rgba(0, 0, 0, 0.5) url(data:image/${formData?.images?.contentType};base64,${base64String}) no-repeat center`,
+                                            backgroundSize: "contain",
+                                            width: "50%",
+                                            height: "50%",
+                                            position: "fixed",
+                                            zIndex: "10000",
+                                            top: "30%",
+                                            left: "30%",
+                                            cursor: "zoom-out",
+                                          }}
+                                          onClick={closeEnlargedView}
+                                        />
+                                      )}
                                     </div>
-                                  )}
-
-                                  {enlarged === index && (
-                                    <div
-                                      style={{
-                                        background: `rgba(0, 0, 0, 0.5) url(data:image/${formData?.images?.contentType};base64,${base64String}) no-repeat center`,
-                                        backgroundSize: "contain",
-                                        width: "50%",
-                                        height: "50%",
-                                        position: "fixed",
-                                        zIndex: "10000",
-                                        top: "30%",
-                                        left: "30%",
-                                        cursor: "zoom-out",
-                                      }}
-                                      onClick={closeEnlargedView}
-                                    />
-                                  )}
-                                </td>
-                              </tr>
-                            );
+                                  </td>
+                                </tr>
+                              );
+                            } else {
+                              return (
+                                <tr key={index}>
+                                  <td>
+                                    <div className="widget-content p-0">
+                                      <div className="widget-content-wrapper">
+                                        <div className="widget-content-left flex2">
+                                          <div className="widget-heading">
+                                            {new Date(
+                                              formData.timestamp
+                                            ).toLocaleString("en-US", {
+                                              year: "numeric",
+                                              month: "2-digit",
+                                              day: "2-digit",
+                                            })}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {formData.Transport_type}
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {formData.Total_expense}
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {formData.Fuel_in_liters}
+                                  </td>
+                                  <td className="text-muted">
+                                    {formData.ImageName}
+                                  </td>
+                                  <td>No image</td>
+                                </tr>
+                              );
+                            }
                           })}
                         </tbody>
                       </table>

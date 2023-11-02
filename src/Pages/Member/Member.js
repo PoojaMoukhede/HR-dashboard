@@ -17,6 +17,9 @@ export default function Member() {
   const [searchValue, setSearchValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+
 
   const fileType = [
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -106,7 +109,44 @@ export default function Member() {
     }
     window.location.reload();
   };
-
+  const handleRowSelection = (email) => {
+    if (selectedRows.includes(email)) {
+      setSelectedRows(selectedRows.filter((id) => id !== email));
+    } else {
+      setSelectedRows([...selectedRows, email]);
+    }
+    const newData = rows.map((row) => {
+      if (row.email === email) {
+        return { ...row, email };
+      }
+      return row;
+    });
+    setRows(newData);
+  };
+  const handleDeleteRows = () => {
+    console.log("Delete All requested");
+    axios
+      .delete("http://192.168.1.211:8080/Users", {
+        data: selectedRows, // Send the array of email addresses directly
+      })
+      .then((res) => {
+        const newData = rows.filter((row) => !selectedRows.includes(row.email));
+        setRows(newData);
+        setSelectedRows([]);
+      })
+      .catch((error) => {
+        console.error("Error deleting data: ", error);
+      });
+  };
+  const handleSelectAll = () => {
+    const allEmails = filteredRows.map((row) => row.email);
+    if (selectAll) {
+      setSelectedRows([]);
+    } else {
+      setSelectedRows(allEmails);
+    }
+    setSelectAll(!selectAll);
+  };
 
 
   return (
@@ -119,6 +159,24 @@ export default function Member() {
           <div className="app-main__outer">
             <div className="app-main__inner">
               <div className="d-flex">
+              <OverlayTrigger
+                  key="tooltip"
+                  placement="top"
+                  overlay={<Tooltip id="tooltip">Delete All</Tooltip>}
+                >
+                  <button
+                    className="btn btn-primary mb-2 mr-2"
+                    name="allselect"
+                    onClick={handleDeleteRows}
+                    style={{ borderRadius: "30px", padding: "10px" }}
+                  >
+                    <Icon
+                      icon="fluent:delete-16-regular"
+                      color="white"
+                      width="1.5rem"
+                    />
+                  </button>
+                </OverlayTrigger>
                 <OverlayTrigger
                   key="tooltip4"
                   placement="top"
@@ -195,6 +253,14 @@ export default function Member() {
                       >
                         <thead>
                           <tr>
+                          <th className="select-header">
+                              <input
+                                type="checkbox"
+                                style={{ height: "1rem", width: "2rem" }}
+                                checked={selectAll}
+                                onChange={handleSelectAll}
+                              />
+                            </th>
                             <th>ID</th>
                             <th>Name</th>
                             <th className="text-center">Email</th>
@@ -215,6 +281,14 @@ export default function Member() {
                         <tbody>
                           {filteredRows.map((row) => (
                             <tr key={row._id} style={{fontSize:"0.85rem"}}>
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  style={{ height: "1rem", width: "2rem" }}
+                                  checked={selectedRows.includes(row.email)}
+                                  onChange={() => handleRowSelection(row.email)}
+                                />
+                              </td>
                               <td className="text-center">{row.Emp_ID}</td>
                               <td>
                                 <div className="widget-content p-0">

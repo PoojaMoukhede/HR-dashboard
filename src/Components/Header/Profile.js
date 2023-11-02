@@ -3,7 +3,6 @@ import "./header.css";
 import Header from "./Header";
 import Sidebar from "../Sidebar/Sidebar";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import profile from "../../Images/pngwing.com (6).png";
 import EditHRModel from "../AddEmployeeModel/EditEmployeeModel/EditHRModel";
 
@@ -59,7 +58,7 @@ export default function Profile() {
                 {user ? (
                   <div class="profile-card">
                     <div class="top-section">
-                      <i class="message fa fa-envelope"></i>
+                     <a href="https://mail.google.com/mail/u/0/"> <i class="message fa fa-envelope"></i></a>
                       <i
                         className="notif fa fa-pencil"
                         onClick={(e) => {
@@ -70,12 +69,12 @@ export default function Profile() {
                       ></i>
 
                       {isModalOpen && (
-                       <EditHRModel
-                       selectedEmployee={selectedEmployee}
-                       open={isModalOpen}
-                       onClose={() => setIsModalOpen(false)}
-                       onAdd={handleAddMember}
-                   />
+                        <EditHRModel
+                          selectedEmployee={selectedEmployee}
+                          open={isModalOpen}
+                          onClose={() => setIsModalOpen(false)}
+                          onAdd={handleAddMember}
+                        />
                       )}
                       <div class="pic">
                         <img src={profile} alt="profile pictur" />

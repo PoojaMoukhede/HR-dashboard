@@ -13,7 +13,7 @@ export const ExportToExcel = ({ apiData, fileName }) => {
   const fileExtension = ".xlsx";
 
   const exportToCSV = (apiData, fileName) => {
-    const fieldsToExclude = ["_id","Emp_ID"];
+    const fieldsToExclude = ["Emp_ID"];
   
     // Filter the apiData to exclude the specified fields
     const filteredData = apiData.map((item) => {

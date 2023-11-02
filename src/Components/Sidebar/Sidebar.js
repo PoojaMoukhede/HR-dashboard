@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { useLocation } from "react-router-dom";
 // import { ToastContainer, toast } from 'react-toastify';
@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const style = { fontSize: "1.5rem", marginRight: "0.5rem" };
 export default function Sidebar() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 
@@ -49,7 +49,7 @@ export default function Sidebar() {
     return user === superAdminCredentials.email;
     // console.log(superAdminCredentials.email ,"..."  , user)
   };
- console.log({currentPath});
+//  console.log({currentPath});
 
   return (
     <>
@@ -162,7 +162,7 @@ export default function Sidebar() {
                 </li>
               </Link>
 
-              <Link to="/managers">
+              {/* <Link to="/managers">
                 <li
                   className={` item_s app-sidebar__heading ${
                     currentPath === "/managers" ? "activate" : ""
@@ -172,7 +172,7 @@ export default function Sidebar() {
                   <Icon icon="majesticons:users-line" style={style} />
                   Managers
                 </li>
-              </Link>
+              </Link> */}
               <Link to="/expanse">
                 <li
                   className={` item_s app-sidebar__heading ${
