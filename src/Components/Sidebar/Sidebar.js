@@ -59,8 +59,8 @@ export default function Sidebar() {
           // isSidebarOpen === true ? setIsSidebarOpen(false) : setIsSidebarOpen(true)
         }`}
       >
-        <div className="app-header__logo">
-          <div className="logo-src"></div>
+        <div className="app-header">
+          {/* <div className="logo-src"></div> */}
           <div className="header__pane ml-auto">
             <div>
               <button

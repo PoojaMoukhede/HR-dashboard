@@ -37,6 +37,8 @@ function PolorChart({series,labels}) {
       monochrome: {
         enabled: true,
         shadeTo: 'light',
+        // shadeTo: 'dark',
+
         shadeIntensity: 0.6,
       },
     },

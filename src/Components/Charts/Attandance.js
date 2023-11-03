@@ -45,6 +45,9 @@ export default function AttandanceTable() {
       chart: {
         type: "bar",
       },
+      dataLabels: {
+        enabled: false,
+      },
       xaxis: {
         categories: attendanceData.map((datas) => {
           const date = new Date(datas.timestamp);
@@ -52,10 +55,27 @@ export default function AttandanceTable() {
           const day = date.getDate();
           return `${day} ${month}`;
         }),
+        labels: {
+          style: {
+            colors: "black",
+            // colors: "rgba(224, 224, 224, 0.38)",
+          },
+        },
       },
+      // grid: {
+      //   // To remove grid lines, set show to false
+      //   show: false,
+      // },
       yaxis: {
         title: {
           text: "Hours",
+        },
+        
+        labels: {
+          style: {
+            colors: "black",
+            // colors: "rgba(224, 224, 224, 0.38)",
+          },
         },
       },
     },

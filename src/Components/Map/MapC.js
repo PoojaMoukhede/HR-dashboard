@@ -14,7 +14,16 @@ export default function MapC() {
       </div>
       {/* <img src={map} alt="" height="900px" /> */}
     <iframe src="https://maps.google.com/maps?q=ahmedabad&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=&amp;output=embed" frameborder="0" scrolling="no" style={{width:" 100%", height: "800px"}}></iframe>
-
+    {/* <iframe
+  src="https://maps.google.com/maps?q=ahmedabad&amp;t=k&amp;z=13&amp;ie=UTF8&amp;iwloc=&amp;output=embed"
+  frameborder="0"
+  scrolling="no"
+  style={{
+    width: "100%",
+    height: "800px",
+    background: "black",
+  }}
+></iframe> */}
     </>
   );
 }

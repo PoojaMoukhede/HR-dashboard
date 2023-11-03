@@ -33,8 +33,6 @@ export default function Register() {
   const UserLogin = () => {
     signUpHR(login);
     handleCloseModal();
-    window.location.reload();
-    // window.top.location = window.top.location
   };
 
   const [countryid, setCountryid] = useState(0);

@@ -25,6 +25,7 @@ export default function Dashboard() {
         labels: {
           style: {
             colors: "black",
+            // colors: "rgba(224, 224, 224, 0.38)",
           },
         },
       },
@@ -32,9 +33,14 @@ export default function Dashboard() {
         labels: {
           style: {
             colors: "black",
+            // colors: "rgba(224, 224, 224, 0.38)",
           },
         },
       },
+      // grid: {
+      //   // To remove grid lines, set show to false
+      //   show: false,
+      // },
       colors: ["#224480"],
       dataLabels: {
         enabled: false,
@@ -47,6 +53,7 @@ export default function Dashboard() {
       },
     ],
   });
+
   const [chartData, setChartData] = useState({
     options: {
       chart: {
@@ -57,6 +64,8 @@ export default function Dashboard() {
         labels: {
           style: {
             colors: "black",
+            // colors: "rgba(224, 224, 224, 0.38)",
+
           },
         },
       },
@@ -64,10 +73,15 @@ export default function Dashboard() {
         labels: {
           style: {
             colors: "black",
+            // colors: "rgba(224, 224, 224, 0.38)",
           },
         },
       },
-      colors: ["#0f2128"],
+      // grid: {
+      //   // To remove grid lines, set show to false
+      //   show: false,
+      // },
+      colors: ["#2b5262"],
       dataLabels: {
         enabled: false,
       },
@@ -139,8 +153,6 @@ export default function Dashboard() {
       })
       .catch(error => console.error(error));
   }, []);
-  
-  
   
   const { theme } = useContext(ThemeContext);
 
