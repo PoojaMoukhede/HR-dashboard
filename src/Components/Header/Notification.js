@@ -4,7 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 function NotificationComponent() {
-  const [count, setCount] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [mute, setMute] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,9 +14,12 @@ function NotificationComponent() {
     axios
       .get(`http://192.168.1.211:8080/notifications`)
       .then((response) => {
-        const dataw = response.data;
-        setCount(dataw.length);
-        console.log(dataw.length);
+        const notifications = response.data;
+        console.log(`notifications:`, notifications);
+        const unreadNotifications = notifications.filter(
+          (notification) => notification.status !== "read"
+        );
+        setUnreadCount(unreadNotifications.length);
       })
       .catch((error) => {
         console.error("Error fetching notifications:", error);
@@ -32,7 +35,6 @@ function NotificationComponent() {
       return null;
     }
 
-    // setCount(count + 1);
     setIsAnimating(!mute);
 
     setTimeout(() => {
@@ -57,7 +59,7 @@ function NotificationComponent() {
           }`}
         >
           <NotificationIcon />
-          <span className="count">{count > 9 ? "9+" : count}</span>
+          <span className="count">{unreadCount > 9 ? "9+" : unreadCount}</span>
         </div>
       </div>
       {isModalOpen && (

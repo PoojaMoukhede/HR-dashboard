@@ -236,7 +236,12 @@ export default function Details() {
       if (status === "approved") {
         toast.success("Leave Approved");
       } else if (status === "rejected") {
-        toast.error("Leave Rejected");
+        if (response.data && response.data.error) {
+          const error = response.data.error;
+          toast.error(error);
+        } else {
+          toast.error("An error occurred while processing the request.");
+        }
       }
     } catch (error) {
       console.error("Error updating leave status:", error);

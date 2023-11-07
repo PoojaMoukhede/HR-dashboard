@@ -7,13 +7,14 @@ import Updates from "../Updates/Updates";
 import { ThemeContext } from "../Header/ThemeProvider";
 import axios from "axios";
 
+
 export default function Dashboard() {
   const [fuelData, setFuelData] = useState([]);
   const [totalDistance, setTotalDistance] = useState(null)
   const [totalExpanse,setTotalExpanse] = useState(0)
   const [currentMonthTotalExpense, setCurrentMonthTotalExpense] = useState(0);
   const [fuel,setFuel] = useState(null)
-
+  
 
   const [chartData2, setChartData2] = useState({
     options: {
@@ -154,7 +155,7 @@ export default function Dashboard() {
       .catch(error => console.error(error));
   }, []);
   
-  const { theme } = useContext(ThemeContext);
+  // const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     axios
@@ -184,8 +185,7 @@ export default function Dashboard() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  
-    axios
+      axios
       .get(`http://192.168.1.211:8080/totalFuelByMonth`)
       .then((response) => {
         const data = response.data;
@@ -243,11 +243,17 @@ export default function Dashboard() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+    
   }, []);
-  
+
+
+
+
+
   return (
     <>
-      <div className={`App ${theme}`}>
+
+      <div className={`App`}>
         <div className="app-main">
           <Sidebar />
           <div className="app-main__outer">

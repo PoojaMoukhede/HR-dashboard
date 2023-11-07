@@ -4,16 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
-import Notification from "./Notification"; 
-import user from '../../Images/pngwing.com (6).png'
-import DarkMode from "../../DarkMode";
+import Notification from "./Notification";
+import userImg from "../../Images/pngwing.com (6).png";
 
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [newNotification, setNewNotification] = useState("");
-  const [notificationCount, setNotificationCount] = useState(0); 
+  const [notificationCount, setNotificationCount] = useState(0);
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -31,14 +30,12 @@ export default function Header() {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-      axios.get(
-          "http://192.168.1.211:8080/notifications"
-        )
-        .then((response) => {
-          setNotifications(response.data);
-          setNotificationCount(response.data.length);
-        })
-      
+        axios
+          .get("http://192.168.1.211:8080/notifications")
+          .then((response) => {
+            setNotifications(response.data);
+            setNotificationCount(response.data.length);
+          });
       } catch (error) {
         console.error("Error fetching notifications:", error);
       }
@@ -75,6 +72,28 @@ export default function Header() {
         console.error("Error clearing notifications:", error);
       });
   };
+  const [user, setUser] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const token = localStorage.getItem("token");
+  const { Admin: userId } = JSON.parse(atob(token.split(".")[1])); // Assuming your token contains the user's ID as "Admin"
+
+  useEffect(() => {
+    axios
+      .get(`http://192.168.1.211:8080/get/${userId}`)
+      .then((response) => {
+        const adminData = response.data;
+
+        if (adminData && adminData._id) {
+          setUser(adminData);
+          console.log(`Admin name is ${adminData}`);
+        } else {
+          console.log("Admin not found");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, [userId]);
 
   return (
     <>
@@ -83,7 +102,8 @@ export default function Header() {
           <div className="left">
             <img alt="" src={m_logo} />
           </div>
-          <DarkMode/>
+          {/* <DarkMode /> Include the DarkMode component */}
+
           <div className="right pt-2">
             <div className="notifications mt-1">
               <Notification
@@ -92,8 +112,8 @@ export default function Header() {
                 addNotification={addNotification}
                 clearNotifications={clearNotifications}
                 newNotification={newNotification}
-                setNewNotification={setNewNotification}               
-              />            
+                setNewNotification={setNewNotification}
+              />
             </div>
             <Button
               style={{
@@ -106,11 +126,20 @@ export default function Header() {
               }}
               href="/profile"
             >
-              {/* <img src={user} alt="" style={{width:'2rem'}}/> */}
-              <Icon
-                icon="healthicons:ui-user-profile"
-                color="#24a1e9"
-                style={{ fontSize: "2rem", marginRight: "0.5rem" }}
+              <img
+                src={
+                  user.profileImage
+                    ? `data:image/${
+                        user.profileImage.contentType
+                      };base64,${btoa(
+                        String.fromCharCode(
+                          ...new Uint8Array(user.profileImage.data.data)
+                        )
+                      )}`
+                    : userImg
+                }
+                alt=""
+                style={{ width: "2rem" }}
               />
               {localStorage.getItem("email").split("@")[0]}
             </Button>

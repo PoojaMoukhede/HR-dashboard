@@ -43,7 +43,7 @@ export default function Complaint() {
     fetchComplaints();
     const intervalId = setInterval(() => {
       fetchComplaints();
-    }, 5000);
+    }, 1000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -55,9 +55,7 @@ export default function Complaint() {
     complaints.filter((complaint) => complaint.status === "Resolved").length
   );
 
-  const [counter, setCouner] = useState(0);
-  // console.log("counter is tell more in cunoth ");
-
+ 
   const handleResolve = async (complaintId, messageId) => {
     try {
       if (processCount > 0) {
@@ -71,6 +69,7 @@ export default function Complaint() {
         setComplaints(updatedComplaints);
         setResolvedCount((prevResolvedCount) => prevResolvedCount + 1);
         setProcessCount((prevProcessCount) => prevProcessCount - 1);
+        fetchComplaints();
       } else {
         // Show a toast message indicating that the user needs to take a complaint first
         toast.info("Please take a complaint before resolving it");

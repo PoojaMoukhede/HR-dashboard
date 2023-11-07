@@ -19,7 +19,7 @@ export default function AttandanceTable() {
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  }, [id]);
 
   const isOvertime = (timer) => {
     return timer > 32400000; // 32400000 milliseconds is 9 hours

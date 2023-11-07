@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./header.css";
 import Header from "./Header";
 import Sidebar from "../Sidebar/Sidebar";
 import axios from "axios";
 import profile from "../../Images/pngwing.com (6).png";
 import EditHRModel from "../AddEmployeeModel/EditEmployeeModel/EditHRModel";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 export default function Profile() {
   const token = localStorage.getItem("token");
@@ -20,10 +22,7 @@ export default function Profile() {
         const adminData = response.data;
 
         if (adminData && adminData._id) {
-          // const name = adminData.name;
-          // const email = adminData.email
           setUser(adminData);
-          // setUser(email);
           console.log(`Admin name is ${adminData}`);
         } else {
           console.log("Admin not found");
@@ -46,6 +45,36 @@ export default function Profile() {
     console.log("model close");
   };
 
+  const profileImageInput = useRef(null);
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0];
+    console.log(`image change function call : ${file}`);
+    if (file) {
+      const formData = new FormData();
+      formData.append("profileImage", file);
+
+      axios
+        .put(
+          `http://192.168.1.211:8080/update-profile-image/${userId}`,
+          formData
+        )
+        .then((response) => {
+          // Handle success
+          console.log("Profile image updated successfully");
+
+          const updatedUser = response.data.user;
+          console.log(`updated user : ${updatedUser}`);
+          setUser(updatedUser);
+
+          setIsModalOpen(false);
+        })
+        .catch((error) => {
+          // Handle error
+          console.error("Error updating profile image:", error);
+        });
+    }
+  };
+
   return (
     <>
       <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -58,15 +87,45 @@ export default function Profile() {
                 {user ? (
                   <div class="profile-card">
                     <div class="top-section">
-                     <a href="https://mail.google.com/mail/u/0/"> <i class="message fa fa-envelope"></i></a>
-                      <i
-                        className="notif fa fa-pencil"
-                        onClick={(e) => {
-                          console.log("Clicked edit icon");
-                          setIsModalOpen(true);
-                          setSelectedEmployee(user);
-                        }}
-                      ></i>
+                      <OverlayTrigger
+                        key="tooltip6"
+                        placement="top"
+                        overlay={<Tooltip id="tooltip">Update Image</Tooltip>}
+                      >
+                        <i class="message fa fa-camera">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleProfileImageChange}
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              width: "100%",
+                              height: "100%",
+                              opacity: 0,
+                            }}
+                            ref={profileImageInput}
+                          />
+                        </i>
+                      </OverlayTrigger>
+
+                      <OverlayTrigger
+                        key="tooltip7"
+                        placement="top"
+                        overlay={
+                          <Tooltip id="tooltip">Edit Information</Tooltip>
+                        }
+                      >
+                        <i
+                          className="notif fa fa-pencil"
+                          onClick={(e) => {
+                            console.log("Clicked edit icon");
+                            setIsModalOpen(true);
+                            setSelectedEmployee(user);
+                          }}
+                        ></i>
+                      </OverlayTrigger>
 
                       {isModalOpen && (
                         <EditHRModel
@@ -76,8 +135,24 @@ export default function Profile() {
                           onAdd={handleAddMember}
                         />
                       )}
-                      <div class="pic">
-                        <img src={profile} alt="profile pictur" />
+
+                      <div className="pic">
+                        <img
+                          src={
+                            user.profileImage
+                              ? `data:image/${
+                                  user.profileImage.contentType
+                                };base64,${btoa(
+                                  String.fromCharCode(
+                                    ...new Uint8Array(
+                                      user.profileImage.data.data
+                                    )
+                                  )
+                                )}`
+                              : profile
+                          }
+                          alt="profile picure"
+                        />
                       </div>
                       <div class="name">{user.name}</div>
                       <div class="tag">@Admin</div>
