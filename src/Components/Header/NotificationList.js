@@ -66,6 +66,10 @@ export default function NotificationList({ open, onClose }) {
       return `${Math.floor(timeDifference / 86400000)} days ago`;
     }
   };
+  useEffect(() => {
+    // Save read notification IDs to local storage whenever the set changes
+    localStorage.setItem("readNotifications", JSON.stringify(Array.from(readNotifications)));
+  }, [readNotifications]);
 
   return (
     <>

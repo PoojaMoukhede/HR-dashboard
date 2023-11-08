@@ -12,6 +12,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import ProfileImg from '../Images/man-profile-png.png'
 // import TripDetail from "../Components/Table/TripDetail";
 
 export default function Details() {
@@ -301,7 +302,18 @@ export default function Details() {
                   <div className="card mb-4">
                     <div className="card-body text-center">
                       <img
-                        src="https://static.vecteezy.com/system/resources/previews/011/675/374/original/man-avatar-image-for-profile-png.png"
+                      // src={employeeData.profileImage
+                      //   ? `data:image/${
+                      //     employeeData.profileImage.contentType
+                      //     };base64,${btoa(
+                      //       String.fromCharCode(
+                      //         ...new Uint8Array(
+                      //           employeeData.profileImage.data.data
+                      //         )
+                      //       )
+                      //     )}`
+                      //   : ProfileImg}
+                      src={ProfileImg}
                         alt="avatar"
                         className="rounded-circle img-fluid"
                         style={{ width: "115px" }}

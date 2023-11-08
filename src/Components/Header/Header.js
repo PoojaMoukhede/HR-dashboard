@@ -13,6 +13,9 @@ export default function Header() {
   const [notifications, setNotifications] = useState([]);
   const [newNotification, setNewNotification] = useState("");
   const [notificationCount, setNotificationCount] = useState(0);
+  const [user, setUser] = useState([]);
+  const token = localStorage.getItem("token");
+  const { Admin: userId } = JSON.parse(atob(token.split(".")[1])); // Assuming your token contains the user's ID as "Admin"
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -53,14 +56,13 @@ export default function Header() {
         .then((response) => {
           setNotifications([...notifications, response.data]);
           setNewNotification("");
-          setNotificationCount(notificationCount + 1);
+          setNotificationCount(notificationCount + 1); // Increment the count
         })
         .catch((error) => {
           console.error("Error adding notification:", error);
         });
     }
   };
-
   const clearNotifications = () => {
     axios
       .delete("http://192.168.1.211:8080/notifications")
@@ -72,10 +74,7 @@ export default function Header() {
         console.error("Error clearing notifications:", error);
       });
   };
-  const [user, setUser] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const token = localStorage.getItem("token");
-  const { Admin: userId } = JSON.parse(atob(token.split(".")[1])); // Assuming your token contains the user's ID as "Admin"
+ 
 
   useEffect(() => {
     axios

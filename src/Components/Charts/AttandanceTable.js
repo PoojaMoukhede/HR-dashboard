@@ -78,15 +78,13 @@ export default function AttandanceTable() {
 
               let status;
               if (isOvertime(timerValue)) {
-                const overtimeHours = (timerValue - 32400000) / 3600000; // Convert to hours
-                // status = `Overtime: ${overtimeHours.toFixed(2)} hours`;
-                status = `Overtime: ${parseInt(overtimeHours)} hours`;
-
+                const overtimeHours = Math.floor((timerValue - 32400000) / 3600000); 
+                const overtimeMinutes = Math.floor((timerValue - 32400000) / 60000) % 60; 
+                status = `Overtime: ${overtimeHours}H:${overtimeMinutes} M`;
               } else {
-                const belowTimeHours = timerValue / 3600000; // Convert to hours
-                // status = `Below time: ${belowTimeHours.toFixed(2)} hours`;
-                status = `Below time: ${parseInt(belowTimeHours)} hours`;
-
+                const belowTimeHours = Math.floor(timerValue / 3600000); // Convert to hours
+                const belowTimeMinutes = Math.floor((timerValue / 60000) % 60); // Convert to minutes
+                status = `Below time: ${belowTimeHours}H:${belowTimeMinutes}M`;
               }
 
               return (
