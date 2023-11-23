@@ -7,14 +7,66 @@ import Updates from "../Updates/Updates";
 import { ThemeContext } from "../Header/ThemeProvider";
 import axios from "axios";
 
-
+// { isDetailsRendered } this prop for sidebar
 export default function Dashboard() {
   const [fuelData, setFuelData] = useState([]);
   const [totalDistance, setTotalDistance] = useState(null)
   const [totalExpanse,setTotalExpanse] = useState(0)
   const [currentMonthTotalExpense, setCurrentMonthTotalExpense] = useState(0);
   const [fuel,setFuel] = useState(null)
-  
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [attendancePercentage, setAttendancePercentage] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const attendanceResponse = await axios.get(
+          "http://192.168.1.211:8080/departmentWise"
+        );
+        setAttendanceData(attendanceResponse.data);
+
+        const userResponse = await axios.get("http://192.168.1.211:8080/Users");
+        setUserData(userResponse.data);
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    let presentCount = 0;
+
+    attendanceData.forEach((attendance) => {
+      const user = userData.find((user) => user._id === attendance.userRef._id);
+
+      if (user) {
+        const status = attendance.Employee_attandance[0]?.action;
+        const D_ate = new Date(attendance.Employee_attandance[0]?.timestamp);
+        const attendanceDate = D_ate.toISOString().split("T")[0];
+
+        if (attendanceDate === today) {
+          if (status === "Punch In") {
+            presentCount += 1;
+          }
+        }
+      }
+    });
+
+    const totalEmployeesCount = userData.length;
+
+    const attendancePercentageValue =
+      totalEmployeesCount > 0 ? (presentCount / totalEmployeesCount) * 100 : 0;
+
+    setAttendancePercentage(attendancePercentageValue);
+  }, [attendanceData, userData]);
 
   const [chartData2, setChartData2] = useState({
     options: {
@@ -255,7 +307,9 @@ export default function Dashboard() {
 
       <div className={`App`}>
         <div className="app-main">
-          <Sidebar />
+        <Sidebar />
+        {/* <Sidebar showDetailItem={isDetailsRendered} /> */}
+        {/* {isDetailsRendered && <Sidebar />} */}
           <div className="app-main__outer">
             <div className="app-main__inner">
               <div className="row">
@@ -265,12 +319,12 @@ export default function Dashboard() {
                       <div className="widget-content-left">
                         <div className="widget-heading">Attandance</div>
                         <div className="widget-subheading">
-                          Till Last month attandance
+                          Today's attandance
                         </div>
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white">
-                          <span>98%</span>
+                          <span>{attendancePercentage}%</span>
                         </div>
                       </div>
                     </div>

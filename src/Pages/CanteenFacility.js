@@ -15,9 +15,9 @@ export default function CanteenFacility() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAdd = (newMenu) => {
-    console.log("model open");
+    // console.log("model open");
     setMenuItems((prevRows) => [...prevRows, newMenu]);
-    console.log("model close");
+    // console.log("model close");
   };
   useEffect(() => {
     axios

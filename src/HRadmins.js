@@ -17,7 +17,7 @@ export default function HRadmins() {
       .get("http://192.168.1.211:8080/getAdmin")
       .then((response) => {
         setRows(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -32,7 +32,7 @@ export default function HRadmins() {
 
   const openRegisterModal = () => {
     setShowRegisterModal(true);
-    console.log("kkkkkkkkkkk");
+    // console.log("kkkkkkkkkkk");
   };
 
   const handleDeleteEmployee = (id) => {
@@ -45,7 +45,7 @@ export default function HRadmins() {
     }).then((willDelete) => {
       if (willDelete) {
         // User confirmed deletion, proceed with the delete request
-        console.log(`id in delete ${id}`);
+        // console.log(`id in delete ${id}`);
         axios
           // .delete(`http://192.168.1.211:8080/deleteEmployee/${id}`)
           .delete(`http://192.168.1.211:8080/admin/${id}`)
@@ -60,7 +60,7 @@ export default function HRadmins() {
               timer: 2000,
               button: false,
             });
-            console.log(`id in delete ${res}`);
+            // console.log(`id in delete ${res}`);
           });
       } else {
         // User clicked "Cancel" or closed the dialog, do nothing

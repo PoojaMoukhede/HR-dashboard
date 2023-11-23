@@ -23,7 +23,7 @@ export default function Profile() {
 
         if (adminData && adminData._id) {
           setUser(adminData);
-          console.log(`Admin name is ${adminData}`);
+          // console.log(`Admin name is ${adminData}`);
         } else {
           console.log("Admin not found");
         }
@@ -40,15 +40,15 @@ export default function Profile() {
   };
 
   const handleAddMember = (newEmployee) => {
-    console.log("model open");
+    // console.log("model open");
     setUser((prevRows) => [...prevRows, newEmployee]);
-    console.log("model close");
+    // console.log("model close");
   };
 
   const profileImageInput = useRef(null);
   const handleProfileImageChange = (e) => {
     const file = e.target.files[0];
-    console.log(`image change function call : ${file}`);
+    // console.log(`image change function call : ${file}`);
     if (file) {
       const formData = new FormData();
       formData.append("profileImage", file);
@@ -60,10 +60,10 @@ export default function Profile() {
         )
         .then((response) => {
           // Handle success
-          console.log("Profile image updated successfully");
+          // console.log("Profile image updated successfully");
 
           const updatedUser = response.data.user;
-          console.log(`updated user : ${updatedUser}`);
+          // console.log(`updated user : ${updatedUser}`);
           setUser(updatedUser);
 
           setIsModalOpen(false);

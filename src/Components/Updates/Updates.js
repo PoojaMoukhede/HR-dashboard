@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import Canteen from "../../Pages/Canteen";
 
+
 export default function Updates() {
   const [rows, setRows] = useState([]);
 
@@ -16,6 +17,7 @@ export default function Updates() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+      // send()
   }, []);
 
   if (rows.usersWithBirthday) {

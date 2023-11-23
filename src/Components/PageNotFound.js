@@ -16,7 +16,7 @@ export default function PageNotFound() {
         <h1 className="code">404</h1>
         <h2 className="desc">Ops... Something's wrong here... !</h2>
         <h6>We cant't find the page you are looking for, head back to home</h6>
-       <button className="btn btn0" onClick={()=>{navigate('/main')}}>
+       <button className="btn btn0" onClick={()=>{navigate('/dashboard')}}>
        <span>Home</span>
         <i className="bi bi-arrow-right" ><Icon icon="bi:arrow-right-short" style={{fontSize:'1.8rem'}}/></i>
        </button>   

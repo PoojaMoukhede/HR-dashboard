@@ -45,14 +45,10 @@ export default function Member() {
   }, []);
 
   const handleAddMember = (newEmployee) => {
-    console.log("model open");
     setRows((prevRows) => [...prevRows, newEmployee]);
-    console.log("model close");
   };
   const handleAddMember2 = (newEmployee) => {
-    console.log("model open");
     setRows((prevRows) => [...prevRows, newEmployee]);
-    console.log("model close");
   };
   const handleDeleteEmployee = (id) => {
     swal({
@@ -63,7 +59,7 @@ export default function Member() {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        console.log(`id in delete ${id}`);
+        // console.log(`id in delete ${id}`);
         axios
           .delete(`http://192.168.1.211:8080/Users/${id}`)
 
@@ -77,7 +73,7 @@ export default function Member() {
               timer: 2000,
               button: false,
             });
-            console.log(`id in delete ${res}`);
+            // console.log(`id in delete ${res}`);
           });
       } else {
         swal("Cancelled", "Employee data is safe 😊", "info");
@@ -97,7 +93,7 @@ export default function Member() {
           .post("http://192.168.1.211:8080/importdata", formData)
  
           .then((response) => {
-            console.log("Import response:", response);
+            // console.log("Import response:", response);
           })
           .catch((error) => {
             console.error("Error sending POST request:", error);
@@ -124,7 +120,7 @@ export default function Member() {
     setRows(newData);
   };
   const handleDeleteRows = () => {
-    console.log("Delete All requested");
+    // console.log("Delete All requested");
     axios
       .delete("http://192.168.1.211:8080/Users", {
         data: selectedRows, // Send the array of email addresses directly
@@ -210,7 +206,7 @@ export default function Member() {
                     <input
                       type="file"
                       className="upload"
-                      onChange={handleImport}
+                      // onChange={handleImport}
                     />
                     <Icon icon="pajamas:import" color="white" width="1.5rem" />
                   </div>

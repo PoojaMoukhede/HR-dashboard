@@ -3,6 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 
 
 function PolorChart({series,labels}) {
+// console.log(`labels : ${labels}`);
 
   const [options] = useState({
     chart: {

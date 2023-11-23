@@ -25,19 +25,19 @@ const AddCoupon = ({ open, onClose }) => {
       .post('http://192.168.1.211:8080/menu', data)
       .then((res) => {
         const { date, menu } = res.data;
-        console.log('Response:', res );
-        console.log('Response status:', res.status ); 
+        // console.log('Response:', res );
+        // console.log('Response status:', res.status ); 
         if (res.status === 201) {
           toast.success('Menu added successfully');
         } if (res.status === 400) {
-          console.log('Menu already exists for this date'); 
+          // console.log('Menu already exists for this date'); 
           toast.error('Menu already exists for this date');
         } else {
           console.error('Unexpected response:', res.data); 
         }
         setNewMenu({ date: "", menu: "" });
         window.location.reload()
-        console.log(date, menu);
+        // console.log(date, menu);
       })
       .catch((error) => {
         console.error("Error:", error);

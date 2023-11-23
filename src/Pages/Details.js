@@ -12,9 +12,9 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import ProfileImg from '../Images/man-profile-png.png'
+import ProfileImg from "../Images/man-profile-png.png";
 // import TripDetail from "../Components/Table/TripDetail";
-
+// { onRender } for sidebar
 export default function Details() {
   const { id } = useParams();
   const [employeeData, setEmployeedata] = useState();
@@ -120,8 +120,8 @@ export default function Details() {
         .get(`http://192.168.1.211:8080/leave/${id}`)
         .then((response) => {
           const leaveInfo = response.data.leaveApplications;
-          console.log("Response data:", response.data.leaveApplications);
-          console.log(`loooooog : ${leaveInfo}`);
+          // console.log("Response data:", response.data.leaveApplications);
+          // console.log(`loooooog : ${leaveInfo}`);
           setLeaveData(response.data.leaveApplications);
         })
         .catch((error) => {
@@ -162,7 +162,7 @@ export default function Details() {
         setTotalExpanse(totalExpanse);
         setFuel(totalFuel);
         setClearanceData(response.data.message.FormData);
-        console.log(`totalFuel : ${response.data.totalFuelLiters}`);
+        // console.log(`totalFuel : ${response.data.totalFuelLiters}`);
       })
       .catch((error) => {
         console.error("Error fetching clearance data:", error);
@@ -220,7 +220,7 @@ export default function Details() {
           status,
         }
       );
-      console.log(`console :${id}`);
+      // console.log(`console :${id}`);
 
       // Update the leaveData state with the updated status
       setLeaveData((prevState) =>
@@ -288,6 +288,10 @@ export default function Details() {
     ReserchAndDevelopment: [],
     Billing: [],
   };
+  // useEffect(() => {
+  //   // Call the onRender callback when the component mounts
+  //   onRender();
+  // }, [onRender]);
 
   return (
     <>
@@ -302,21 +306,21 @@ export default function Details() {
                   <div className="card mb-4">
                     <div className="card-body text-center">
                       <img
-                      // src={employeeData.profileImage
-                      //   ? `data:image/${
-                      //     employeeData.profileImage.contentType
-                      //     };base64,${btoa(
-                      //       String.fromCharCode(
-                      //         ...new Uint8Array(
-                      //           employeeData.profileImage.data.data
-                      //         )
-                      //       )
-                      //     )}`
-                      //   : ProfileImg}
-                      src={ProfileImg}
+                        src={employeeData?.profileImage
+                          ? `data:image/${
+                            employeeData.profileImage.contentType
+                            };base64,${btoa(
+                              String.fromCharCode(
+                                ...new Uint8Array(
+                                  employeeData.profileImage.data.data
+                                )
+                              )
+                            )}`
+                          : ProfileImg}
+                        // src={ProfileImg}
                         alt="avatar"
                         className="rounded-circle img-fluid"
-                        style={{ width: "115px" }}
+                        style={{ width: "115px",height:'9.65rem' }}
                       />
                       <h5 className="my-2">{employeeData?.Emp_name}</h5>
                       <p className="text-muted mb-1">
@@ -973,7 +977,7 @@ export default function Details() {
                                   ...new Uint8Array(formData.images.data.data)
                                 )
                               );
-
+    
                               return (
                                 <tr key={index}>
                                   <td>
@@ -1074,6 +1078,50 @@ export default function Details() {
                               );
                             }
                           })}
+                          {/* {clearanceData?.map((formData, index) => {
+                            const base64String = formData.images.data
+                              ? formData.images.data.toString("base64")
+                              : null;
+
+                            return (
+                              <tr key={index}>
+                                <td>
+                                  {base64String ? (
+                                    <div>
+                                      <img
+                                        src={`data:image/${formData?.images?.contentType};base64,${base64String}`}
+                                        alt={formData.ImageName}
+                                        key={index}
+                                        style={{
+                                          width: "3rem",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() => handleImageClick(index)}
+                                      />
+                                      {enlarged === index && (
+                                        <div
+                                          style={{
+                                            background: `rgba(0, 0, 0, 0.5) url(data:image/${formData?.images?.contentType};base64,${base64String}) no-repeat center`,
+                                            backgroundSize: "contain",
+                                            width: "50%",
+                                            height: "50%",
+                                            position: "fixed",
+                                            zIndex: "10000",
+                                            top: "30%",
+                                            left: "30%",
+                                            cursor: "zoom-out",
+                                          }}
+                                          onClick={closeEnlargedView}
+                                        />
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <div>No image</div>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })}  */}
                         </tbody>
                       </table>
                     </div>

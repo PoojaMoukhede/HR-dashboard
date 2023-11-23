@@ -22,7 +22,7 @@ export default function Register() {
     admin_state: "",
     admin_country: "",
   });
-  console.log(login);
+  // console.log(login);
   const handleChange = (e) => {
     setLogin((curr) => ({ ...curr, [e.target.name]: e.target.value }));
   };

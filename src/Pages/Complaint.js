@@ -11,7 +11,7 @@ export default function Complaint() {
     axios
       .get("http://192.168.1.211:8080/empdata")
       .then((response) => {
-        console.log(`userlookup :`, response.data);
+        // console.log(`userlookup :`, response.data);
         const userLookup = {};
         response.data.forEach((user) => {
           userLookup[user._id] = user;
@@ -32,7 +32,7 @@ export default function Complaint() {
       .get("http://192.168.1.211:8080/complaint")
       .then((response) => {
         setComplaints(response.data.message);
-        console.log(response.data.message);
+        // console.log(response.data.message);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

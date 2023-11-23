@@ -14,7 +14,7 @@ const ApexChart = () => {
       .get(`http://192.168.1.211:8080/leave-balance/${id}`)
       .then((response) => {
         setRemDays(response.data.message.availableLeave);
-        console.log(`totalLeave : ${response.data.message.availableLeave}`);
+        // console.log(`totalLeave : ${response.data.message.availableLeave}`);
       })
       .catch((error) => {
         console.error("Error fetching clearance data:", error);

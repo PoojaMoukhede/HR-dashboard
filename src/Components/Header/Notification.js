@@ -15,7 +15,7 @@ function NotificationComponent() {
       .get(`http://192.168.1.211:8080/notifications`)
       .then((response) => {
         const notifications = response.data;
-        console.log(`notifications:`, notifications);
+        // console.log(`notifications:`, notifications);
         const unreadNotifications = notifications.filter(
           (notification) => notification.status !== "read"
         );

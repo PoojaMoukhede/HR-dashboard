@@ -1,511 +1,98 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PolorChart from "../PolorChart";
+import axios from "axios";
 
 export default function AttandancedepartmentWise() {
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [departmentCounts, setDepartmentCounts] = useState([]);
+  const [presentEmployees, setPresentEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const dummyData = [
-    {
-      name: "Charil Estrella",
-      attendance: "present",
-      department: "Accounting",
-      date: "06-10-2023",
-    },
-    {
-      name: "Sandro Hasell",
-      attendance: "present",
-      department: "Product Management",
-    },
-    {
-      name: "Britt Chinge de Hals",
-      attendance: "present",
-      department: "Research and Development",
-    },
-    {
-      name: "Jermaine Copcutt",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Calvin Haworth",
-      attendance: "present",
-      department: "Product Management",
-    },
-    {
-      name: "Austin MacTerlagh",
-      attendance: "present",
-      department: "Accounting",
-    },
-    {
-      name: "Janean Lisciandri",
-      attendance: "present",
-      department: "Training",
-    },
-    {
-      name: "Charlot Shubotham",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Aldrich Enderlein",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Lawton Dumingo",
-      attendance: "present",
-      department: "Marketing",
-    },
-    {
-      name: "Bonni Hartburn",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Martyn Spier",
-      attendance: "present",
-      department: "Accounting",
-    },
-    {
-      name: "Galvan MacGilrewy",
-      attendance: "present",
-      department: "Services",
-    },
-    {
-      name: "Florina Lumsdaine",
-      attendance: "absent",
-      department: "Training",
-    },
-    {
-      name: "Curry Tollmache",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Hyacinthia Challes",
-      attendance: "present",
-      department: "Research and Development",
-    },
-    {
-      name: "Calvin Casarino",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Paton Wiggington",
-      attendance: "present",
-      department: "Support",
-    },
-    {
-      name: "Daisi Camidge",
-      attendance: "present",
-      department: "Accounting",
-    },
-    {
-      name: "Norrie Dummett",
-      attendance: "absent",
-      department: "Human Resources",
-    },
-    {
-      name: "Barbi Winborn",
-      attendance: "present",
-      department: "Legal",
-    },
-    {
-      name: "Erinn Ert",
-      attendance: "present",
-      department: "Accounting",
-    },
-    {
-      name: "Edeline Smorthwaite",
-      attendance: "present",
-      department: "Training",
-    },
-    {
-      name: "Willamina Ruck",
-      attendance: "present",
-      department: "Legal",
-    },
-    {
-      name: "Charlean Leetham",
-      attendance: "present",
-      department: "Services",
-    },
-    {
-      name: "Vernice Goodbarne",
-      attendance: "present",
-      department: "Product Management",
-    },
-    {
-      name: "Raphael Stollsteiner",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Kelley Huntley",
-      attendance: "present",
-      department: "Human Resources",
-    },
-    {
-      name: "Thaddus Ives",
-      attendance: "present",
-      department: "Training",
-    },
-    {
-      name: "Lorelle Heaney",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Aundrea Clews",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Karleen Smitherman",
-      attendance: "present",
-      department: "Product Management",
-    },
-    {
-      name: "Meredith Davydoch",
-      attendance: "present",
-      department: "Training",
-    },
-    {
-      name: "Rasla Chilver",
-      attendance: "absent",
-      department: "Legal",
-    },
-    {
-      name: "Merrilee Baseley",
-      attendance: "present",
-      department: "Training",
-    },
-    {
-      name: "Hermon Baalham",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Lora Matejovsky",
-      attendance: "present",
-      department: "Services",
-    },
-    {
-      name: "Kitti Williamson",
-      attendance: "present",
-      department: "Training",
-    },
-    {
-      name: "Roger Congdon",
-      attendance: "absent",
-      department: "Legal",
-    },
-    {
-      name: "Lazarus Bonallack",
-      attendance: "present",
-      department: "Legal",
-    },
-    {
-      name: "Marleah Handyside",
-      attendance: "absent",
-      department: "Research and Development",
-    },
-    {
-      name: "Nicolais Ruse",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "James Eley",
-      attendance: "present",
-      department: "Research and Development",
-    },
-    {
-      name: "Conni Houlridge",
-      attendance: "present",
-      department: "Training",
-    },
-    {
-      name: "Duncan Forker",
-      attendance: "present",
-      department: "Marketing",
-    },
-    {
-      name: "Hortense Halbard",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Olin Learie",
-      attendance: "present",
-      department: "Research and Development",
-    },
-    {
-      name: "Krishnah MacRierie",
-      attendance: "present",
-      department: "Accounting",
-    },
-    {
-      name: "Riannon Blench",
-      attendance: "absent",
-      department: "Human Resources",
-    },
-    {
-      name: "Frayda Anfonsi",
-      attendance: "absent",
-      department: "Training",
-    },
-    {
-      name: "Wain O'Grady",
-      attendance: "present",
-      department: "Human Resources",
-    },
-    {
-      name: "Weider Nottingham",
-      attendance: "present",
-      department: "Services",
-    },
-    {
-      name: "Gary Lisett",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Georgy Vasey",
-      attendance: "present",
-      department: "Product Management",
-    },
-    {
-      name: "Rolph Quinnette",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Saba Hessay",
-      attendance: "present",
-      department: "Research and Development",
-    },
-    {
-      name: "Maddalena Stinton",
-      attendance: "present",
-      department: "Legal",
-    },
-    {
-      name: "Lucy Fitzsimmons",
-      attendance: "present",
-      department: "Services",
-    },
-    {
-      name: "Meggie Massot",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Lavina Maudlen",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Bradney Munnion",
-      attendance: "present",
-      department: "Legal",
-    },
-    {
-      name: "Angy Sellek",
-      attendance: "present",
-      department: "Accounting",
-    },
-    {
-      name: "Luce Pursey",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Bennie Rose",
-      attendance: "present",
-      department: "Product Management",
-    },
-    {
-      name: "Ainslie Mealham",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Orsola Gotch",
-      attendance: "present",
-      department: "Support",
-    },
-    {
-      name: "Salomon Devita",
-      attendance: "present",
-      department: "Legal",
-    },
-    {
-      name: "Arlee Gravet",
-      attendance: "present",
-      department: "Support",
-    },
-    {
-      name: "Lawton Boreland",
-      attendance: "present",
-      department: "Support",
-    },
-    {
-      name: "Timothy Vanner",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Tiffi Rymour",
-      attendance: "present",
-      department: "Training",
-    },
-    {
-      name: "Linzy Dacca",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Kleon Oliva",
-      attendance: "present",
-      department: "Services",
-    },
-    {
-      name: "Marylou Crosse",
-      attendance: "present",
-      department: "Human Resources",
-    },
-    {
-      name: "Eilis O'Hallagan",
-      attendance: "present",
-      department: "Marketing",
-    },
-    {
-      name: "Gwendolen Kermannes",
-      attendance: "present",
-      department: "Research and Development",
-    },
-    {
-      name: "Beryl Norres",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Irwinn Cleen",
-      attendance: "present",
-      department: "Training",
-    },
-    {
-      name: "Wainwright Cossington",
-      attendance: "absent",
-      department: "Software",
-    },
-    {
-      name: "Collen Scothron",
-      attendance: "present",
-      department: "Legal",
-    },
-    {
-      name: "Robbert O'Rourke",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Bucky Claughton",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Boy Heinssen",
-      attendance: "present",
-      department: "Software",
-    },
-    {
-      name: "Arny Breslane",
-      attendance: "present",
-      department: "Product Management",
-    },
-    {
-      name: "Nadeen Stempe",
-      attendance: "absent",
-      department: "Training",
-    },
-    {
-      name: "Sarene Dubber",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Kain Kellie",
-      attendance: "present",
-      department: "Product Management",
-    },
-    {
-      name: "Dorise Scraney",
-      attendance: "present",
-      department: "Legal",
-    },
-    {
-      name: "Matelda Jakel",
-      attendance: "present",
-      department: "Sales",
-    },
-    {
-      name: "Tallie Mowat",
-      attendance: "present",
-      department: "Legal",
-    },
-    {
-      name: "Stormy Levin",
-      attendance: "present",
-      department: "Product Management",
-    },
-    {
-      name: "Giorgia Stetson",
-      attendance: "present",
-      department: "Human Resources",
-    },
-    {
-      name: "Sylvan Broker",
-      attendance: "present",
-      department: "Support",
-    },
-    {
-      name: "Guglielma Lindell",
-      attendance: "present",
-      department: "Support",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const attendanceResponse = await axios.get(
+          "http://192.168.1.211:8080/departmentWise"
+        );
+        setAttendanceData(attendanceResponse.data);
 
-  const handleDepartmentClick = (department) => {
-    setSelectedDepartment(department);
-  };
+        const userResponse = await axios.get("http://192.168.1.211:8080/Users");
+        setUserData(userResponse.data);
 
-  // Extract unique departments from the dummyData
-  const uniqueDepartments = [
-    ...new Set(dummyData.map((item) => item.department)),
-  ];
-  const chart3Labels = uniqueDepartments;
-  // Initialize an object to store department-wise counts
-  const departmentCounts = {};
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
 
-  // Calculate counts for each department
-  uniqueDepartments.forEach((department) => {
-    const departmentData = dummyData.filter(
-      (item) => item.department === department
-    );
-    const absentCount = departmentData.filter(
-      (item) => item.attendance === "absent"
-    ).length;
-    const presentCount = departmentData.filter(
-      (item) => item.attendance === "present"
-    ).length;
-    departmentCounts[department] = { presentCount, absentCount };
-  });
+    fetchData();
+  }, []);
 
+  const uniqueDepartments = Array.from(
+    new Set(userData.map((user) => user.Emp_department))
+  );
+
+  const initialCounts = uniqueDepartments.map((department) => ({
+    department,
+    totalMembers: 0,
+    presentCount: 0,
+    absentCount: 0,
+  }));
+
+  useEffect(() => {
+    // Update departmentCounts with fetched data
+    const updatedCounts = [...initialCounts];
+    const presentEmployeeList = [];
+
+    userData.forEach((user) => {
+      const department = user.Emp_department;
+      const departmentIndex = updatedCounts.findIndex(
+        (item) => item.department === department
+      );
+
+      if (departmentIndex !== -1) {
+        updatedCounts[departmentIndex].totalMembers += 1;
+      }
+    });
+
+    const today = new Date().toISOString().split("T")[0];
+
+    attendanceData.forEach((attendance) => {
+      const department = attendance.userRef.Emp_department;
+      const user = userData.find((user) => user._id === attendance.userRef._id);
+
+      if (user) {
+        const status = attendance.Employee_attandance[0]?.action;
+        const D_ate = new Date(attendance.Employee_attandance[0]?.timestamp);
+        const attendanceDate = D_ate.toISOString().split("T")[0];
+
+        if (attendanceDate === today) {
+          const departmentIndex = updatedCounts.findIndex(
+            (item) => item.department === department
+          );
+          if (status === "Punch In") {
+            updatedCounts[departmentIndex].presentCount += 1;
+            presentEmployeeList.push(user); // Add the present employee to the list
+          } else {
+            updatedCounts[departmentIndex].absentCount += 1;
+          }
+        }
+      }
+    });
+
+    setDepartmentCounts(updatedCounts);
+    setPresentEmployees(presentEmployeeList);
+    console.log(`list :${presentEmployeeList}`);
+  }, [attendanceData, userData]);
   return (
     <div>
+      {/* <ul>   // for checking only
+              {presentEmployees.map((employee) => (
+                <li key={employee._id}>{employee.Emp_name}</li>
+              ))}
+            </ul> */}
       <div className="row">
         <div className="col-md-12 col-lg-8">
           <div className="mb-3 card">
@@ -535,36 +122,33 @@ export default function AttandancedepartmentWise() {
                           </tr>
                         </thead>
                         <tbody>
-                          {uniqueDepartments.map((department) => (
-                            <tr key={department}>
-                              <td>
-                                <div className="widget-content p-0">
-                                  <div className="widget-content-wrapper">
-                                    <div className="widget-content-left flex2">
-                                      <div
-                                        className="widget-heading"
-                                        onClick={() =>
-                                          handleDepartmentClick(department)
-                                        }
-                                      >
-                                        {department}
+                          {departmentCounts.length > 0 &&
+                            departmentCounts.map(
+                              ({ department, presentCount, totalMembers }) => (
+                                <tr key={department}>
+                                  <td>
+                                    <div className="widget-content p-0">
+                                      <div className="widget-content-wrapper">
+                                        <div className="widget-content-left flex2">
+                                          <div className="widget-heading">
+                                            {department}
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="text-center text-muted">
-                                {departmentCounts[department].presentCount +
-                                  departmentCounts[department].absentCount}
-                              </td>
-                              <td className="text-center text-muted">
-                                {departmentCounts[department].presentCount}
-                              </td>
-                              <td className="text-center text-muted">
-                                {departmentCounts[department].absentCount}
-                              </td>
-                            </tr>
-                          ))}
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {totalMembers}
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {presentCount}
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {totalMembers - presentCount}
+                                  </td>
+                                </tr>
+                              )
+                            )}
                         </tbody>
                       </table>
                     </div>
@@ -592,12 +176,16 @@ export default function AttandancedepartmentWise() {
                     className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0"
                     style={{ height: "370px" }}
                   >
-                   
+                    {!loading && departmentCounts.length > 0 ? (
                       <PolorChart
-                        series={[7, 9, 6, 14, 9, 3, 6, 12, 6, 6, 11]}
-                        labels={chart3Labels}
+                        series={departmentCounts.map(
+                          (data) => data.presentCount
+                        )}
+                        labels={departmentCounts.map((data) => data.department)}
                       />
-         
+                    ) : (
+                      <div>Loading...</div>
+                    )}
                   </div>
                 </div>
               </div>

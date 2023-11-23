@@ -192,6 +192,87 @@ const AddEmployeeModal = ({ open, onClose }) => {
     }));
   };
 
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedDesignation, setSelectedDesignation] = useState("");
+
+const department_list = {
+  Software:[
+    'Web Application Developer',
+    'Intern',
+    'Front-end Developer',
+    'Backend Developer',
+    'Software Engineer',
+    'Embedded Softeware Engineer',
+    'Team Leader',
+    'Project Manager'
+  ],
+  Sales:[
+    'Sales Executive',
+    'Marketing Manager',
+    'Customer Service Representative',
+    'Intern',
+  ],
+  Service:[
+    'Service Engineer',
+    'Intern',
+    'Technician'
+  ],
+  Accounting:[
+    'Accounting Manager',
+    'Financial Analyst',
+    'Intern',
+  ],
+  HR:[
+    'Intern',
+    'Human Resource Assistant',
+    'Recruiter',
+    'HR Officer',
+  ],
+  Resarch_Development:[
+    'Research and Development Intern',
+    'Technician'
+  ],
+  Billing:[
+    'Intern',
+    'Billing Specialist',
+    'Receptionist',
+  ],
+  Production:[
+    'Manager',
+    'Production Planner',
+    'Intern',
+  ]
+}
+
+const handleDepartmentChange = (event) => {
+  const department = event.target.value;
+  setSelectedDepartment(department);
+  setSelectedDesignation("");
+
+  setNewEmployee((prevEmployee) => ({
+    ...prevEmployee,
+    Emp_department: department,
+  }));
+};
+const handleDesignationChange = (event) => {
+  const DesignationValue = event.target.value;
+  setSelectedDesignation(DesignationValue);
+
+  setNewEmployee((prevEmployee) => ({
+    ...prevEmployee,
+    Emp_designation: DesignationValue,
+  }));
+};
+
+const Options = selectedDepartment
+    ? department_list[selectedDepartment].map((Emp_designation) => (
+        <MenuItem key={Emp_designation} value={Emp_designation}>
+          {Emp_designation}
+        </MenuItem>
+      ))
+    : null;
+
+
   return (
     <>
       <Modal
@@ -343,8 +424,10 @@ const AddEmployeeModal = ({ open, onClose }) => {
                     id="demo-simple-select"
                     style={{ color: "black" }}
                     fullWidth
-                    value={newEmployee.Emp_department}
-                    onChange={handleInputChange}
+                    // value={newEmployee.Emp_department}
+                    // onChange={handleInputChange}
+                    value={selectedDepartment}
+                    onChange={handleDepartmentChange}
                     className={
                       emptyFields.Emp_department
                         ? "input-field-error"
@@ -352,45 +435,55 @@ const AddEmployeeModal = ({ open, onClose }) => {
                     }
                     // onChange={handleInputChange}
                   >
-                    <MenuItem>Select</MenuItem>
+                    {/* <MenuItem>Select</MenuItem>
                     <MenuItem value="Software">Software</MenuItem>
                     <MenuItem value="Sales">Sales & Marketing</MenuItem>
                     <MenuItem value="Service">Service</MenuItem>
                     <MenuItem value="Accounting">Accounting</MenuItem>
                     <MenuItem value="HR">Human Resources</MenuItem>
                     <MenuItem value="RD">Research & Development</MenuItem>
+                    <MenuItem value="HR">Billing</MenuItem>
+                    <MenuItem value="RD">Production</MenuItem> */}
+                    <MenuItem>Select</MenuItem>
+                    {Object.keys(department_list).map((depart) => (
+                      <MenuItem value={depart} key={depart}>
+                        {depart}
+                      </MenuItem>
+                    ))}
                   </Select>
+       
                 </div>
                 <div className="grid-item">
-                  <label>Blood Group</label>
-                  <Select
+                  {/* <TextField
                     type="text"
-                    name="Emp_blood_group"
-                    label="Blood Group"
-                    value={newEmployee.Emp_blood_group}
+                    name="Emp_designation"
+                    label="Designation"
+                    // value={newEmployee.Emp_designation}
+                    value={selectedDesignation}
+                    // onChange={handleInputChange}
+                    onChange={handleDesignationChange}
+                    fullWidth
+                    margin="normal"
+                    required
+                  /> */}
+                    <label>Designation</label>
+                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    style={{ color: "black" }}
+                    type="text"
+                    name="Emp_designation"
+                    label="Designation"
+                    value={selectedDesignation}
+                    onChange={handleDesignationChange}
                     fullWidth
-                    onChange={handleInputChange}
-                    className={
-                      emptyFields.Emp_blood_group
-                        ? "input-field-error"
-                        : "input-field"
-                    }
-                    // onChange={handleInputChange}
+                    margin="normal"
+                    required
                   >
-                    <MenuItem>Select</MenuItem>
-                    <MenuItem value="O+">O+</MenuItem>
-                    <MenuItem value="O-">O-</MenuItem>
-                    <MenuItem value="AB+">AB+</MenuItem>
-                    <MenuItem value="AB-">AB-</MenuItem>
-                    <MenuItem value="A-">A-</MenuItem>
-                    <MenuItem value="A+">A+</MenuItem>
-                    <MenuItem value="B-">B-</MenuItem>
-                    <MenuItem value="B+">B+</MenuItem>
+                    <MenuItem value="">Select</MenuItem>
+                    {Options}
                   </Select>
                 </div>
+                
               </div>
 
               <div className="grid-row mt-2">
@@ -442,20 +535,38 @@ const AddEmployeeModal = ({ open, onClose }) => {
                 </div>
               </div>
 
-              <div className="grid-row ">
-                <div className="grid-item">
-                  <TextField
+              <div className="grid-row mt-2">
+              <div className="grid-item">
+                  <label>Blood Group</label>
+                  <Select
                     type="text"
-                    name="Emp_designation"
-                    label="Designation"
-                    value={newEmployee.Emp_designation}
-                    onChange={handleInputChange}
+                    name="Emp_blood_group"
+                    label="Blood Group"
+                    value={newEmployee.Emp_blood_group}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    style={{ color: "black" }}
                     fullWidth
-                    margin="normal"
-                    required
-                  />
+                    onChange={handleInputChange}
+                    className={
+                      emptyFields.Emp_blood_group
+                        ? "input-field-error"
+                        : "input-field"
+                    }
+                    // onChange={handleInputChange}
+                  >
+                    <MenuItem>Select</MenuItem>
+                    <MenuItem value="O+">O+</MenuItem>
+                    <MenuItem value="O-">O-</MenuItem>
+                    <MenuItem value="AB+">AB+</MenuItem>
+                    <MenuItem value="AB-">AB-</MenuItem>
+                    <MenuItem value="A-">A-</MenuItem>
+                    <MenuItem value="A+">A+</MenuItem>
+                    <MenuItem value="B-">B-</MenuItem>
+                    <MenuItem value="B+">B+</MenuItem>
+                  </Select>
                 </div>
-                <div className="grid-item">
+                <div className="grid-item mt-4">
                   <TextField
                     type="text"
                     name="Emp_expertise"

@@ -34,12 +34,12 @@ export function APIContextProvider({ children }) {
   
   //post user
   const signUpUser = (userData) => {
-    console.log(userData);
+    // console.log(userData);
     try {
       axios
         .post(SignUpUrl, userData)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           setEmployeedata(userData)
           window.alert(`Registeration Completed`);
           // navigate("/login");
@@ -56,15 +56,15 @@ export function APIContextProvider({ children }) {
 
   //Login USER
   const loginUser = (loginData) => {
-    console.log(loginData);
+    // console.log(loginData);
     axios
       .post(loginUrl, loginData)
       .then((res) => {
         const myToken = res.data.token;
-        console.log(myToken);
+        // console.log(myToken);
         localStorage.setItem("token", myToken);
         localStorage.setItem("email", loginData.email);
-        navigate("/main");
+        navigate("/dashboard");
         document.location.reload();
         setUserEmail(loginData.email);
       })
@@ -165,9 +165,9 @@ export function APIContextProvider({ children }) {
       // console.log("-------------")
       .then((res) => {
         const info = res.data;
-        console.log(`info ${info}`);
+        // console.log(`info ${info}`);
         setEmployeedata(data)
-        console.log(`id while fetching ${id}`)
+        // console.log(`id while fetching ${id}`)
         window.location.reload()
       })
       .catch((error) => {
@@ -179,9 +179,9 @@ export function APIContextProvider({ children }) {
       .put(`http://192.168.1.211:8080/admin/${id}`,data)
       .then((res) => {
         const info = res.data;
-        console.log(`info ${info}`);
+        // console.log(`info ${info}`);
         setAdmindata(data)
-        console.log(`id while fetching ${id}`)
+        // console.log(`id while fetching ${id}`)
         window.location.reload()
       })
       .catch((error) => {
@@ -193,10 +193,10 @@ export function APIContextProvider({ children }) {
       axios
         .get(CurrExpanseURL)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
         const moneyFromAPI = res.data[0].money;
         setCurrentMonthFuelExpensetotal(moneyFromAPI);
-        console.log("Money from API:", moneyFromAPI);
+        // console.log("Money from API:", moneyFromAPI);
         })
         .catch((err) => {
           console.log(err);
@@ -208,12 +208,12 @@ export function APIContextProvider({ children }) {
 
 
   const signUpHR = (userData) => {
-    console.log(userData);
+    // console.log(userData);
     try {
       axios
         .post(addHrURL, userData)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           window.alert(`Registeration Completed`);
           window.location.reload()
           // navigate("/login");

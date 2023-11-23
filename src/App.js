@@ -18,8 +18,14 @@ import FullCalendarComponent from "./Components/Updates/FullCalendarComponent";
 import Profile from "./Components/Header/Profile";
 import CanteenFacility from "./Pages/CanteenFacility";
 import HRadmins from "./HRadmins";
+import {useState} from 'react'
 function App() {
- 
+  // const [isDetailsRendered, setIsDetailsRendered] = useState(false);
+
+  // const handleDetailsRender = () => {
+  //   setIsDetailsRendered(true);
+  // };
+
   return (
     <>
       <BrowserRouter>
@@ -30,16 +36,20 @@ function App() {
             {/* <Route exact path="/register" element={<Register/>} /> */}
             <Route
               exact
-              path="/main"
+              path="/dashboard"
               element={localStorage.getItem("token") ? <Main /> : <Login />}
             />
             {/* <Route exact path="/managers" element={isSuperAdmin() ? <Managers /> : null} /> */}
-            <Route exact path="/main" element={<Main />} />
-            <Route exact path="/members" element={<Member />} />
+            <Route exact path="/dashboard" element={<Main />} />
+            <Route exact path="/employee" element={<Member />} />
             <Route exact path="/attandance" element={<Attandance />} />
             <Route exact path="/complaint" element={<Complaint />} />
+            {/* <Route
+              exact
+              path="/details/:id"
+              element={<Details onRender={handleDetailsRender} />}
+            /> */}
             <Route exact path="/details/:id" element={<Details />} />
-            <Route exact path="/details" element={<Details />} />
             <Route exact path="/expanse" element={<Expanse />} />
             <Route exact path="/to" element={<ToastNotification />} />
             <Route exact path="*" element={<PageNotFound />} />
@@ -50,7 +60,7 @@ function App() {
           </Routes>
         </APIContextProvider>
       </BrowserRouter>
-     
+      {/* <Main isDetailsRendered={isDetailsRendered} /> */}
     </>
   );
 }

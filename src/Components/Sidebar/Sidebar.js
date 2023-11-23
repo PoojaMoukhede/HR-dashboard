@@ -6,6 +6,8 @@ import { useLocation } from "react-router-dom";
 // import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
+
+// { showDetailItem } for item detail
 const style = { fontSize: "1.5rem", marginRight: "0.5rem" };
 export default function Sidebar() {
   // const navigate = useNavigate();
@@ -13,7 +15,7 @@ export default function Sidebar() {
   const [selected, setSelected] = useState(null);
 
   function handleToggleSidebar() {
-    console.log("sidebar toggle");
+    // console.log("sidebar toggle");
     setIsSidebarOpen(!isSidebarOpen);
   }
 
@@ -102,12 +104,12 @@ export default function Sidebar() {
         <div className="scrollbar-sidebar">
           <div className="app-sidebar__inner mt-3">
             <ul className="vertical-nav-menu ">
-              <Link to="/main">
+              <Link to="/dashboard">
                 <li
                   className={`item_s app-sidebar__heading ${
-                    currentPath === "/main" ? "activate" : ""
+                    currentPath === "/dashboard" ? "activate" : ""
                   }`}
-                  onClick={() => handleItemClick("/main")}
+                  onClick={() => handleItemClick("/dashboard")}
                 >
                   <Icon icon="icon-park-outline:dashboard" style={style} />
                   Dashboards
@@ -124,6 +126,14 @@ export default function Sidebar() {
                   Details
                 </li>
               </Link> */}
+                {/* {showDetailItem && <li
+                  className={`item_s ${
+                    currentPath === "/details" ? "activate" : ""
+                  } ${getActiveClass("Details")}`}
+                  onClick={(id) => handleItemClick(`/details/${id}`)}
+                >
+                  Details
+                </li>} */}
 
               {isSuperAdmin() ? (
                 <Link to="/hradmins">
@@ -139,12 +149,12 @@ export default function Sidebar() {
                 </Link>
               ) : null}
 
-              <Link to="/members">
+              <Link to="/employee">
                 <li
                   className={` item_s app-sidebar__heading ${
-                    currentPath === "/members" ? "activate" : ""
+                    currentPath === "/employee" ? "activate" : ""
                   }`}
-                  onClick={() => handleItemClick("/members")}
+                  onClick={() => handleItemClick("/employee")}
                 >
                   <Icon icon="clarity:employee-group-line" style={style} />
                   Employee

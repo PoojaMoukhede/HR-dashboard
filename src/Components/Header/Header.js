@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import m_logo from "../../Images/multispan-logo 2.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import Notification from "./Notification";
 import userImg from "../../Images/pngwing.com (6).png";
-
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -74,7 +73,6 @@ export default function Header() {
         console.error("Error clearing notifications:", error);
       });
   };
- 
 
   useEffect(() => {
     axios
@@ -84,7 +82,7 @@ export default function Header() {
 
         if (adminData && adminData._id) {
           setUser(adminData);
-          console.log(`Admin name is ${adminData}`);
+          // console.log(`Admin name is ${adminData}`);
         } else {
           console.log("Admin not found");
         }
@@ -94,12 +92,21 @@ export default function Header() {
       });
   }, [userId]);
 
+  const location = useLocation();
+
   return (
     <>
       <div className="app-header header-shadow">
         <div className="app-header__logo">
           <div className="left">
             <img alt="" src={m_logo} />
+          </div>
+          {/* <div className="current-route">
+  {location.pathname.slice(1).charAt(0).toUpperCase() + location.pathname.slice(2)}
+</div> */}
+          <div className="current-route">
+            {location.pathname.slice(1).charAt(0).toUpperCase() +
+              location.pathname.slice(2).replace(/\/[a-f\d]{24}$/i, "")}
           </div>
           {/* <DarkMode /> Include the DarkMode component */}
 

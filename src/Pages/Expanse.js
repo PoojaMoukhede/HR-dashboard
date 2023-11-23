@@ -59,7 +59,7 @@ export default function Expanse() {
         const formData = response.data;
         const clearanceData = Array.isArray(formData) ? formData : [formData];
         setClearanceData(clearanceData);
-        console.log(`data: ${JSON.stringify(formData)}`);
+        // console.log(`data: ${JSON.stringify(formData)}`);
         setLoading(false);
         
       })
