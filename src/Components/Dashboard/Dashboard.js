@@ -41,31 +41,14 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    let presentCount = 0;
-
-    attendanceData.forEach((attendance) => {
-      const user = userData.find((user) => user._id === attendance.userRef._id);
-
-      if (user) {
-        const status = attendance.Employee_attandance[0]?.action;
-        const D_ate = new Date(attendance.Employee_attandance[0]?.timestamp);
-        const attendanceDate = D_ate.toISOString().split("T")[0];
-
-        if (attendanceDate === today) {
-          if (status === "Punch In") {
-            presentCount += 1;
-          }
-        }
-      }
-    });
 
     const totalEmployeesCount = userData.length;
+    const presentCount = attendanceData.length
 
     const attendancePercentageValue =
       totalEmployeesCount > 0 ? (presentCount / totalEmployeesCount) * 100 : 0;
 
-    setAttendancePercentage(attendancePercentageValue);
+    setAttendancePercentage(attendancePercentageValue.toFixed(2));
   }, [attendanceData, userData]);
 
   const [chartData2, setChartData2] = useState({
@@ -304,7 +287,6 @@ export default function Dashboard() {
 
   return (
     <>
-
       <div className={`App`}>
         <div className="app-main">
         <Sidebar />

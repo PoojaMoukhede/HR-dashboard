@@ -56,7 +56,8 @@ export default function MapC() {
       // Geocode locations
       mapl.mapquest
         .geocoding()
-        .geocode(["Naroda, GJ", "Nikol, GJ", "Narol, GJ"], createMap);
+        // .geocode(["Sola, AHM","Gota,AHM"], createMap);
+        .geocode(["Naroda, GJ", "Nikol, GJ", "Narol, GJ","Vatva, GJ","Gandhi Nagar,GJ","South Bopal,GJ","Karnavati Club,GJ","Sola, GJ","Gota,GJ"], createMap);
     } else {
       console.error("Map container is already initialized.");
     }

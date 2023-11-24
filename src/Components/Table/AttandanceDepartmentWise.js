@@ -30,69 +30,56 @@ export default function AttandancedepartmentWise() {
     fetchData();
   }, []);
 
-  const uniqueDepartments = Array.from(
-    new Set(userData.map((user) => user.Emp_department))
-  );
-
-  const initialCounts = uniqueDepartments.map((department) => ({
-    department,
-    totalMembers: 0,
-    presentCount: 0,
-    absentCount: 0,
-  }));
 
   useEffect(() => {
-    // Update departmentCounts with fetched data
-    const updatedCounts = [...initialCounts];
-    const presentEmployeeList = [];
+    // Create an object to store users by department
+    const usersByDepartment = {};
+
+    // Map attendanceData to users
+    const presentUsers = attendanceData.map((attendance) => {
+      const user = userData.find((user) => user._id === attendance.userRef._id);
+      return user;
+    });
+
+    // Group users by department
+    presentUsers.forEach((user) => {
+      if (user) {
+        const department = user.Emp_department;
+
+        if (!usersByDepartment[department]) {
+          usersByDepartment[department] = [];
+        }
+
+        usersByDepartment[department].push(user);
+      }
+    });
+
+    setPresentEmployees(usersByDepartment);
+
+    // Calculate total members department-wise
+    const totalMembersByDepartment = {};
 
     userData.forEach((user) => {
       const department = user.Emp_department;
-      const departmentIndex = updatedCounts.findIndex(
-        (item) => item.department === department
-      );
 
-      if (departmentIndex !== -1) {
-        updatedCounts[departmentIndex].totalMembers += 1;
+      if (!totalMembersByDepartment[department]) {
+        totalMembersByDepartment[department] = 0;
       }
+
+      totalMembersByDepartment[department] += 1;
     });
 
-    const today = new Date().toISOString().split("T")[0];
-
-    attendanceData.forEach((attendance) => {
-      const department = attendance.userRef.Emp_department;
-      const user = userData.find((user) => user._id === attendance.userRef._id);
-
-      if (user) {
-        const status = attendance.Employee_attandance[0]?.action;
-        const D_ate = new Date(attendance.Employee_attandance[0]?.timestamp);
-        const attendanceDate = D_ate.toISOString().split("T")[0];
-
-        if (attendanceDate === today) {
-          const departmentIndex = updatedCounts.findIndex(
-            (item) => item.department === department
-          );
-          if (status === "Punch In") {
-            updatedCounts[departmentIndex].presentCount += 1;
-            presentEmployeeList.push(user); // Add the present employee to the list
-          } else {
-            updatedCounts[departmentIndex].absentCount += 1;
-          }
-        }
-      }
-    });
-
-    setDepartmentCounts(updatedCounts);
-    setPresentEmployees(presentEmployeeList);
-    console.log(`list :${presentEmployeeList}`);
+    setDepartmentCounts(
+      Object.keys(totalMembersByDepartment).map((department) => ({
+        department,
+        totalMembers: totalMembersByDepartment[department],
+        presentCount: usersByDepartment[department]?.length || 0,
+      }))
+    );
   }, [attendanceData, userData]);
+
   return (
     <div>
-      {/* <ul>   // for checking only
-              {presentEmployees.map((employee) => (
-                <li key={employee._id}>{employee.Emp_name}</li>
-              ))}
-            </ul> */}
       <div className="row">
         <div className="col-md-12 col-lg-8">
           <div className="mb-3 card">
@@ -116,7 +103,7 @@ export default function AttandancedepartmentWise() {
                         <thead>
                           <tr>
                             <th>Department</th>
-                            <th className="text-center">Total</th>
+                            <th className="text-center">Total Members</th>
                             <th className="text-center">Present</th>
                             <th className="text-center">Absent</th>
                           </tr>

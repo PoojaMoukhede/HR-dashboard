@@ -8,8 +8,6 @@ export default function Attandance() {
   const [attendanceData, setAttendanceData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalEmployees, setTotalEmployees] = useState(0);
-  const [totalPresent, setTotalPresent] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,29 +30,6 @@ export default function Attandance() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    let presentCount = 0;
-
-    attendanceData.forEach((attendance) => {
-      const user = userData.find((user) => user._id === attendance.userRef._id);
-
-      if (user) {
-        const status = attendance.Employee_attandance[0]?.action;
-        const D_ate = new Date(attendance.Employee_attandance[0]?.timestamp);
-        const attendanceDate = D_ate.toISOString().split("T")[0];
-
-        if (attendanceDate === today) {
-          if (status === "Punch In") {
-            presentCount += 1;
-          } 
-        }
-      }
-    });
-
-    setTotalEmployees(userData.length);
-    setTotalPresent(presentCount);
-  }, [attendanceData, userData]);
 
   return (
     <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -74,7 +49,7 @@ export default function Attandance() {
                     </div>
                     <div className="widget-content-right">
                       <div className="widget-numbers text-black">
-                        <span>{totalEmployees}</span>
+                        <span>{userData.length}</span>
                       </div>
                     </div>
                   </div>
@@ -89,7 +64,7 @@ export default function Attandance() {
                     </div>
                     <div className="widget-content-right">
                       <div className="widget-numbers text-black">
-                        <span>{totalPresent}</span>
+                        <span>{attendanceData.length}</span>
                       </div>
                     </div>
                   </div>
@@ -104,7 +79,7 @@ export default function Attandance() {
                     </div>
                     <div className="widget-content-right">
                       <div className="widget-numbers text-black">
-                        <span>{totalEmployees-totalPresent}</span>
+                        <span>{(userData.length)-(attendanceData.length)}</span>
                       </div>
                     </div>
                   </div>
