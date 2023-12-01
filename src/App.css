@@ -1,3 +1,59 @@
+/* .card {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+}
+.app-sidebar {
+  background: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+  color: white;
+}
+.card-header-title,
+.table,
+th,
+td,
+.card-header,
+.card-text,
+.media-body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  color: white;
+}
+.search-input {
+  background-color: #191a1a !important;
+}
+tbody tr:hover {
+  background-color: #292929 !important;
+}
+hr {
+  background-color: #616161 !important;
+}
+.bg-dark {
+  background-color: #414141 !important;
+}
+.App {
+  background-image: url(./Images/tersius-van-rhyn-xcQWMPm9fG8-unsplash.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+} */
 .hamburger-inner,
 .hamburger-inner::before,
 .hamburger-inner::after {
@@ -876,12 +932,111 @@ body[data-theme='dark'] {
   line-height: 0;
   color: #000;
   z-index: 999;
-}
- */
+} */
+
 
 .current-route {
   font-size: 1.2rem;
   color: #0ba8cf;
   font-variant: small-caps;
   cursor: pointer;
+}
+
+.container_btn .btn {
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 200px;
+	height: 45px;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.container_btn .btn a {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.05);
+	box-shadow: 0 15px 10px rgba(0, 0, 0, 0.3);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 30px;
+	padding: 10px;
+	letter-spacing: 1px;
+	text-decoration: none;
+	overflow: hidden;
+	color: #257797;
+	font-weight: 400px;
+	z-index: 1;
+	transition: 0.5s;
+	backdrop-filter: blur(15px);
+}
+.container_btn .btn:hover a {
+	letter-spacing: 3px;
+	color: white;
+}
+.container_btn .btn a::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50%;
+	height: 100%;
+	background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
+	transform: skewX(45deg) translate(0);
+	transition: 0.5s;
+	filter: blur(0px);
+}
+.container_btn .btn:hover a::before {
+	transform: skewX(45deg) translate(200px);
+}
+.container_btn .btn::before {
+	content: "";
+	position: absolute;
+	left: 50%;
+	transform: translatex(-50%);
+	bottom: -5px;
+	width: 30px;
+	height: 10px;
+	border-radius: 10px;
+	transition: 0.5s;
+	transition-delay: 0.5;
+}
+.container_btn .btn:hover::before  {
+	bottom: 0;
+	height: 50%;
+	width: 80%;
+	border-radius: 30px;
+}
+
+.container_btn .btn::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	transform: translatex(-50%);
+	top: -5px;
+	width: 30px;
+	height: 10px;
+	background: #1fd2ff;
+	border-radius: 10px;
+	transition: 0.5s;
+	transition-delay: 0.5;
+}
+.container_btn .btn:hover::after{
+	top: 0;
+	height: 50%;
+	width: 80%;
+	border-radius: 30px;
+}
+.container_btn .btn:nth-child(1)::before,
+.container .btn:nth-child(1)::after {
+	background: #1fd2ff;
+	box-shadow: 0 0 5px #1fd2ff, 0 0 15px #1fd2ff, 0 0 30px #1fd2ff,
+		0 0 60px #1fd2ff;
 }

@@ -1,6 +1,94 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import marker1 from "../../Images/location (1).png";
+import marker2 from '../../Images/position.png'
 
 export default function MapC() {
+  const [data, setData] = useState([]);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://192.168.1.211:8080/location")
+  //     .then((response) => {
+  //       setData(response.data);
+  //       const mapl = window.L;
+  //       let mapContainer = document.getElementById("map");
+  //       mapl.mapquest.key = "urXw4lfYOkv5w3osyatzBTfNulYG7BYd";
+  //       // Check if response.data exists and has at least one element
+  //       if (response.data && response.data.length > 0) {
+  //         const lastLocationInfo = response.data[response.data.length - 1];
+
+  //         if (
+  //           lastLocationInfo.Location_info &&
+  //           lastLocationInfo.Location_info.length > 0
+  //         ) {
+  //           // Get the endpoint name from the last document
+  //           const lastPoint =
+  //             lastLocationInfo.Location_info[
+  //               lastLocationInfo.Location_info.length - 1
+  //             ].endPoint.endPointname;
+  //           console.log(`Endpoint: ${lastPoint}`);
+
+  //           // Initialize the Map
+  //           const map = mapl.mapquest.map("map", {
+  //             layers: mapl.mapquest.tileLayer("map"),
+  //             center: [40.7128, -74.0059],
+  //             zoom: 13,
+  //           });
+
+  //           // Create a marker for the endpoint
+  //           const marker = mapl
+  //             .marker([40.7128, -74.0059], {
+  //               icon: mapl.mapquest.icons.marker(),
+  //             })
+  //             .bindPopup(lastPoint);
+
+  //           // Add the marker to the map
+  //           marker.addTo(map);
+  //           mapContainer._mapquest = true;
+  //           mapl.mapquest.geocoding().geocode(lastPoint); // Set a property on the map container to indicate that it has been initialized
+  //         } else {
+  //           console.log("Last Location_info is empty or undefined");
+  //         }
+  //       } else {
+  //         console.log("Data is empty or undefined");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://192.168.1.211:8080/location")
+      .then((response) => {
+        setData(response.data);
+
+        // Check if response.data exists and has at least one element
+        if (response.data && response.data.length > 0) {
+          const lastLocationInfo = response.data[response.data.length - 1];
+
+          if (
+            lastLocationInfo.Location_info &&
+            lastLocationInfo.Location_info.length > 0
+          ) {
+            const lastLocation =
+              lastLocationInfo.Location_info[
+                lastLocationInfo.Location_info.length - 1
+              ];
+            console.log(`Endpoint: ${lastLocation.endPoint.endPointname}`);
+          } else {
+            console.log("Last Location_info is empty or undefined");
+          }
+        } else {
+          console.log("Data is empty or undefined");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
   useEffect(() => {
     let mapContainer = document.getElementById("map");
     const mapl = window.L;
@@ -27,41 +115,51 @@ export default function MapC() {
         // Generate the feature group containing markers from the geocoded locations
         const featureGroup = generateMarkersFeatureGroup(response);
         function generateMarkersFeatureGroup(response) {
-          // console.log(`response : ${response}`);
           const group = [];
           for (let i = 0; i < response.results.length; i++) {
             const location = response.results[i].locations[0];
             const locationLatLng = location.latLng;
-            // console.log(`locationLatLng : ${locationLatLng}`);
-            // console.log(`location : ${location}`);
-
-            // Create a marker for each location
+            const customIcon = window.L.icon({
+              iconUrl: marker1,
+              iconSize: [40, 40], // Adjust the size of your custom marker icon
+            });
+  
             const marker = mapl
-              .marker(locationLatLng, { icon: mapl.mapquest.icons.marker() })
+              // .marker(locationLatLng, { icon: mapl.mapquest.icons.marker() })
+              .marker(locationLatLng, { icon: customIcon })
               .bindPopup(location.adminArea5 + ", " + location.adminArea3);
 
             group.push(marker);
-            // console.log(`group : ${group}`);
           }
           return mapl.featureGroup(group);
         }
-        // Add markers to the map and zoom to the features
         featureGroup.addTo(map);
         map.fitBounds(featureGroup.getBounds());
-
-        // Set a property on the map container to indicate that it has been initialized
-        mapContainer._mapquest = true;
+        mapContainer._mapquest = true; // Set a property on the map container to indicate that it has been initialized
       }
 
       // Geocode locations
       mapl.mapquest
         .geocoding()
         // .geocode(["Sola, AHM","Gota,AHM"], createMap);
-        .geocode(["Naroda, GJ", "Nikol, GJ", "Narol, GJ","Vatva, GJ","Gandhi Nagar,GJ","South Bopal,GJ","Karnavati Club,GJ","Sola, GJ","Gota,GJ"], createMap);
+        .geocode(
+          [
+            "Naroda, GJ",
+            "Nikol, GJ",
+            "Narol, GJ",
+            "Vatva, GJ",
+            "Gandhi Nagar,GJ",
+            "South Bopal,GJ",
+            "Karnavati Club,GJ",
+            "Sola, GJ",
+            "Gota,GJ",
+          ],
+          createMap
+        );
     } else {
       console.error("Map container is already initialized.");
     }
-  }, []); // Empty dependency array ensures that the effect runs once after the initial render
+  }, []);
   return (
     <>
       <div className="card-header-tab card-header">

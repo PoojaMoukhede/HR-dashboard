@@ -4,14 +4,23 @@ import axios from "axios";
 
 export default function Table() {
   const [rows, setRows] = useState([]);
+  const [attandance, setAttandance] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [timer,setTimer] =([])
   const navigate = useNavigate();
   useEffect(() => {
-    // setRows(dummyData);
     axios
       .get("http://192.168.1.211:8080/Users")
       .then((response) => {
         setRows(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+    axios
+      .get("http://192.168.1.211:8080/departmentWise")
+      .then((response) => {
+        setAttandance(response.data[0].Employee_attandance);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -23,6 +32,7 @@ export default function Table() {
       value.toString().toLowerCase().includes(searchValue.toLowerCase())
     )
   );
+
 
   const makeStyle = (status) => {
     if (status === "On-site") {
@@ -77,64 +87,59 @@ export default function Table() {
               </tr>
             </thead>
             <tbody>
-              {filteredRows.map((row) => (
-                <tr>
-                  <td className="text-center text-muted">{row.Emp_ID}</td>
-                  <td>
-                    <div className="widget-content p-0">
-                      <div className="widget-content-wrapper">
-                        <div className="widget-content-left mr-3">
-                          <div className="widget-content-left">
-                            <img
-                              width="40"
-                              className="rounded-circle"
-                              src="assets/images/avatars/4.jpg"
-                              alt=""
-                            />
+              {attandance &&
+                filteredRows.map((row) => (
+                  <tr>
+                    <td className="text-center text-muted">{row.Emp_ID}</td>
+                    <td>
+                      <div className="widget-content p-0">
+                        <div className="widget-content-wrapper">
+                          <div className="widget-content-left mr-3">
+                            <div className="widget-content-left">
+                              <img
+                                width="40"
+                                className="rounded-circle"
+                                src="assets/images/avatars/4.jpg"
+                                alt=""
+                              />
+                            </div>
                           </div>
-                        </div>
-                        <div className="widget-content-left flex2">
-                          <div className="widget-heading">{row.Emp_name}</div>
-                          <div className="widget-subheading opacity-7">
-                            {row.Emp_department}
+                          <div className="widget-content-left flex2">
+                            <div className="widget-heading">{row.Emp_name}</div>
+                            <div className="widget-subheading opacity-7">
+                              {row.Emp_department}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="text-center">{row.hours}</td>
-                  <td className="text-center">
-                    <div
-                      className="badge badge-warning"
-                      style={makeStyle(row.status)}
-                    >
-                      {row.status}
-                    </div>
-                  </td>
-                  <td className="text-center">
-                    <button
-                      type="button"
-                      id="PopoverCustomT-1"
-                      className="btn btn-primary btn-sm"
-                      onClick={(e) => {
-                        // console.log({ row });
-                        navigate(`/details/${row?._id}`);
-                      }}
-                    >
-                      Details
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="text-center"> {timer}</td>
+                    <td className="text-center">
+                      <div
+                        className="badge badge-warning"
+                        style={makeStyle(row.status)}
+                      >
+                        {row.status}
+                      </div>
+                    </td>
+                    <td className="text-center">
+                      <button
+                        type="button"
+                        id="PopoverCustomT-1"
+                        className="btn btn-primary btn-sm"
+                        onClick={(e) => {
+                          // console.log({ row });
+                          navigate(`/details/${row?._id}`);
+                        }}
+                      >
+                        Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
-        {/* <div className="d-block text-center card-footer">
-          <button className="mr-2 btn-icon btn-icon-only btn btn-outline-danger">
-            <i className="pe-7s-trash btn-icon-wrapper"> </i>
-          </button>
-          <button className="btn-wide btn btn-success">Save</button>
-        </div> */}
       </div>
     </>
   );

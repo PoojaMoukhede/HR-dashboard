@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { useLocation } from "react-router-dom";
-// import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 
 // { showDetailItem } for item detail
 const style = { fontSize: "1.5rem", marginRight: "0.5rem" };
 export default function Sidebar() {
-  // const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 
   function handleToggleSidebar() {
-    // console.log("sidebar toggle");
     setIsSidebarOpen(!isSidebarOpen);
   }
 
@@ -24,7 +20,6 @@ export default function Sidebar() {
     sessionStorage.clear();
     localStorage.clear();
     window.location.replace("/login");
-    // navigate("/");
   }
 
   // Function to handle item click and set the selected item
@@ -34,7 +29,6 @@ export default function Sidebar() {
   }
 
   const getActiveClass = (item) => {
-    // alert('triggred')
     return item === selected ? "activate" : "";
   };
   const location = useLocation();
@@ -49,9 +43,7 @@ export default function Sidebar() {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("email");
     return user === superAdminCredentials.email;
-    // console.log(superAdminCredentials.email ,"..."  , user)
   };
-//  console.log({currentPath});
 
   return (
     <>

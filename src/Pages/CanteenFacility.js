@@ -3,8 +3,8 @@ import Coupon from "../Components/Coupon/Coupon";
 import Header from "../Components/Header/Header";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import axios from "axios";
-import food from "../Images/lai-yuching-WxePxgrIJbQ-unsplash (1).jpg";
-import food2 from "../Images/zoshua-colah-dncjnYtmWHo-unsplash (1).jpg";
+import food from "../Images/jo-sonn-M-tzZD5z720-unsplash.png";
+import food2 from "../Images/jaydeep-gajera-7yb08BMYhmQ-unsplash.png";
 import AddCoupon from "../Components/Coupon/AddCoupon";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -53,7 +53,7 @@ export default function CanteenFacility() {
           <Sidebar />
           <div className="app-main__outer">
             <div className="app-main__inner">
-              <div className="d-flex">
+              <div className="d-flex container_btn">
                 <OverlayTrigger
                   key="tooltip14"
                   placement="top"
@@ -61,14 +61,9 @@ export default function CanteenFacility() {
                 >
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="btn mb-2 "
-                    style={{
-                      padding: "10px",
-                      border: " 2px solid #00c6f8",
-                      borderRadius: "5px",
-                    }}
+                    className="btn mb-2"
                   >
-                    ADD MENU
+                   <a>ADD MENU</a>
                   </button>
                 </OverlayTrigger>
               </div>
@@ -77,17 +72,31 @@ export default function CanteenFacility() {
                 onClose={() => setIsModalOpen(false)}
                 onAdd={handleAdd}
               />
-
               <div className="row">
                 <div className="col-md-12 col-lg-6">
                   {menuItems.today && (
                     <div className="menu-card">
                       <div className="meal">
-                        <img src={food} className="meal-img" alt="Salad" />
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            width:'45%'
+                          }}
+                        >
+                          <img
+                            src={food}
+                            className="meal-img"
+                            alt="Salad"
+                            width="90%"
+                
+                          />
+                        </div>
                         <div className="meal-content p-0">
                           <div className="text">
                             <h5 style={{ fontWeight: "700", color: "#485D67" }}>
-                              LUNCH COUPON TODAY'S MEAL
+                              TODAY'S MEAL
                             </h5>
                             <div className="detail">
                               <ul className="menuItem">
@@ -98,17 +107,10 @@ export default function CanteenFacility() {
                                   ))}
                               </ul>
                             </div>
-                            <div className="d-flex">
-                              <div style={{ width: "50%" }}>
-                                <button>
-                                  BOUGHT -{" "}
-                                  {getCouponCountForMenu(menuItems.today._id)}
-                                </button>
-                              </div>
-                              <div>
-                                <p className="pt-2">Valid Till Tomorrow</p>
-                              </div>
-                            </div>
+                            <button>
+                              BOUGHT -{" "}
+                              {getCouponCountForMenu(menuItems.today._id)}
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -120,11 +122,21 @@ export default function CanteenFacility() {
                   {menuItems.tomorrow && (
                     <div className="menu-card">
                       <div className="meal">
-                        <img src={food2} className="meal-img" alt="Salad" />
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            // marginLeft:'50px'
+                            width:'45%'
+                          }}
+                        >
+                          <img src={food2} className="meal-img" alt="Salad"  width="100%"/>
+                        </div>
                         <div className="meal-content p-0">
                           <div className="text">
                             <h5 style={{ fontWeight: "700", color: "#485D67" }}>
-                              LUNCH COUPON TOMARROW'S MEAL
+                              TOMARROW'S MEAL
                             </h5>
                             <div className="detail">
                               <ul className="menuItem">
@@ -135,16 +147,12 @@ export default function CanteenFacility() {
                                   ))}
                               </ul>
                             </div>
-                            <div className="d-flex">
-                              <div style={{ width: "50%" }}>
-                                <button>
-                                  BOUGHT - {getCouponCountForMenu(menuItems.tomorrow._id)}
-                                </button>
-                              </div>
-                              <div>
-                              </div>
-                            </div>
+                            <button>
+                              BOUGHT -{" "}
+                              {getCouponCountForMenu(menuItems.tomorrow._id)}
+                            </button>
                           </div>
+                          <div></div>
                         </div>
                       </div>
                     </div>

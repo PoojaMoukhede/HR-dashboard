@@ -13,8 +13,8 @@ import Tooltip from "react-bootstrap/Tooltip";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import ProfileImg from "../Images/man-profile-png.png";
-// import TripDetail from "../Components/Table/TripDetail";
 // { onRender } for sidebar
+
 export default function Details() {
   const { id } = useParams();
   const [employeeData, setEmployeedata] = useState();
@@ -35,7 +35,6 @@ export default function Details() {
       const emp = await axios
         .get(`http://192.168.1.211:8080/Users/${id}`)
         .then((response) => {
-          // console.log({response});
           return response.data;
         });
       setEmployeedata(emp);
@@ -53,34 +52,12 @@ export default function Details() {
         // Calculate remaining leave days
         const remainingLeaveDays = totalLeaveDays - availableLeave;
         setRemDays(remainingLeaveDays);
-        // console.log(`totalLeave: ${totalLeaveDays}`);
-        // console.log(`availableLeave: ${availableLeave}`);
-        // console.log(`remainingLeaveDays: ${remainingLeaveDays}`);
       })
       .catch((error) => {
         console.error("Error fetching leave balance:", error);
       });
   }, [id, totalLeaveDays]);
-
-  // useEffect(() => {
-  //   fetch(`http://192.168.1.211:8080/attendance`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ userId: '651e4de3b38144033cf2fae2', isPunchIn:false, timer: 1848232}),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       if (data.overtimeHours !== undefined && data.belowTimeHours !== undefined) {
-  //         setOvertimeHours(data.overtimeHours);
-  //         setBelowTimeHours(data.belowTimeHours);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error:', error);
-  //     });
-  // }, []);
+;
 
   useEffect(() => {
     fetchData(id);
@@ -88,7 +65,6 @@ export default function Details() {
       axios
         .get(`http://192.168.1.211:8080/attandance/${id}`)
         .then((response) => {
-          // console.log(response.data.message.Employee_attandance)
           setAttandance(response.data);
         })
         .catch((error) => {
@@ -120,8 +96,6 @@ export default function Details() {
         .get(`http://192.168.1.211:8080/leave/${id}`)
         .then((response) => {
           const leaveInfo = response.data.leaveApplications;
-          // console.log("Response data:", response.data.leaveApplications);
-          // console.log(`loooooog : ${leaveInfo}`);
           setLeaveData(response.data.leaveApplications);
         })
         .catch((error) => {
@@ -133,7 +107,6 @@ export default function Details() {
         .then((response) => {
           const coupon_Count = response.data.totalCoupons;
           setCouponCount(coupon_Count);
-          // console.log(`loooooog : ${leaveInfo}`);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -162,7 +135,6 @@ export default function Details() {
         setTotalExpanse(totalExpanse);
         setFuel(totalFuel);
         setClearanceData(response.data.message.FormData);
-        // console.log(`totalFuel : ${response.data.totalFuelLiters}`);
       })
       .catch((error) => {
         console.error("Error fetching clearance data:", error);
@@ -254,44 +226,6 @@ export default function Details() {
     setShowModal(!showModal);
   };
 
-  const Departments = {
-    Software: [
-      "Web Application Developer",
-      "Web Intern",
-      "Front-End Developer",
-      "Back-End Developer",
-      "Full- Stack Developer",
-      "Software Engineer",
-      "Team Leader",
-      "Project Manager",
-      "Sr Embedded Software Engineer",
-      "jr Embedded Software Engineer",
-      "Intern Embedded Software Engineer",
-    ],
-    SalesMarketing: [
-      "Export Sales",
-      "Application Engineer",
-      "Business Development Engineer",
-      "Proposal Engineer",
-      "Inhouse Sales Engineer",
-      "Techincal Sales Engineer",
-      "Sales Manager",
-    ],
-    Service: [
-      "Service Technician",
-      "Service Engineer",
-      "Service Intern",
-      "Service Manager",
-    ],
-    HR: ["Senior HR", "Junior HR", "HR Intern", "Recruiter"],
-    Accounting: [],
-    ReserchAndDevelopment: [],
-    Billing: [],
-  };
-  // useEffect(() => {
-  //   // Call the onRender callback when the component mounts
-  //   onRender();
-  // }, [onRender]);
 
   return (
     <>
@@ -306,21 +240,23 @@ export default function Details() {
                   <div className="card mb-4">
                     <div className="card-body text-center">
                       <img
-                        src={employeeData?.profileImage
-                          ? `data:image/${
-                            employeeData.profileImage.contentType
-                            };base64,${btoa(
-                              String.fromCharCode(
-                                ...new Uint8Array(
-                                  employeeData.profileImage.data.data
+                        src={
+                          employeeData?.profileImage
+                            ? `data:image/${
+                                employeeData.profileImage.contentType
+                              };base64,${btoa(
+                                String.fromCharCode(
+                                  ...new Uint8Array(
+                                    employeeData.profileImage.data.data
+                                  )
                                 )
-                              )
-                            )}`
-                          : ProfileImg}
+                              )}`
+                            : ProfileImg
+                        }
                         // src={ProfileImg}
                         alt="avatar"
                         className="rounded-circle img-fluid"
-                        style={{ width: "115px",height:'9.65rem' }}
+                        style={{ width: "115px", height: "9.65rem" }}
                       />
                       <h5 className="my-2">{employeeData?.Emp_name}</h5>
                       <p className="text-muted mb-1">
@@ -519,7 +455,8 @@ export default function Details() {
               {/* attandance details */}
               <div className="row">
                 <div className="col-md-12 col-lg-6">
-                  <div className="mb-3 card">
+                  <Attandance/>
+                  {/* <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
                         <i className="header-icon lnr lnr-chart-bars icon-gradient bg-night-sky">
@@ -531,17 +468,17 @@ export default function Details() {
                     <div className="tab-content">
                       <div className="tab-pane fade active show" id="tab-eg-55">
                         <div className="widget-chart p-3">
-                          <div style={{ height: "370px" }}>
-                            {/* <Attandance/> */}
+                          <div style={{ height: "450px" }}>
                             <Attandance />
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="col-md-12 col-lg-6">
-                  <div className="mb-3 card">
+                  <AttandanceTable/>
+                  {/* <div className="mb-3 card">
                     <div className="card-header-tab card-header">
                       <div className="card-header-title">
                         <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
@@ -562,7 +499,7 @@ export default function Details() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               {/* attandance details */}
@@ -622,7 +559,6 @@ export default function Details() {
                                       color: "white",
                                       width: "10rem",
                                     }}
-                                    // onClick={toastError}
                                     onClick={toggleModal}
                                   >
                                     View Details
@@ -970,158 +906,115 @@ export default function Details() {
                         </thead>
                         <tbody>
                           {clearanceData?.map((formData, index) => {
-                            // Check if formData.images is defined
-                            if (formData.images && formData.images.data) {
-                              const base64String = btoa(
+                            const base64Strings = formData.images.map((image) =>
+                              btoa(
                                 String.fromCharCode(
-                                  ...new Uint8Array(formData.images.data.data)
+                                  ...new Uint8Array(image.data.data)
                                 )
-                              );
-    
-                              return (
-                                <tr key={index}>
-                                  <td>
-                                    <div className="widget-content p-0">
-                                      <div className="widget-content-wrapper">
-                                        <div className="widget-content-left flex2">
-                                          <div className="widget-heading">
-                                            {new Date(
-                                              formData.timestamp
-                                            ).toLocaleString("en-US", {
-                                              year: "numeric",
-                                              month: "2-digit",
-                                              day: "2-digit",
-                                            })}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="text-center text-muted">
-                                    {formData.Transport_type}
-                                  </td>
-                                  <td className="text-center text-muted">
-                                    {formData.Total_expense}
-                                  </td>
-                                  <td className="text-center text-muted">
-                                    {formData.Fuel_in_liters}
-                                  </td>
-                                  <td className="text-muted">
-                                    {formData.ImageName}
-                                  </td>
-                                  <td>
-                                    <div>
-                                      <img
-                                        src={`data:image/${formData?.images?.contentType};base64,${base64String}`}
-                                        alt={formData.ImageName}
-                                        key={index}
-                                        style={{
-                                          width: "3rem",
-                                          cursor: "pointer",
-                                        }}
-                                        onClick={() => handleImageClick(index)}
-                                      />
-                                      {enlarged === index && (
-                                        <div
-                                          style={{
-                                            background: `rgba(0, 0, 0, 0.5) url(data:image/${formData?.images?.contentType};base64,${base64String}) no-repeat center`,
-                                            backgroundSize: "contain",
-                                            width: "50%",
-                                            height: "50%",
-                                            position: "fixed",
-                                            zIndex: "10000",
-                                            top: "30%",
-                                            left: "30%",
-                                            cursor: "zoom-out",
-                                          }}
-                                          onClick={closeEnlargedView}
-                                        />
-                                      )}
-                                    </div>
-                                  </td>
-                                </tr>
-                              );
-                            } else {
-                              return (
-                                <tr key={index}>
-                                  <td>
-                                    <div className="widget-content p-0">
-                                      <div className="widget-content-wrapper">
-                                        <div className="widget-content-left flex2">
-                                          <div className="widget-heading">
-                                            {new Date(
-                                              formData.timestamp
-                                            ).toLocaleString("en-US", {
-                                              year: "numeric",
-                                              month: "2-digit",
-                                              day: "2-digit",
-                                            })}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="text-center text-muted">
-                                    {formData.Transport_type}
-                                  </td>
-                                  <td className="text-center text-muted">
-                                    {formData.Total_expense}
-                                  </td>
-                                  <td className="text-center text-muted">
-                                    {formData.Fuel_in_liters}
-                                  </td>
-                                  <td className="text-muted">
-                                    {formData.ImageName}
-                                  </td>
-                                  <td>No image</td>
-                                </tr>
-                              );
-                            }
-                          })}
-                          {/* {clearanceData?.map((formData, index) => {
-                            const base64String = formData.images.data
-                              ? formData.images.data.toString("base64")
-                              : null;
+                              )
+                            );
 
                             return (
-                              <tr key={index}>
-                                <td>
-                                  {base64String ? (
+                              <React.Fragment key={index}>
+                                <tr>
+                                  <td>
+                                    <div className="widget-content p-0">
+                                      <div className="widget-content-wrapper">
+                                        <div className="widget-content-left flex2">
+                                          <div className="widget-heading">
+                                            {new Date(
+                                              formData.timestamp
+                                            ).toLocaleString("en-US", {
+                                              year: "numeric",
+                                              month: "2-digit",
+                                              day: "2-digit",
+                                            })}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {formData.Transport_type}
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {formData.Total_expense}
+                                  </td>
+                                  <td className="text-center text-muted">
+                                    {formData.Fuel_in_liters}
+                                  </td>
+                                  <td className="text-muted">
+                                    {formData.ImageName}
+                                  </td>
+                                  <td>
                                     <div>
-                                      <img
-                                        src={`data:image/${formData?.images?.contentType};base64,${base64String}`}
-                                        alt={formData.ImageName}
-                                        key={index}
-                                        style={{
-                                          width: "3rem",
-                                          cursor: "pointer",
-                                        }}
-                                        onClick={() => handleImageClick(index)}
-                                      />
-                                      {enlarged === index && (
-                                        <div
+                                      {/* Render the first image with the row */}
+                                      {base64Strings.length > 0 && (
+                                        <img
+                                          src={`data:image/${formData?.images[0]?.contentType};base64,${base64Strings[0]}`}
+                                          alt={formData.ImageName}
                                           style={{
-                                            background: `rgba(0, 0, 0, 0.5) url(data:image/${formData?.images?.contentType};base64,${base64String}) no-repeat center`,
-                                            backgroundSize: "contain",
-                                            width: "50%",
-                                            height: "50%",
-                                            position: "fixed",
-                                            zIndex: "10000",
-                                            top: "30%",
-                                            left: "30%",
-                                            cursor: "zoom-out",
+                                            width: "3rem",
+                                            cursor: "pointer",
                                           }}
-                                          onClick={closeEnlargedView}
+                                          onClick={() =>
+                                            handleImageClick(index)
+                                          }
                                         />
                                       )}
+
+                                      {/* Render additional images without row data */}
+                                     
+                                      {base64Strings.length > 1 && (
+                                        <React.Fragment>
+                                          {base64Strings
+                                            .slice(1)
+                                            .map((base64String, imageIndex) => (
+                                              <img
+                                                key={`${index}_${imageIndex}`}
+                                                src={`data:image/${
+                                                  formData?.images[
+                                                    imageIndex + 1
+                                                  ]?.contentType
+                                                };base64,${base64String}`}
+                                                alt={formData.ImageName}
+                                                style={{
+                                                  width: "3rem",
+                                                  cursor: "pointer",
+                                                }}
+                                                onClick={() =>
+                                                  handleImageClick(index)
+                                                }
+                                              />
+                                            ))}
+                                        </React.Fragment>
+                                      )}
                                     </div>
-                                  ) : (
-                                    <div>No image</div>
-                                  )}
-                                </td>
-                              </tr>
+                                  </td>
+                                </tr>
+                                {enlarged === index && (
+                                  <tr key={`${index}_enlarged`}>
+                                    <td colSpan="6">
+                                      <div
+                                        style={{
+                                          background: `rgba(0, 0, 0, 0.5) url(data:image/${formData?.images[enlarged]?.contentType};base64,${base64Strings[enlarged]}) no-repeat center`,
+                                          backgroundSize: "contain",
+                                          width: "50%",
+                                          height: "50%",
+                                          position: "fixed",
+                                          zIndex: "10000",
+                                          top: "30%",
+                                          left: "30%",
+                                          cursor: "zoom-out",
+                                        }}
+                                        onClick={closeEnlargedView}
+                                      />
+                                    </td>
+                                  </tr>
+                                )}
+                              </React.Fragment>
                             );
-                          })}  */}
+                          })}
                         </tbody>
                       </table>
                     </div>

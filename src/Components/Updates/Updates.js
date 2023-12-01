@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import React, { useEffect, useState} from "react";
 import axios from "axios";
 import Canteen from "../../Pages/Canteen";
-
+import emailjs from "@emailjs/browser";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Updates() {
   const [rows, setRows] = useState([]);
@@ -12,19 +12,17 @@ export default function Updates() {
       .get("http://192.168.1.211:8080/updates")
       .then((response) => {
         setRows(response.data);
-        // console.log(`update : ${response.data}`);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-      // send()
   }, []);
 
   if (rows.usersWithBirthday) {
     rows.usersWithBirthday.sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
-  
+
       if (dateA < dateB) return -1;
       if (dateA > dateB) return 1;
       return 0;
@@ -32,8 +30,69 @@ export default function Updates() {
   }
 
 
-  const toastSuccess = () => toast.success("Wishes Sent");
+  const sendEmail = (userEmail, userName, usersWithBirthday) => {
+    if (!userEmail) {
+      console.error("Email address is empty or undefined.");
+      return;
+    }
+    const currentDate = new Date();
+    if (usersWithBirthday !== currentDate.toISOString().split("T")[0]) {
+      toast.error("Birth Date has expired. Email not sent.");
+      return;
+    }
 
+    const templateParams = {
+      to_email: userEmail,
+      Emp_name: userName,
+    };
+    emailjs
+      .send(
+        "service_1p5hnfn",
+        "template_52ov41w",
+        templateParams,
+        "xmDHyItmmFUHqFhv0"
+      )
+      .then((result) => {
+        console.log(`result.text: ${result.text}`);
+        console.log(`Email sent to: ${userEmail}`);
+      })
+      .catch((error) => {
+        console.log(`error.text: ${error.text}`);
+      });
+  };
+
+  const sendEmail2 = (userEmail, userName, workAnniversaryDate) => {
+    if (!userEmail) {
+      console.error("Email address is empty or undefined.");
+      return;
+    }
+
+    const currentDate = new Date();
+
+    if (workAnniversaryDate !== currentDate.toISOString().split("T")[0]) {
+      toast.error("Work anniversary has expired. Email not sent.");
+      return;
+    }
+
+    const templateParams = {
+      to_email: userEmail,
+      Emp_name: userName,
+    };
+    emailjs
+      .send(
+        "service_1p5hnfn",
+        "template_drol7vb",
+        templateParams,
+        "xmDHyItmmFUHqFhv0"
+      )
+      .then((result) => {
+        console.log(`result.text: ${result.text}`);
+        console.log(`Email sent to: ${userEmail}`);
+      })
+      .catch((error) => {
+        console.log(`error.text: ${error.text}`);
+      });
+  };
   return (
     <>
       <div className="row">
@@ -61,19 +120,18 @@ export default function Updates() {
                             <div className="widget-heading">
                               {rows.usersWithBirthday?.map((data) => (
                                 <div key={data.Emp_name}>
-                                  <div
-                                    className="card mb-2"
-                                   
-                                  >
+                                  <div className="card mb-2">
                                     {/* Birthday Card */}
                                     <div className="row g-0">
-                                      {/* Image */}
                                       <div className="col-md-2">
                                         <img
-                                          src='https://i.pinimg.com/originals/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.png'
+                                          src="https://i.pinimg.com/originals/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.png"
                                           width="120rem"
                                           className="img-fluid"
-                                          style={{width:"4rem", margin:'2.5rem'}}
+                                          style={{
+                                            width: "4rem",
+                                            margin: "2.5rem",
+                                          }}
                                           alt="..."
                                         />
                                       </div>
@@ -94,16 +152,16 @@ export default function Updates() {
                                             <small className="text-muted">
                                               {data.date}
                                             </small>
-                                            <button
-                                              className="btn"
-                                              style={{
-                                                fontSize: "0.8rem",
-                                                color: "#24a1e9",
-                                              }}
-                                              onClick={toastSuccess}
-                                            >
-                                              Send
-                                            </button>
+                                              <button
+                                                className="btn"
+                                                style={{
+                                                  fontSize: "0.8rem",
+                                                  color: "#24a1e9",
+                                                }}
+                                                onClick={() => { sendEmail(data.email,data.Emp_name)}}
+                                              >
+                                                Send
+                                              </button>
                                           </p>
                                         </div>
                                       </div>
@@ -114,19 +172,18 @@ export default function Updates() {
 
                               {rows.usersWithWorkAnniversary?.map((data) => (
                                 <div key={data.Emp_name}>
-                                  <div
-                                    className="card mb-2"
-                                
-                                  >
+                                  <div className="card mb-2">
                                     {/* Work Anniversary Card */}
                                     <div className="row g-0">
-                                      {/* Image */}
                                       <div className="col-md-2">
                                         <img
-                                          src='https://i.pinimg.com/originals/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.png'
+                                          src="https://i.pinimg.com/originals/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.png"
                                           width="100rem"
                                           className="img-fluid"
-                                          style={{width:"4rem", margin:'2.5rem'}}
+                                          style={{
+                                            width: "4rem",
+                                            margin: "2.5rem",
+                                          }}
                                           alt="..."
                                         />
                                       </div>
@@ -153,7 +210,7 @@ export default function Updates() {
                                                 fontSize: "0.8rem",
                                                 color: "#24a1e9",
                                               }}
-                                              onClick={toastSuccess}
+                                              onClick={() => { sendEmail2(data.email,data.Emp_name)}}
                                             >
                                               Send
                                             </button>
@@ -193,3 +250,61 @@ export default function Updates() {
     </>
   );
 }
+
+
+
+ // const sendEmail = (userEmail,userName) => {
+  //   if (!userEmail) {
+  //     console.error("Email address is empty or undefined.");
+  //     return;
+  //   }
+  //   // console.log(`function call 2222222222222222222222222`);
+  //   const templateParams = {
+  //     to_email: userEmail,
+  //     Emp_name:userName
+  //   };
+  //   emailjs
+  //     .send(
+  //       "service_1p5hnfn",
+  //       "template_52ov41w",
+  //       templateParams,
+  //       "xmDHyItmmFUHqFhv0"
+  //     )
+  //     .then((result) => {
+  //       console.log(`result.text: ${result.text}`);
+  //       console.log(`Email sent to: ${userEmail}`);
+  //     })
+  //     .catch((error) => {
+  //       console.log(`error.text: ${error.text}`);
+  //     });
+  // };
+
+
+  // const sendEmail2 = (userEmail,userName) => {
+    
+  //   if (!userEmail) {
+  //     console.error("Email address is empty or undefined.");
+  //     return;
+  //   }
+  //   // console.log(`function call 2222222222222222222222222`);
+  //   const templateParams = {
+  //     to_email: userEmail,
+  //     Emp_name:userName
+  //   };
+  //   emailjs
+  //     .send(
+  //       "service_1p5hnfn",
+  //       "template_drol7vb",
+  //       templateParams,
+  //       "xmDHyItmmFUHqFhv0"
+  //     )
+  //     .then((result) => {
+  //       console.log(`result.text: ${result.text}`);
+  //       console.log(`Email sent to: ${userEmail}`);
+  //       // console.log(`Email sent to: ${userName}`);
+
+  //     })
+  //     .catch((error) => {
+  //       console.log(`error.text: ${error.text}`);
+  //     });
+  // };

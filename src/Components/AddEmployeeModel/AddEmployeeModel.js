@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
@@ -6,7 +6,6 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import "./AddMember.css";
 import Select from "@mui/material/Select";
-import { CountryDropdown } from "react-country-region-selector";
 import MenuItem from "@mui/material/MenuItem";
 import { useAPI } from "../../Context";
 import {
@@ -17,7 +16,6 @@ import {
 import "react-country-state-city/dist/react-country-state-city.css";
 
 const AddEmployeeModal = ({ open, onClose }) => {
-  const [country, setCountry] = useState("");
   const [newEmployee, setNewEmployee] = useState({
     // id: Date.now(),
     Emp_ID: false,
