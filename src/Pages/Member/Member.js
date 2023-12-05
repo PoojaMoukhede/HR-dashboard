@@ -4,6 +4,7 @@ import Header from "../../Components/Header/Header";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 import AddEmployeeModel from "../../Components/AddEmployeeModel/AddEmployeeModel";
 import { ExportToExcel } from "../../Components/Export/ExportToExcel";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -12,6 +13,7 @@ import EditEmployeeModel from "../../Components/AddEmployeeModel/EditEmployeeMod
 
 const fileName = "EmployeeData";
 export default function Member() {
+  const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchValue, setSearchValue] = useState("");
@@ -148,7 +150,7 @@ export default function Member() {
 
   return (
     <>
-      <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+      <div className="app-container  body-tabs-shadow fixed-sidebar fixed-header">
         <Header />
         <div className="app-main">
           <Sidebar />
@@ -194,7 +196,7 @@ export default function Member() {
                 </OverlayTrigger>
 
                 <ExportToExcel apiData={rows} fileName={fileName} />
-                <OverlayTrigger
+                {/* <OverlayTrigger
                   key="tooltip5"
                   placement="top"
                   overlay={<Tooltip id="tooltip">Import Data</Tooltip>}
@@ -210,7 +212,7 @@ export default function Member() {
                     />
                     <Icon icon="pajamas:import" color="white" width="1.5rem" />
                   </div>
-                </OverlayTrigger>
+                </OverlayTrigger> */}
 
               </div>
               <div className="row">
@@ -375,6 +377,17 @@ export default function Member() {
                                     <Icon icon="fluent:delete-20-filled" />
                                   </button>
                                 </OverlayTrigger>
+                                <button
+                        type="button"
+                        id="PopoverCustomT-1"
+                        className="btn btnprimary btn-sm"
+                        onClick={(e) => {
+                          // console.log({ row });
+                          navigate(`/details/${row?._id}`);
+                        }}
+                      >
+                        Details
+                      </button>
                               </td>
                             </tr>
                           ))}

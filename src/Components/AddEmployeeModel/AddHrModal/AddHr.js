@@ -66,10 +66,11 @@ const handleCityChange =(e)=>{
   return (
     <>
       <Button
-        variant="primary"
+        // variant="primary"
+        className="btnprimary"
         // onClick={handleShowModal}
         onClick={() => setLgShow(true)}
-        style={{ marginLeft: "0.5rem", marginBottom: "0.5rem" }}
+        style={{ marginLeft: "0", marginBottom: "0.5rem" ,border:'none'}}
       >
         Create New Account
       </Button>

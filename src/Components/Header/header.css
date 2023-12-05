@@ -1,7 +1,9 @@
-body {
+/* body {
     background-color: #f9f9fa
+} */
+.app-header{
+    background-color: #012842 !important;
 }
-
 .padding {
     padding: 3rem !important
 }
@@ -12,8 +14,8 @@ body {
 
 .card {
     border-radius: 5px;
-    -webkit-box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
-    box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
+    /* -webkit-box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08); */
+    /* box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08); */
     border: none;
     margin-bottom: 30px;
 }

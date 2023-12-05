@@ -60,10 +60,10 @@ export default function Profile() {
         )
         .then((response) => {
           // Handle success
-          // console.log("Profile image updated successfully");
+          console.log("Profile image updated successfully");
 
           const updatedUser = response.data.user;
-          // console.log(`updated user : ${updatedUser}`);
+          console.log(`updated user : ${updatedUser}`);
           setUser(updatedUser);
 
           setIsModalOpen(false);
@@ -77,7 +77,7 @@ export default function Profile() {
 
   return (
     <>
-      <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+      <div className="app-container  body-tabs-shadow fixed-sidebar fixed-header">
         <Header />
         <div className="app-main">
           <Sidebar />

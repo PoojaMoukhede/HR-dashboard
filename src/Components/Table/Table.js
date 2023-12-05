@@ -66,7 +66,7 @@ export default function Table() {
               <input
                 type="text"
                 className="search-input"
-                placeholder="Type to search"
+                placeholder="Type to search..."
                 onChange={(event) => setSearchValue(event.target.value)}
               />
             </div>
@@ -126,7 +126,7 @@ export default function Table() {
                       <button
                         type="button"
                         id="PopoverCustomT-1"
-                        className="btn btn-primary btn-sm"
+                        className="btn btnprimary btn-sm"
                         onClick={(e) => {
                           // console.log({ row });
                           navigate(`/details/${row?._id}`);

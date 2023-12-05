@@ -109,9 +109,9 @@ export default function Login() {
                           >
                             Log in
                           </button>
-                          <a className="text-muted" href="#!">
+                          {/* <a className="text-muted" href="#!">
                             Forgot password?
-                          </a>
+                          </a> */}
                         </div>
 
                         {/* <div className="d-flex align-items-center justify-content-center pb-4 ">

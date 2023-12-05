@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 import { Icon } from "@iconify/react";
-
+// 192.168.1.211 oppo 
 export default function NotificationList({ open, onClose }) {
   const [leaveData, setLeaveData] = useState([]);
   const [readNotifications, setReadNotifications] = useState(new Set());
 
   useEffect(() => {
     axios
-      .get("http://192.168.1.211:8080/notifications")
+      .get("http://192.168.1.211:8080/notifications") 
       .then((response) => {
         setLeaveData(response.data);
       })
@@ -68,18 +68,22 @@ export default function NotificationList({ open, onClose }) {
   };
   useEffect(() => {
     // Save read notification IDs to local storage whenever the set changes
-    localStorage.setItem("readNotifications", JSON.stringify(Array.from(readNotifications)));
+    localStorage.setItem(
+      "readNotifications",
+      JSON.stringify(Array.from(readNotifications))
+    );
   }, [readNotifications]);
 
   return (
     <>
-      <Modal show={open} onHide={onClose} >
-        <Modal.Header closeButton 
-        // style={{backgroundColor:"#414141", color:"white"}}
+      <Modal show={open} onHide={onClose}>
+        <Modal.Header
+          closeButton
+          // style={{backgroundColor:"#414141", color:"white"}}
         >
           <Modal.Title>Notifications</Modal.Title>
         </Modal.Header>
-        <Modal.Body 
+        <Modal.Body
         // style={{backgroundColor:"#414141", color:"white"}}
         >
           <ul>
@@ -99,7 +103,7 @@ export default function NotificationList({ open, onClose }) {
                       style={{ width: "1rem", marginLeft: "-30px" }}
                     />
                   )}
-                  <p style={{ width: "80%", marginLeft: "8px"}}>
+                  <p style={{ width: "80%", marginLeft: "8px" }}>
                     {notification.message}
                   </p>
                   <p className="text-muted">
@@ -119,9 +123,10 @@ export default function NotificationList({ open, onClose }) {
             ))}
           </ul>
         </Modal.Body>
-        <Modal.Footer className="m-0 p-0"
-        //  style={{backgroundColor:"#414141", color:"white"}}
-         >
+        <Modal.Footer
+          className="m-0 p-0"
+          //  style={{backgroundColor:"#414141", color:"white"}}
+        >
           <Button
             variant="link"
             style={{ color: "#feb019", textDecoration: "none" }}

@@ -57,8 +57,6 @@ export default function Details() {
         console.error("Error fetching leave balance:", error);
       });
   }, [id, totalLeaveDays]);
-;
-
   useEffect(() => {
     fetchData(id);
     try {
@@ -226,15 +224,15 @@ export default function Details() {
     setShowModal(!showModal);
   };
 
-
   return (
     <>
-      <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+      <div className="app-container body-tabs-shadow fixed-sidebar fixed-header">
         <Header />
         <div className="app-main">
           <Sidebar />
           <div className="app-main__outer">
             <div className="app-main__inner">
+
               <div className="row">
                 <div className="col-lg-4">
                   <div className="card mb-4">
@@ -253,17 +251,13 @@ export default function Details() {
                               )}`
                             : ProfileImg
                         }
-                        // src={ProfileImg}
                         alt="avatar"
                         className="rounded-circle img-fluid"
                         style={{ width: "115px", height: "9.65rem" }}
                       />
-                      <h5 className="my-2">{employeeData?.Emp_name}</h5>
+                      <h5 className="my-2 fw-bolder">{employeeData?.Emp_name}</h5>
                       <p className="text-muted mb-1">
                         {employeeData?.Emp_department}
-                      </p>
-                      <p className="text-muted mb-1">
-                        {employeeData?.Emp_city} , {employeeData?.Emp_state}
                       </p>
                     </div>
                   </div>
@@ -273,59 +267,61 @@ export default function Details() {
                   <div className="card mb-4">
                     <div className="card-body">
                       <div className="row">
-                        <div className="col-sm-3">
-                          <p className="mb-0">Employee ID</p>
+                        <div className="col-sm-6">
+                          <table className="table">
+                            <tbody>
+                              <tr>
+                                <td className="fw-bolder">Employee ID</td>
+                                <td className="text-muted fw-bolder">{employeeData?.Emp_ID}</td>
+                              </tr>
+                              <tr>
+                                <td className="fw-bolder">Full Name</td>
+                                <td className="text-muted fw-bolder">{employeeData?.Emp_name}</td>
+                              </tr>
+                              <tr>
+                                <td className="fw-bolder">Email</td>
+                                <td className="text-muted fw-bolder">{employeeData?.email}</td>
+                              </tr>
+                              <tr>
+                                <td className="fw-bolder">Phone</td>
+                                <td className="text-muted fw-bolder">{employeeData?.Emp_contact_No}</td>
+                              </tr>
+                              <tr>
+                                <td className="fw-bolder">Address</td>
+                                <td className="text-muted fw-bolder">
+                                  {employeeData?.Emp_city},{" "}
+                                  {employeeData?.Emp_state}, (
+                                  {employeeData?.Emp_country})
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
-                        <div className="col-sm-9">
-                          <p className="text-muted mb-0">
-                            {employeeData?.Emp_ID}
-                          </p>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="row">
-                        <div className="col-sm-3">
-                          <p className="mb-0">Full Name</p>
-                        </div>
-                        <div className="col-sm-9">
-                          <p className="text-muted mb-0">
-                            {employeeData?.Emp_name}
-                          </p>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="row">
-                        <div className="col-sm-3">
-                          <p className="mb-0">Email</p>
-                        </div>
-                        <div className="col-sm-9">
-                          <p className="text-muted mb-0">
-                            {employeeData?.email}
-                          </p>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="row">
-                        <div className="col-sm-3">
-                          <p className="mb-0">Phone</p>
-                        </div>
-                        <div className="col-sm-9">
-                          <p className="text-muted mb-0">
-                            {employeeData?.Emp_contact_No}
-                          </p>
-                        </div>
-                      </div>
-
-                      <hr />
-                      <div className="row">
-                        <div className="col-sm-3">
-                          <p className="mb-0">Address</p>
-                        </div>
-                        <div className="col-sm-9">
-                          <p className="text-muted mb-0">
-                            {employeeData?.Emp_city} , {employeeData?.Emp_state}{" "}
-                            , ({employeeData?.Emp_country})
-                          </p>
+                        <div className="col-sm-6">
+                          <table className="table">
+                            <tbody>
+                              <tr>
+                                <td className="fw-bolder">Department</td>
+                                <td className="text-muted fw-bolder">{employeeData?.Emp_department}</td>
+                              </tr>
+                              <tr>
+                                <td className="fw-bolder">Expertise</td>
+                                <td className="text-muted fw-bolder">{employeeData?.Emp_expertise}</td>
+                              </tr>
+                              <tr>
+                                <td className="fw-bolder">Blood Group</td>
+                                <td className="text-muted fw-bolder">{employeeData?.Emp_blood_group}</td>
+                              </tr>
+                              <tr>
+                                <td className="fw-bolder">Date Of Birth</td>
+                                <td className="text-muted fw-bolder">{employeeData?.Emp_DOB}</td>
+                              </tr>
+                              <tr>
+                                <td className="fw-bolder">Designation</td>
+                                <td className="text-muted fw-bolder">{employeeData?.Emp_designation}</td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     </div>
@@ -333,7 +329,7 @@ export default function Details() {
                 </div>
 
                 <div className="col-md-6 col-xl-4">
-                  <div className="mb-3 widget-content bg-arielle-smile">
+                  <div className="mb-3 widget-content bgColor">
                     <div className="widget-content-wrapper text-white">
                       <div className="widget-content-left">
                         <div
@@ -354,7 +350,7 @@ export default function Details() {
                 </div>
 
                 <div className="col-md-6 col-xl-4">
-                  <div className="mb-3 widget-content bg-arielle-smile">
+                  <div className="mb-3 widget-content bgColor">
                     <div className="widget-content-wrapper text-white">
                       <div className="widget-content-left">
                         <div
@@ -378,7 +374,7 @@ export default function Details() {
                 </div>
 
                 <div className="col-md-6 col-xl-4">
-                  <div className="mb-3 widget-content bg-arielle-smile">
+                  <div className="mb-3 widget-content bgColor">
                     <div className="widget-content-wrapper text-white">
                       <div className="widget-content-left">
                         <div
@@ -399,11 +395,11 @@ export default function Details() {
               </div>
 
               <div className="row">
-                <div className="col-md-6 col-xl-4">
-                  <div className="card11 mb-3 widget-content ">
+                <div className="col-md-6 col-xl-4" style={{color:"white"}}>
+                  <div className="card11 mb-3 widget-content bgColor">
                     <div className="widget-content-wrapper text-black">
                       <div className="widget-content-left">
-                        <div className="widget-heading">
+                        <div className="widget-heading" >
                           Total Coupon Purchased
                         </div>
                         <div className="widget-subheading">Till this month</div>
@@ -416,8 +412,9 @@ export default function Details() {
                     </div>
                   </div>
                 </div>
-                <div className="col-md-6 col-xl-4">
-                  <div className="card11 mb-3 widget-content">
+
+                <div className="col-md-6 col-xl-4" style={{color:"white"}}>
+                  <div className="card11 mb-3 widget-content bgColor">
                     <div className="widget-content-wrapper text-black">
                       <div className="widget-content-left">
                         <div className="widget-heading">
@@ -435,8 +432,9 @@ export default function Details() {
                     </div>
                   </div>
                 </div>
-                <div className="col-md-6 col-xl-4">
-                  <div className="card11 mb-3 widget-content ">
+
+                <div className="col-md-6 col-xl-4" style={{color:"white"}}>
+                  <div className="card11 mb-3 widget-content bgColor">
                     <div className="widget-content-wrapper text-black">
                       <div className="widget-content-left">
                         <div className="widget-heading">Total Expenses</div>
@@ -455,51 +453,10 @@ export default function Details() {
               {/* attandance details */}
               <div className="row">
                 <div className="col-md-12 col-lg-6">
-                  <Attandance/>
-                  {/* <div className="mb-3 card">
-                    <div className="card-header-tab card-header">
-                      <div className="card-header-title">
-                        <i className="header-icon lnr lnr-chart-bars icon-gradient bg-night-sky">
-                          {" "}
-                        </i>
-                        Daily Attandance Report
-                      </div>
-                    </div>
-                    <div className="tab-content">
-                      <div className="tab-pane fade active show" id="tab-eg-55">
-                        <div className="widget-chart p-3">
-                          <div style={{ height: "450px" }}>
-                            <Attandance />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
+                  <Attandance />
                 </div>
                 <div className="col-md-12 col-lg-6">
-                  <AttandanceTable/>
-                  {/* <div className="mb-3 card">
-                    <div className="card-header-tab card-header">
-                      <div className="card-header-title">
-                        <i className="header-icon lnr lnr-layers icon-gradient bg-night-sky">
-                          {" "}
-                        </i>
-                        Daily In-Out Report
-                      </div>
-                    </div>
-                    <div className="card-body">
-                      <div className="tab-content">
-                        <div
-                          className="tab-pane fade show active"
-                          id="tabs-eg-77"
-                        >
-                          <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
-                            <AttandanceTable />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
+                  <AttandanceTable />
                 </div>
               </div>
               {/* attandance details */}
@@ -516,7 +473,7 @@ export default function Details() {
                         Leave Status
                       </div>
                     </div>
-                    <div className="tab-content">
+                    <div className="tab-content ">
                       <div className="tab-pane fade active show" id="tab-eg-55">
                         <div className="widget-chart p-3 d-flex ">
                           <div
@@ -606,8 +563,8 @@ export default function Details() {
                                             <tr key={leaves._id}>
                                               <td>
                                                 <div className="widget-content p-0">
-                                                  <div className="widget-content-wrapper">
-                                                    <div className="widget-content-left flex2">
+                                                  <div className=" widget-content-wrapper">
+                                                    <div className=" widget-content-left flex2">
                                                       <div className="widget-heading">
                                                         {leaves.numberOfDays}
                                                       </div>
@@ -834,7 +791,7 @@ export default function Details() {
                               <tr>
                                 <td>
                                   <div className="widget-content p-0">
-                                    <div className="widget-content-wrapper">
+                                    <div className="widget-content-wrapperr">
                                       <div className="widget-content-left flex2">
                                         <div className="widget-heading">
                                           {new Date(
@@ -900,27 +857,17 @@ export default function Details() {
                             <th className="text-center">Transportation Type</th>
                             <th className="text-center">Expanse</th>
                             <th className="text-center">Fuel in Liters</th>
-                            <th>Imgae Name</th>
-                            <th>Image</th>
                           </tr>
                         </thead>
                         <tbody>
                           {clearanceData?.map((formData, index) => {
-                            const base64Strings = formData.images.map((image) =>
-                              btoa(
-                                String.fromCharCode(
-                                  ...new Uint8Array(image.data.data)
-                                )
-                              )
-                            );
-
                             return (
                               <React.Fragment key={index}>
                                 <tr>
                                   <td>
-                                    <div className="widget-content p-0">
-                                      <div className="widget-content-wrapper">
-                                        <div className="widget-content-left flex2">
+                                    <div className="widget-content  p-0">
+                                      <div className=" widget-content-wrapper">
+                                        <div className=" widget-content-left flex2">
                                           <div className="widget-heading">
                                             {new Date(
                                               formData.timestamp
@@ -943,75 +890,9 @@ export default function Details() {
                                   <td className="text-center text-muted">
                                     {formData.Fuel_in_liters}
                                   </td>
-                                  <td className="text-muted">
-                                    {formData.ImageName}
-                                  </td>
-                                  <td>
-                                    <div>
-                                      {/* Render the first image with the row */}
-                                      {base64Strings.length > 0 && (
-                                        <img
-                                          src={`data:image/${formData?.images[0]?.contentType};base64,${base64Strings[0]}`}
-                                          alt={formData.ImageName}
-                                          style={{
-                                            width: "3rem",
-                                            cursor: "pointer",
-                                          }}
-                                          onClick={() =>
-                                            handleImageClick(index)
-                                          }
-                                        />
-                                      )}
 
-                                      {/* Render additional images without row data */}
-                                     
-                                      {base64Strings.length > 1 && (
-                                        <React.Fragment>
-                                          {base64Strings
-                                            .slice(1)
-                                            .map((base64String, imageIndex) => (
-                                              <img
-                                                key={`${index}_${imageIndex}`}
-                                                src={`data:image/${
-                                                  formData?.images[
-                                                    imageIndex + 1
-                                                  ]?.contentType
-                                                };base64,${base64String}`}
-                                                alt={formData.ImageName}
-                                                style={{
-                                                  width: "3rem",
-                                                  cursor: "pointer",
-                                                }}
-                                                onClick={() =>
-                                                  handleImageClick(index)
-                                                }
-                                              />
-                                            ))}
-                                        </React.Fragment>
-                                      )}
-                                    </div>
-                                  </td>
+                                  <td></td>
                                 </tr>
-                                {enlarged === index && (
-                                  <tr key={`${index}_enlarged`}>
-                                    <td colSpan="6">
-                                      <div
-                                        style={{
-                                          background: `rgba(0, 0, 0, 0.5) url(data:image/${formData?.images[enlarged]?.contentType};base64,${base64Strings[enlarged]}) no-repeat center`,
-                                          backgroundSize: "contain",
-                                          width: "50%",
-                                          height: "50%",
-                                          position: "fixed",
-                                          zIndex: "10000",
-                                          top: "30%",
-                                          left: "30%",
-                                          cursor: "zoom-out",
-                                        }}
-                                        onClick={closeEnlargedView}
-                                      />
-                                    </td>
-                                  </tr>
-                                )}
                               </React.Fragment>
                             );
                           })}

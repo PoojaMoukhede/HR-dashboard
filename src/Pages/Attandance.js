@@ -32,7 +32,7 @@ export default function Attandance() {
 
 
   return (
-    <div className="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+    <div className="app-container  body-tabs-shadow fixed-sidebar fixed-header">
       <Header />
       <div className="app-main">
         <Sidebar />
@@ -42,7 +42,7 @@ export default function Attandance() {
 
             <div className="row">
               <div className="col-md-6 col-xl-4">
-                <div className="card11 mb-4 widget-content">
+                <div className="card11 mb-4 widget-content" style={{backgroundColor:'#55bfe9',color:'white'}}>
                   <div className="widget-content-wrapper text-black">
                     <div className="widget-content-left">
                       <div className="widget-heading">Total Employees</div>
@@ -57,7 +57,7 @@ export default function Attandance() {
               </div>
 
               <div className="col-md-6 col-xl-4">
-                <div className="card11 mb-4 widget-content">
+                <div className="card11 mb-4 widget-content" style={{backgroundColor:'#55bfe9',color:'white'}}>
                   <div className="widget-content-wrapper text-black">
                     <div className="widget-content-left">
                       <div className="widget-heading">Present Today</div>
@@ -72,7 +72,7 @@ export default function Attandance() {
               </div>
 
               <div className="col-md-6 col-xl-4">
-                <div className="card11 mb-4 widget-content">
+                <div className="card11 mb-4 widget-content" style={{backgroundColor:'#55bfe9',color:'white'}}>
                   <div className="widget-content-wrapper text-black">
                     <div className="widget-content-left">
                       <div className="widget-heading">Absent Today</div>
@@ -98,7 +98,7 @@ export default function Attandance() {
                       Leave Applied
                     </div>
                   </div>
-                  {/* <p>Functionality coming soon....</p> */}
+                  <p>Functionality coming soon....</p>
                 </div>
               </div>
             </div>

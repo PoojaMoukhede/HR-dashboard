@@ -36,8 +36,8 @@ export const ExportToExcel = ({ apiData, fileName }) => {
 
   // for email and contact number hashing
   const exportToCSV = (apiData, fileName) => {
-    // const fieldsToExclude = ["_id", "Emp_ID"];
-    const fieldsToExclude = ["Emp_ID"];
+    const fieldsToExclude = ["_id","profileImage","__v",'password'];
+    // const fieldsToExclude = ["Emp_ID"];
 
   
     // Filter the apiData to exclude the specified fields and hash email and contact_No
@@ -48,40 +48,19 @@ export const ExportToExcel = ({ apiData, fileName }) => {
       });
   
       // Hash the email field (assuming it's a string)
-      if (filteredItem.email) {
-        filteredItem.email = SHA256(filteredItem.email).toString();
-      }
-      if (filteredItem.Emp_contact_No) {
-        filteredItem.Emp_contact_No = SHA256(filteredItem.Emp_contact_No).toString();
-      }
-      if (filteredItem._id) {
-        filteredItem._id = SHA256(filteredItem._id).toString();
-      }
+      // if (filteredItem.email) {
+      //   filteredItem.email = SHA256(filteredItem.email).toString();
+      // }
+      // if (filteredItem.Emp_contact_No) {
+      //   filteredItem.Emp_contact_No = SHA256(filteredItem.Emp_contact_No).toString();
+      // }
+      // if (filteredItem._id) {
+      //   filteredItem._id = SHA256(filteredItem._id).toString();
+      // }
   
       return filteredItem;
     });
-    // const fieldsToExclude = ["Emp_ID"];
 
-    // // Filter the apiData to exclude the specified fields and encrypt sensitive information
-    // const filteredData = apiData.map((item) => {
-    //   const filteredItem = { ...item };
-    //   fieldsToExclude.forEach((field) => {
-    //     delete filteredItem[field];
-    //   });
-  
-    //   // Encrypt the email and contact_No fields
-    //   if (filteredItem.email) {
-    //     filteredItem.email = CryptoJS.AES.encrypt(filteredItem.email, 'encryptionKey').toString();
-    //   }
-    //   if (filteredItem.Emp_contact_No) {
-    //     filteredItem.Emp_contact_No = CryptoJS.AES.encrypt(filteredItem.Emp_contact_No, 'encryptionKey').toString();
-    //   }
-    //   if (filteredItem._id) {
-    //     filteredItem._id = CryptoJS.AES.encrypt(filteredItem._id, 'encryptionKey').toString();
-    //   }
-  
-    //   return filteredItem;
-    // });
   
   
     // Convert the filtered data to a CSV

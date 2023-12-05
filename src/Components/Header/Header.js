@@ -123,11 +123,9 @@ export default function Header() {
             </div>
             <Button
               style={{
-                backgroundColor: "#fafbfc",
-                // backgroundColor:"#191a1a",
+                backgroundColor: "#012842",
                 border: "none",
-                color: "black",
-                // color: "white",
+                color: "white",
                 paddingTop: "0",
               }}
               href="/profile"
@@ -145,7 +143,7 @@ export default function Header() {
                     : userImg
                 }
                 alt=""
-                style={{ width: "2rem" }}
+                style={{ width: "2rem" ,borderRadius:'50%',marginRight:'0.7rem'}}
               />
               {localStorage.getItem("email").split("@")[0]}
             </Button>

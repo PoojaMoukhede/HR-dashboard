@@ -133,7 +133,7 @@ export default function Canteen() {
               </div>
 
               <button
-                className="btn btn-primary float-right mt-4"
+                className="btn btnprimary float-right mt-4"
                 style={{ width: "8rem" }}
                 onClick={() => {
                   navigate("/canteen");

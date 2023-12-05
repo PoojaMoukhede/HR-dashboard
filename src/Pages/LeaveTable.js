@@ -21,9 +21,9 @@ export default function LeaveTable() {
           <tbody>
             <tr>
               <td>
-                <div className="widget-content p-0">
-                  <div className="widget-content-wrapper">
-                    <div className="widget-content-left flex2">
+                <div className="widget-content widget-content0 p-0">
+                  <div className="widget-content widget-content0-wrapper">
+                    <div className="widget-content widget-content0-left flex2">
                       <div className="widget-heading">Employee Name</div>
                     </div>
                   </div>
